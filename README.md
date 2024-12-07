@@ -57,10 +57,7 @@ npm run build
 | NEXT_PUBLIC_BASIC_AUTH_LOGIN    | Логин базовой аутентификации для запросов на бекенд. Если бекенд не защищен базовой аутентификацией, можно оставлять пустым.         | нет         |
 | NEXT_PUBLIC_BASIC_AUTH_PASSWORD | Пароль базовой аутентификации для запросов на бекенд. Если бекенд не защищен базовой аутентификацией, можно оставлять пустым.        | нет         |
 | UNOPTIMIZED_IMAGES              | Нужно ли пропускать оптимизацию изображений. 0 - нет, 1 - да. Оптимизацией изображений занимается бекенд. Значение по умолчанию - 0. | нет         |
-| ENABLE_SENTRY                   | Нужно ли включить sentry на проекте, 0 - нет, 1 - да. Данный параметр требует настройки других переменных связанных с sentry         | да          |
-| SENTRY_DSN                      | Sentry DSN можно узнать в настройках проекта Sentry                                                                                  | нет         |
-| SENTRY_PROJECT                  | Название проекта можно узнать в настройках проекта Sentry                                                                            | нет         |
-| SENTRY_AUTH_TOKEN               | Auth token можно создать в настройках организации в Sentry                                                                           | нет         |
+
 
 # Регламент по стилизации
 
@@ -78,52 +75,51 @@ npm run build
 
 ## Название классов
 
-Названия классов должны быть в camelCase с добавлением префикса cva после семантического наименования элемента. 
+Названия классов должны быть в camelCase с добавлением префикса cva после семантического наименования элемента.
 **Пример:**
 
 ```typescript
 export const cvaSubtitle = cva([
   'hero-cvaSubtitle',
   // тут будут стили
-])
+]);
 ```
+
 ## Элементы БЭМ
 
 Самый первый класс cva должен придерживаться naming-conventions из БЭМ, это упростит навигацию по элементам в проекте, позволяет поддерживать код в чистоте. **Пример компонента, стилизованного cva:**
 
 ```tsx
-const PersonCard=()=>{
-    
-    const cvaRoot = cva([
-        'persconCard-cvaRoot'
-        //остальные стили
-    ])
+const PersonCard = () => {
+  const cvaRoot = cva([
+    'persconCard-cvaRoot',
+    //остальные стили
+  ]);
 
-    const cvaImage = cva([
-        'persconCard-cvaImage'
-        //остальные стили
-    ])
+  const cvaImage = cva([
+    'persconCard-cvaImage',
+    //остальные стили
+  ]);
 
-    const cvaTitle = cva([
-        'persconCard-cvaTitle'
-        //остальные стили
-    ])
+  const cvaTitle = cva([
+    'persconCard-cvaTitle',
+    //остальные стили
+  ]);
 
-    const cvaDescription = cva([
-        'persconCard-cvaDescription'
-        //остальные стили
-    ])
+  const cvaDescription = cva([
+    'persconCard-cvaDescription',
+    //остальные стили
+  ]);
 
-    return (
-        <div className={cvaRoot()}>
-            <img className={cvaImage()}/>
-            <h3 className={cvaTitle()}></h3>
-            <p className={cvaDescription()}></p>
-        </div>
-    )
-    
-}
-export default PersonCard
+  return (
+    <div className={cvaRoot()}>
+      <img className={cvaImage()} />
+      <h3 className={cvaTitle()}></h3>
+      <p className={cvaDescription()}></p>
+    </div>
+  );
+};
+export default PersonCard;
 ```
 
 ## Добавление нескольких классов
@@ -133,7 +129,10 @@ export default PersonCard
 **Пример:**
 
 ```jsx
-<span className={clsx(cvaSubtitle(), classNameFromParentComponent)}> Какой-то подзаголовок </span>
+<span className={clsx(cvaSubtitle(), classNameFromParentComponent)}>
+  {' '}
+  Какой-то подзаголовок{' '}
+</span>
 ```
 
 ## Группировка Tailwind классов
@@ -141,7 +140,9 @@ export default PersonCard
 **Плохо:**
 
 ```typescript
-const cvaMenuLink = cva(['inline-block uppercase text-xs whitespace-nowrap transition-colors duration-300 bg-red hover:bg-green'])
+const cvaMenuLink = cva([
+  'inline-block uppercase text-xs whitespace-nowrap transition-colors duration-300 bg-red hover:bg-green',
+]);
 ```
 
 **Хорошо:**
@@ -153,7 +154,7 @@ const cvaMenuLink = cva([
   'text-xs uppercase whitespace-nowrap',
   'bg-red hover:bg-green',
   'transition-colors duration-300',
-])
+]);
 ```
 
 ## Порядок группировки классов
@@ -180,8 +181,8 @@ const cvaMenuLink = cva([
   'inline-block',
   'text-xs sm:text-sm md:text-md lg:text-lg uppercase whitespace-nowrap',
   'bg-red hover:bg-green',
-  'transition-colors duration-300'
-])
+  'transition-colors duration-300',
+]);
 ```
 
 Важно помнить, что Tailwind — это mobile-first библиотека, что означает, что мобильные свойства должны быть приоритетными. В случае, если вы верстаете сначала ПК версию, адаптируйте мобильные свойства справа налево.
@@ -189,21 +190,25 @@ const cvaMenuLink = cva([
 ## Пример адаптации:
 
 - Верстаем только ПК версию:
+
 ```
 text-lg uppercase whitespace-nowrap
 ```
 
 - Добавляем адаптив под большие планшеты:
+
 ```
 text-md lg:text-lg uppercase whitespace-nowrap
 ```
 
 - Добавляем адаптив под маленькие планшеты:
+
 ```
 text-sm md:text-md lg:text-lg uppercase whitespace-nowrap
 ```
 
 - Добавляем адаптив под телефоны:
+
 ```
 text-xs sm:text-sm md:text-md lg:text-lg uppercase whitespace-nowrap
 ```
@@ -252,52 +257,191 @@ w-[12.3rem] w-[calc(100%-5rem)]
 [&>svg]:w-full [&>span:nth-child(2)]:text-red
 ```
 
-
 # Стейт менеджер Zustand
 
-Разберём базовый регламент работы  с zustand.Все сторы размещаются в /shared/store
+Разберём базовый регламент работы с zustand.Все сторы размещаются в /shared/store
 
 ```tsx
-import {create} from 'zustand';
+import { create } from 'zustand';
 
-interface ExampleStoreState { //Определение типов для параметров стейта
-    someValue: number;
+interface ExampleStoreState {
+  //Определение типов для параметров стейта
+  someValue: number;
 }
 
-interface ExampleStoreActions { //Определение типов для мутаций
-    setSomeValue: (someValue: number) => void;
-    increment: () => void;
+interface ExampleStoreActions {
+  //Определение типов для мутаций
+  setSomeValue: (someValue: number) => void;
+  increment: () => void;
 }
 
 export const useExampleStore = create<ExampleStoreValue & ExampleStoreActions>(
-    (set) => ({
-        someValue: 0, //дефолтное значение
-        setSomeValue: (someValue) => { //Переопределенние
-            set((state) => {
-                return {
-                    someValue,
-                };
-            });
-        }, increment: () => { //использование значений стейта внутри мутации
-            set((state) => {
-                someValue:state.someValue + 1
-            });
-        }
-    })
+  (set) => ({
+    someValue: 0, //дефолтное значение
+    setSomeValue: (someValue) => {
+      //Переопределенние
+      set((state) => {
+        return {
+          someValue,
+        };
+      });
+    },
+    increment: () => {
+      //использование значений стейта внутри мутации
+      set((state) => {
+        someValue: state.someValue + 1;
+      });
+    },
+  })
 );
-
 ```
 
 Использование стейта в компонентах:
 
-``` tsx
+```tsx
 function Counter() {
-  const { someValue, increment } = useStore()
+  const { someValue, increment } = useStore();
   return (
     <div>
       <span>{someValue}</span>
       <button onClick={increment}>+</button>
     </div>
-  )
+  );
 }
 ```
+
+# Регламент работы с API
+
+Хорошей практикой, по возможности, является использование SSR (server-side-rendering), с оптимальной ревалидацией. Разберёмся на примере, как, согласно регламенту создавать серверные компоненты с предзагруженным контентом с API.
+
+```tsx
+// app/posts/[id]/page.tsx
+
+import {FC} from 'react';
+import {axiosInstance} from "./axios";
+
+interface Post { //Написали интерфейсы для каждой прилетающей с АПИ сущности
+    id: string;
+    title: string;
+    content: string;
+}
+
+interface PageProps { // Параметры для страницы
+    params: { id: string };
+}
+
+// Функция для получения данных о посте
+async function fetchPostById(id: string): Promise<Post> {
+    const res = await axiosInstance(API.getPost(id));
+    if (res.data.error) {
+        throw new Error(res.data.error);
+    }
+    return res.json();
+}
+
+// Генерация статических параметров (аналог getStaticPaths)
+export async function generateStaticParams() {
+    const res = await axiosInstance(API.getPosts);
+    const posts: Post[] = await res.json();
+    
+    return posts.map((post) => ({
+        id: post.id.toString(),
+    }));
+}
+
+export const revalidate = 60 //ревалидация каждые 60 секунд
+//export const dynamic = "force-dynamic" 
+// при необходимости отключения ревалидации совсем
+
+// Основной компонент страницы
+const PostPage: FC<PageProps> = async ({params}) => {
+    const post = await fetchPostById(params.id);
+    return (
+        <div>
+            <h1>{post.title}</h1>
+            <p>{post.content}</p>
+        </div>
+    );
+};
+
+export default PostPage;
+
+```
+Мы ещё вернёмся к регламенту работы с API при рассмотрении архитектуры проекта.
+
+# Архитектура проекта FSD
+Документация по FSD [тут](https://feature-sliced.design/docs/get-started/overview)
+
+Статья с кратким резюме FSD [тут](https://habr.com/ru/companies/piter/articles/744824/)
+
+Если кратко, то в проекте существуют:
+
+/app/**_directory-name/page.tsx_** - страница, которая влияет на роутинг next.js. Здесь размещаются необходимые страницы проекта.
+
+/app/**_widgets_**/* - здесь размещаются так называемые _**виджеты**_ , отдельные программные сущности, которые выполняют определённые глобальные функции. Такими могут быть например - Каталог на странице интернет магазина, какой то кальлкулятор, конструктор и т.д.
+
+/app/**_features_**/* - здесь размещаются **_фичи_** - утилиты, которые могут влиять на все выше слои архитектуры. Например - Theming, пуш уведомления и тд.
+
+/app/**_entities_**/* - слой для бизнес-сущностей, например Post, User и тд. 
+
+/app/**_shared_**/* - слой для UI элементов и часто переиспользуемых функций/элементов. 
+
+
+
+--------------
+
+**_В /shared/api/ - Возвращаемся к API. Базово, там находятся:_**
+
+- api.ts - тут важным экспортируем элементом является API. В нём записываются все эндпоинты (роуты) к апи.
+- axios.ts - axiosInstance. Это объект, в котором базово преднастроены все запросы, автоматическое проксирование, хеддеры, базовая авторизация и тд.
+- prepareHeaders - заголовки для axiosInstance
+
+Для каждого эндпоинта создаём директорию /shared/api/_**function-name**_/
+
+Там размещаем два файла - index.ts и types.ts. Во втором прописываем типы данных прилетающих с API. Пример:
+
+```typescript
+//types.ts
+export interface IPageProps {
+    title:string,
+    content:string
+}
+```
+
+```typescript
+//index.ts
+import { API } from '../api';
+import { axiosInstance } from '../axios';
+
+export const getPage = async (slug?: string) => {
+    const result = await axiosInstance.get<IPageProps>(API.getPages, { //Взяли эндпоинт с API
+        params: {
+            slug,
+        },
+    });
+
+    return result.data;
+};
+
+```
+
+
+-------------------
+
+Кастомные хуки размещаем /app/shared/hooks/
+
+В /shared/store/ размещаем сторы Zustand
+
+В /shared/utils - часто переиспользуемые функции (форматтеры, валидаторы и тд)
+
+------
+Свой UI мы базируем на [ShadCN](https://ui.shadcn.com/docs). При установке компонента из библиотеки ShadCN, он попадает в /app/shared/ui/. 
+
+Для добавления компонента из библиотеки ShadCn используем
+```
+npx shadcn@latest add имя_компонента
+```
+
+При необходимости, можно добавлять кастомные UI компоненты.
+
+--------

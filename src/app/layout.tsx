@@ -1,8 +1,6 @@
 import './globals.css';
 import React from 'react';
 import type { Metadata } from 'next';
-import SmoothScroll from '@/shared/ui/SmoothScroll/SmoothScroll';
-import { RemResizeScript } from '@/features/rem-resize';
 
 // import 'swiper/css';
 // import 'swiper/css/navigation';
@@ -36,18 +34,9 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="ru">
-      <head>
-        <RemResizeScript
-          defaultFontSize={10}
-          startScaleWidth={1440}
-          endScaleTopWidth={1920}
-          endScaleBottomWidth={1024}
-        />
-      </head>
+      <head></head>
       <body>
-        <SmoothScroll>
-          <div id="app">{children}</div>
-        </SmoothScroll>
+        <div id="app">{children}</div>
       </body>
     </html>
   );

@@ -8,7 +8,7 @@ const variantsPage = {
   in: {
     opacity: 1,
     transition: {
-      duration: 3,
+      duration: 1,
       delay: 0,
       ease: cubicBezier(0.55, 0.055, 0.675, 0.19),
     },
@@ -16,7 +16,7 @@ const variantsPage = {
   out: {
     opacity: 0,
     transition: {
-      duration: 3,
+      duration: 1,
       delay: 0,
       ease: cubicBezier(0.55, 0.055, 0.675, 0.19),
     },

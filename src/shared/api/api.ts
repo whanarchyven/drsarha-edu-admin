@@ -14,4 +14,5 @@ export interface IResponse<D = any> {
 
 export const API = {
   getTestApiEndpoint: `/endpoint/name`,
+  getTestApiEndpointById: (id: string) => `/endpoint/name/${id}`,
 };
