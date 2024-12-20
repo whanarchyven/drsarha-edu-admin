@@ -1,5 +1,7 @@
-const PROXY_PATH = process.env.NEXT_PUBLIC_FRONT_API_URL;
-const API_URL = process.env.NEXT_PUBLIC_FRONT_PROXY_API_URL;
+const PROXY_PATH = process.env.NEXT_PUBLIC_FRONT_API_URL || '/api/proxy';
+const API_URL =
+  process.env.NEXT_PUBLIC_FRONT_PROXY_API_URL || 'http://localhost:3000'; // Укажите резервный адрес
+
 /** @type {import('next').NextConfig} */
 const moduleExports = {
   reactStrictMode: false,
@@ -14,8 +16,8 @@ const moduleExports = {
   async rewrites() {
     return [
       {
-        source: `${PROXY_PATH}/:path*`, // Захватываем маршруты с /api/proxy
-        destination: `${API_URL}/:path*`, // Перенаправляем на API
+        source: `${PROXY_PATH}/:path*`,
+        destination: `${API_URL}/:path*`, // Убедитесь, что значение корректное
       },
     ];
   },
@@ -42,4 +44,5 @@ const moduleExports = {
     return config;
   },
 };
+
 module.exports = moduleExports;

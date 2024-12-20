@@ -1,6 +1,5 @@
 import type { Config } from 'tailwindcss';
 import { colors } from './tailwind/colors';
-import { typography } from './tailwind/typography';
 import { plugins } from './tailwind/plugins';
 import { animations } from './tailwind/animations';
 
@@ -16,7 +15,6 @@ const config: Config = {
   theme: {
     extend: {
       ...colors,
-      ...typography,
       ...animations,
       borderRadius: {
         lg: 'var(--radius)',
