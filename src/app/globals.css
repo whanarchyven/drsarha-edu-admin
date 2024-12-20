@@ -35,7 +35,6 @@ body {
   @apply text-black;
   @apply bg-white;
   min-width: 360px;
-  font-size: 1.8rem;
   font-weight: 400;
   line-height: 1.2;
   -webkit-overflow-scrolling: touch;
