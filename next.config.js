@@ -1,12 +1,22 @@
-const PROXY_PATH = process.env.NEXT_PUBLIC_FRONT_API_URL || '/api/proxy';
-const API_URL =
-  process.env.NEXT_PUBLIC_FRONT_PROXY_API_URL || 'http://localhost:3000'; // Укажите резервный адрес
-
 /** @type {import('next').NextConfig} */
-const moduleExports = {
+const nextConfig = {
   reactStrictMode: false,
   images: {
-    unoptimized: Boolean(Number(process.env.UNOPTIMIZED_IMAGES)),
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '3000',
+        pathname: '/public/**',
+      },
+      // Добавьте здесь конфигурацию для продакшн домена, когда он будет известен
+      // {
+      //   protocol: 'https',
+      //   hostname: 'your-production-domain.com',
+      //   pathname: '/public/**',
+      // },
+    ],
+    unoptimized: process.env.UNOPTIMIZED_IMAGES === '1',
     deviceSizes: [767, 980, 1156, 1400, 1920],
     formats: ['image/webp'],
   },
@@ -16,33 +26,18 @@ const moduleExports = {
   async rewrites() {
     return [
       {
-        source: `${PROXY_PATH}/:path*`,
-        destination: `${API_URL}/:path*`, // Убедитесь, что значение корректное
-      },
+        source: '/api/proxy/:path*',
+        destination: 'http://localhost:3000/:path*',
+      }
     ];
   },
   webpack: (config) => {
     config.module.rules.push({
       test: /\.svg$/i,
-      use: [
-        {
-          loader: '@svgr/webpack',
-          options: {
-            svgo: true,
-            svgoConfig: {
-              plugins: [
-                {
-                  name: 'removeDimensions',
-                  active: true,
-                },
-              ],
-            },
-          },
-        },
-      ],
+      use: ['@svgr/webpack'],
     });
     return config;
   },
 };
 
-module.exports = moduleExports;
+module.exports = nextConfig;

@@ -63,11 +63,12 @@ const config: Config = {
           '5': 'hsl(var(--chart-5))',
         },
       },
-    },
-    aspectRatio: {
-      '169': '16 / 9',
-      auto: 'auto',
-      square: '1 / 1',
+      aspectRatio: {
+        'video': '16 / 9',
+        '169': '16 / 9',
+        auto: 'auto',
+        square: '1 / 1',
+      },
     },
   },
   ...plugins,

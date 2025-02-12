@@ -1,6 +1,7 @@
 import './globals.css';
 import React from 'react';
 import type { Metadata } from 'next';
+import { Navbar } from '@/widgets/Navbar/Navbar';
 
 // import 'swiper/css';
 // import 'swiper/css/navigation';
@@ -36,7 +37,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="ru">
       <head></head>
       <body>
-        <div id="app">{children}</div>
+        <div className="flex">
+          <Navbar />
+          <main className="flex-1 p-6">{children}</main>
+        </div>
       </body>
     </html>
   );
