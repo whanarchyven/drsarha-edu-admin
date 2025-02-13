@@ -8,14 +8,15 @@ import { Edit, Trash2 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Pagination } from '@/shared/ui/pagination';
 
-import ClinicTaskCard from '@/entities/clinical-case/ui/ClinicalCaseCard'
-import { ClinicTask } from '@/shared/models/ClinicTask';
-import { clinicTasksApi } from '@/shared/api/clinic-tasks';
+import ClinicAtlasCard from '@/entities/clinic-atlas/ui/ClinicalAtlasCard'
+import { ClinicAtlas } from '@/shared/models/ClinicAtlas';
+import { clinicAtlasesApi } from '@/shared/api/clinic-atlases';
 import { DeleteDialog } from '@/shared/ui/DeleteDialog/DeleteDialog';
 
 
-interface ClinicTaskGridProps {
-  data: ClinicTask[];
+
+interface ClinicAtlasGridProps {
+  data: ClinicAtlas[];
   isLoading: boolean;
   pagination: {
     total: number;
@@ -26,18 +27,18 @@ interface ClinicTaskGridProps {
   onPageChange: (page: number) => void;
 }
 
-export function ClinicTaskGrid({ data, isLoading, pagination, onPageChange }: ClinicTaskGridProps) {
+export function ClinicAtlasGrid({ data, isLoading, pagination, onPageChange }: ClinicAtlasGridProps) {
   const router = useRouter();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [clinicTaskToDelete, setClinicTaskToDelete] = useState<string | null>(null);
+  const [clinicAtlasToDelete, setClinicAtlasToDelete] = useState<string | null>(null);
 
   const handleDelete = async () => {
-    if (!clinicTaskToDelete) return;
+    if (!clinicAtlasToDelete) return;
 
     try {
       setIsDeleting(true);
-      await clinicTasksApi.delete(clinicTaskToDelete);
+      await clinicAtlasesApi.delete(clinicAtlasToDelete);
       setIsDeleteDialogOpen(false);
       // Перезагружаем текущую страницу
       router.refresh();
@@ -46,12 +47,12 @@ export function ClinicTaskGrid({ data, isLoading, pagination, onPageChange }: Cl
       console.error('Error deleting clinic atlas:', error);
     } finally {
       setIsDeleting(false);
-      setClinicTaskToDelete(null);
+      setClinicAtlasToDelete(null);
     }
   };
 
   const openDeleteDialog = (id: string) => {
-    setClinicTaskToDelete(id);
+    setClinicAtlasToDelete(id);
     setIsDeleteDialogOpen(true);
   };
 
@@ -70,22 +71,22 @@ export function ClinicTaskGrid({ data, isLoading, pagination, onPageChange }: Cl
   }
 
   const handleEdit = (id: string) => {
-      router.push(`/knowledge/clinic-tasks/${id}/edit`);
+      router.push(`/knowledge/clinic-atlases/${id}/edit`);
   };
 
   return (
     <>
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {data.map((task) => {
-            if(task._id) {
+          {data.map((atlas) => {
+            if(atlas._id) {
               return (
-                <ClinicTaskCard 
-                  key={task._id} 
-                  _id={task._id} 
-                  {...task}  
-                  onDelete={() => openDeleteDialog(task._id!)}
-                  onEdit={()=>{handleEdit(task._id!)}}
+                <ClinicAtlasCard 
+                  key={atlas._id} 
+                  _id={atlas._id} 
+                  {...atlas}  
+                  onDelete={() => openDeleteDialog(atlas._id!)}
+                  onEdit={()=>{handleEdit(atlas._id!)}}
                 />
               );
             }
@@ -113,7 +114,7 @@ export function ClinicTaskGrid({ data, isLoading, pagination, onPageChange }: Cl
         onConfirm={handleDelete}
         isLoading={isDeleting}
       >
-        Вы уверены, что хотите удалить клиническую задачу?
+        Вы уверены, что хотите удалить клинический атлас?
       </DeleteDialog>
     </>
   );

@@ -15,5 +15,6 @@ export interface InteractiveTask {
     difficulty_type:TaskDifficultyType;
     available_errors:number;
     feedback:FeedBackQuestions;
-    nozology:string
+    nozology:string;
+    stars:number;   
 }

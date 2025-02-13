@@ -5,7 +5,7 @@ import { ClinicTaskForm } from '../../_components/ClinicTaskForm';
 import { clinicTasksApi } from '@/shared/api/clinic-tasks';
 import type { ClinicTask } from '@/shared/models/ClinicTask';
 
-export default function EditBrochurePage({
+export default function EditClinicTaskPage({
   params,
 }: {
   params: { id: string };
@@ -14,7 +14,7 @@ export default function EditBrochurePage({
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchBrochure = async () => {
+    const fetchClinicTask = async () => {
       try {
         const data = await clinicTasksApi.getById(params.id);
         setClinicTask(data);
@@ -24,7 +24,7 @@ export default function EditBrochurePage({
         setIsLoading(false);
       }
     };
-    fetchBrochure();
+    fetchClinicTask();
   }, [params.id]);
 
   if (isLoading) {

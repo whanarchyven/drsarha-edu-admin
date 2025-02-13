@@ -48,7 +48,7 @@ export function NozologyForm({ initialData }: NozologyFormProps) {
         await nozologiesApi.create(values);
       }
       console.log('API call successful');
-      router.push('/knowledge/nozologies');
+      router.push('/knowledge/');
       router.refresh();
     } catch (error) {
       console.error('Error submitting form:', error);

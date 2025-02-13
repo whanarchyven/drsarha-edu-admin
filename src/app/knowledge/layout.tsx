@@ -27,12 +27,7 @@ export default function KnowledgeLayout({
     });
   }, [pathname, fetchNozologies]);
 
-  // Редирект на courses если находимся на корневом пути knowledge
-  useEffect(() => {
-    if (pathname === '/knowledge') {
-      router.push('/knowledge/courses');
-    }
-  }, [pathname, router]);
+  
 
   const handleNozologyChange = (nozologyId: string) => {
     const params = new URLSearchParams(searchParams);

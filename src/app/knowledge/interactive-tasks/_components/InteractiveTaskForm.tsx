@@ -6,41 +6,31 @@ import * as z from 'zod';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useNozologiesStore } from '@/shared/store/nozologiesStore';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { clinicTasksApi } from '@/shared/api/clinic-tasks';
-import type { ClinicTask } from '@/shared/models/ClinicTask';
+import { interactiveTasksApi } from '@/shared/api/interactive-tasks';
+import type { InteractiveTask } from '@/shared/models/InteractiveTask';
 import { FeedbackQuestions } from '@/shared/ui/FeedBackQuestions/FeedbackQuestions';
 import { TaskDifficultyType } from '@/shared/models/types/TaskDifficultyType';
-import { ImagesField } from '@/shared/ui/ImagesField/ImagesField';
 
 import Image from 'next/image';
 import { getContentUrl } from '@/shared/utils/url';
-import { DiagnosesField } from './DiagnosesField';
+import { AnswersField } from './AnswersField';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Название обязательно'),
   difficulty: z.number().min(1).max(10),
-  description: z.string().min(1, 'Описание обязательно'),
   cover_image: z.any(),
-  images: z.array(z.object({
+  answers: z.array(z.object({
     image: z.any(),
-    is_open: z.boolean()
+    answer: z.string()
   })).default([]),
-  treatment: z.string().min(1, 'Лечение обязательно'),
-  additional_info: z.string().optional(),
   difficulty_type: z.nativeEnum(TaskDifficultyType),
-  ai_scenario: z.string().optional(),
-  stars: z.number().min(0),
+  available_errors: z.number().min(0),
+  stars: z.number().min(0).max(5),
   nozology: z.string().min(1, 'Нозология обязательна'),
-  diagnoses: z.array(z.object({
-    name: z.string(),
-    is_correct: z.boolean(),
-    description: z.string()
-  })).default([]),
   feedback: z.array(z.object({
     question: z.string(),
     has_correct: z.boolean(),
@@ -51,11 +41,11 @@ const formSchema = z.object({
   })).default([])
 });
 
-interface ClinicTaskFormProps {
-  initialData?: ClinicTask;
+interface InteractiveTaskFormProps {
+  initialData?: InteractiveTask;
 }
 
-export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
+export function InteractiveTaskForm({ initialData }: InteractiveTaskFormProps) {
   const router = useRouter();
   const { items: nozologies } = useNozologiesStore();
 
@@ -64,17 +54,13 @@ export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
     defaultValues: {
       name: initialData?.name || '',
       difficulty: initialData?.difficulty || 1,
-      description: initialData?.description || '',
-      treatment: initialData?.treatment || '',
-      additional_info: initialData?.additional_info || '',
-      difficulty_type: initialData?.difficulty_type || TaskDifficultyType.EASY,
-      ai_scenario: initialData?.ai_scenario || '',
+      difficulty_type: initialData?.difficulty_type || TaskDifficultyType['easy'],
+      available_errors: initialData?.available_errors || 0,
       stars: initialData?.stars || 0,
       nozology: initialData?.nozology || '',
-      diagnoses: initialData?.diagnoses || [],
+      answers: initialData?.answers || [],
       feedback: initialData?.feedback || [],
       cover_image: undefined,
-      images: initialData?.images || [],
     },
   });
 
@@ -83,54 +69,56 @@ export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
       const formData = new FormData();
       
       if (!initialData && !values.cover_image?.[0]) {
-        throw new Error('Обложка обязательна при создании задачи');
+        throw new Error('Обложка обязательна при создании интерактивной задачи');
       }
 
       // Базовые поля
       formData.append('name', values.name);
       formData.append('difficulty', values.difficulty.toString());
-      formData.append('description', values.description);
-      formData.append('treatment', values.treatment);
-      formData.append('additional_info', values.additional_info || '');
       formData.append('difficulty_type', values.difficulty_type);
-      formData.append('ai_scenario', values.ai_scenario || '');
+      formData.append('available_errors', values.available_errors.toString());
       formData.append('stars', values.stars.toString());
       formData.append('nozology', values.nozology);
 
       // Обработка обложки
-      if (values.cover_image?.[0] instanceof File) {
+      if (values.cover_image?.[0]) {
         formData.append('cover_image', values.cover_image[0]);
       }
 
       // Массивы и объекты
       formData.append('feedback', JSON.stringify(values.feedback));
-      formData.append('diagnoses', JSON.stringify(values.diagnoses));
 
-      // Подготовка данных изображений
-      const imagesData = values.images.map((img, counter) => ({
-        image: typeof img.image === 'string' ? img.image : `image_file_${counter}`,
-        is_open: img.is_open
+      // Подготовка данных ответов
+      const answersData = values.answers.map((ans, counter) => ({
+        image: typeof ans.image === 'string' ? ans.image : `image_file_${counter}`,
+        answer: ans.answer
       }));
-      formData.append('images', JSON.stringify(imagesData));
+      formData.append('answers', JSON.stringify(answersData));
 
       // Отправка файлов изображений
-      values.images.forEach((image, index) => {
-        if (image.image?.[0] instanceof File) {
-          formData.append(`image_file_${index}`, image.image[0]);
+      values.answers.forEach((answer, index) => {
+        if (answer.image?.[0]) {
+          formData.append(`image_file_${index}`, answer.image[0]);
         }
       });
 
+      // Для отладки
+      console.log('FormData contents:');
+      for (let [key, value] of formData.entries()) {
+        console.log(key, ':', value);
+      }
+
       if (initialData?._id) {
-        await clinicTasksApi.update(initialData._id.toString(), formData);
+        await interactiveTasksApi.update(initialData._id.toString(), formData);
       } else {
-        await clinicTasksApi.create(formData);
+        await interactiveTasksApi.create(formData);
       }
       
-      router.push('/knowledge/clinic-tasks');
+      router.push('/knowledge/interactive-tasks');
       router.refresh();
     } catch (error: any) {
-      console.error('Error saving clinic task:', error);
-      alert(error.message || 'Произошла ошибка при сохранении задачи');
+      console.error('Error saving interactive task:', error);
+      alert(error.message || 'Произошла ошибка при сохранении интерактивной задачи');
     }
   };
 
@@ -175,10 +163,10 @@ export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
 
             <FormField
               control={form.control}
-              name="stars"
+              name="available_errors"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Звёзды</FormLabel>
+                  <FormLabel>Доступные ошибки</FormLabel>
                   <FormControl>
                     <Input
                       type="number"
@@ -191,84 +179,28 @@ export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
                 </FormItem>
               )}
             />
-
-            <FormField
-              control={form.control}
-              name="difficulty_type"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Тип сложности</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Выберите тип" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {Object.values(TaskDifficultyType).map((type) => (
-                        <SelectItem key={type} value={type}>
-                          {type}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
           </div>
 
           <FormField
             control={form.control}
-            name="description"
+            name="difficulty_type"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Описание</FormLabel>
-                <FormControl>
-                  <Textarea {...field} placeholder="Введите описание" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="treatment"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Лечение</FormLabel>
-                <FormControl>
-                  <Textarea {...field} placeholder="Введите лечение" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="additional_info"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Дополнительная информация</FormLabel>
-                <FormControl>
-                  <Textarea {...field} placeholder="Дополнительная информация" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="ai_scenario"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>AI сценарий</FormLabel>
-                <FormControl>
-                  <Textarea {...field} placeholder="Опишите AI сценарий" />
-                </FormControl>
+                <FormLabel>Тип сложности</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Выберите тип" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {Object.values(TaskDifficultyType).map((type) => (
+                      <SelectItem key={type} value={type}>
+                        {type}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}
@@ -327,11 +259,7 @@ export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
               </FormItem>
             )}
           />
-        </Card>
-
-        <Card className="p-6">
-          <DiagnosesField />
-          <ImagesField />
+          <AnswersField />
         </Card>
 
         <Card className="p-6">
@@ -340,7 +268,7 @@ export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
 
         <div className="flex gap-4">
           <Button type="submit">
-            {initialData ? 'Сохранить изменения' : 'Создать клиническую задачу'}
+            {initialData ? 'Сохранить изменения' : 'Создать интерактивную задачу'}
           </Button>
           <Button
             type="button"

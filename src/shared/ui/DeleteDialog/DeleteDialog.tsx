@@ -11,26 +11,27 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 
-interface DeleteClinicTaskDialogProps {
+interface DeleteDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
   isLoading: boolean;
+  children: React.ReactNode;
 }
 
-export function DeleteClinicTaskDialog({
+export function DeleteDialog({
   isOpen,
   onClose,
   onConfirm,
-  isLoading
-}: DeleteClinicTaskDialogProps) {
+  isLoading, children
+}: DeleteDialogProps) {
   return (
     <AlertDialog open={isOpen} onOpenChange={onClose}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Вы уверены?</AlertDialogTitle>
           <AlertDialogDescription>
-            Это действие нельзя отменить. Клиническая задача будет удалена навсегда.
+            {children}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

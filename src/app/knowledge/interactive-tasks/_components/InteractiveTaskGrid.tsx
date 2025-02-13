@@ -8,14 +8,15 @@ import { Edit, Trash2 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Pagination } from '@/shared/ui/pagination';
 
-import ClinicTaskCard from '@/entities/clinical-case/ui/ClinicalCaseCard'
-import { ClinicTask } from '@/shared/models/ClinicTask';
-import { clinicTasksApi } from '@/shared/api/clinic-tasks';
+import InteractiveTaskCard from '@/entities/interactive-task/ui/InteractiveTaskCard'
+import { InteractiveTask } from '@/shared/models/InteractiveTask';
+import { interactiveTasksApi } from '@/shared/api/interactive-tasks';
 import { DeleteDialog } from '@/shared/ui/DeleteDialog/DeleteDialog';
 
 
-interface ClinicTaskGridProps {
-  data: ClinicTask[];
+
+interface InteractiveTaskGridProps {
+  data: InteractiveTask[];
   isLoading: boolean;
   pagination: {
     total: number;
@@ -26,32 +27,32 @@ interface ClinicTaskGridProps {
   onPageChange: (page: number) => void;
 }
 
-export function ClinicTaskGrid({ data, isLoading, pagination, onPageChange }: ClinicTaskGridProps) {
+export function InteractiveTaskGrid({ data, isLoading, pagination, onPageChange }: InteractiveTaskGridProps) {
   const router = useRouter();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [clinicTaskToDelete, setClinicTaskToDelete] = useState<string | null>(null);
+  const [interactiveTaskToDelete, setInteractiveTaskToDelete] = useState<string | null>(null);
 
   const handleDelete = async () => {
-    if (!clinicTaskToDelete) return;
+    if (!interactiveTaskToDelete) return;
 
     try {
       setIsDeleting(true);
-      await clinicTasksApi.delete(clinicTaskToDelete);
+      await interactiveTasksApi.delete(interactiveTaskToDelete);
       setIsDeleteDialogOpen(false);
       // Перезагружаем текущую страницу
       router.refresh();
       window.location.reload();
     } catch (error) {
-      console.error('Error deleting clinic atlas:', error);
+      console.error('Error deleting interactive task:', error);
     } finally {
       setIsDeleting(false);
-      setClinicTaskToDelete(null);
+      setInteractiveTaskToDelete(null);
     }
   };
 
   const openDeleteDialog = (id: string) => {
-    setClinicTaskToDelete(id);
+    setInteractiveTaskToDelete(id);
     setIsDeleteDialogOpen(true);
   };
 
@@ -70,7 +71,7 @@ export function ClinicTaskGrid({ data, isLoading, pagination, onPageChange }: Cl
   }
 
   const handleEdit = (id: string) => {
-      router.push(`/knowledge/clinic-tasks/${id}/edit`);
+      router.push(`/knowledge/interactive-tasks/${id}/edit`);
   };
 
   return (
@@ -80,7 +81,7 @@ export function ClinicTaskGrid({ data, isLoading, pagination, onPageChange }: Cl
           {data.map((task) => {
             if(task._id) {
               return (
-                <ClinicTaskCard 
+                <InteractiveTaskCard 
                   key={task._id} 
                   _id={task._id} 
                   {...task}  
@@ -113,7 +114,7 @@ export function ClinicTaskGrid({ data, isLoading, pagination, onPageChange }: Cl
         onConfirm={handleDelete}
         isLoading={isDeleting}
       >
-        Вы уверены, что хотите удалить клиническую задачу?
+        Вы уверены, что хотите удалить интерактивную задачу?
       </DeleteDialog>
     </>
   );

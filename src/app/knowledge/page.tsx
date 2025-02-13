@@ -7,16 +7,7 @@ export default function KnowledgePage() {
       <h1 className="text-2xl font-bold mb-6">База знаний</h1>
       
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        <Link 
-          href="/knowledge/nozologies" 
-          className="p-6 border rounded-lg hover:border-primary transition-colors"
-        >
-          <h2 className="text-xl font-semibold mb-2">Нозологии</h2>
-          <p className="text-muted-foreground">
-            Управление нозологиями и их классификацией
-          </p>
-        </Link>
-
+        
         <Link 
           href="/knowledge/brochures" 
           className="p-6 border rounded-lg hover:border-primary transition-colors"

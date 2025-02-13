@@ -1,8 +1,7 @@
 "use client"
-
 import Image from "next/image"
 import { useState } from "react"
-import { Star, Edit, Trash2, Eye, AlertCircle } from "lucide-react"
+import { Star, Edit, Trash2, Eye, AlertCircle, CheckSquare, ClipboardList } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
@@ -12,6 +11,8 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 
 import type { ClinicAtlas } from "@/shared/models/ClinicAtlas"
 import { getContentUrl } from "@/shared/utils/url"
+import { Separator } from "@/components/ui/separator"
+import { TaskBadges } from "@/shared/ui/TaskBadges/TaskBadges"
 
 interface ClinicAtlasCardProps extends ClinicAtlas {
   onEdit: (id: string) => void
@@ -36,6 +37,8 @@ export default function ClinicalAtlasCard({
   onDelete,
 }: ClinicAtlasCardProps) {
   const [imagesOpen, setImagesOpen] = useState(false)
+  const hasTest = feedback.some((q) => q.has_correct)
+  const questionCount = feedback.length
 
   return (
     <>
@@ -78,6 +81,9 @@ export default function ClinicalAtlasCard({
               <strong>AI сценарий:</strong> {ai_scenario}
             </div>
           )}
+          <div className="flex items-center gap-2">
+            <TaskBadges feedback={feedback} />
+          </div>
         </CardContent>
         <CardFooter className="gap-2">
           <Button variant="secondary" className="flex-1" onClick={() => setImagesOpen(true)}>

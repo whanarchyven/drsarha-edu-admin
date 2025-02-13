@@ -22,7 +22,7 @@ const formSchema = z.object({
   name: z.string().min(1, 'Название обязательно'),
   description: z.string().min(1, 'Описание обязательно'),
   duration: z.string().min(1, 'Длительность обязательна'),
-  stars: z.number().min(0).max(5).default(0),
+  stars: z.number().min(0).default(0),
   nozology: z.string().min(1, 'Нозология обязательна'),
   cover_image: z.any(),
   video: z.any(),

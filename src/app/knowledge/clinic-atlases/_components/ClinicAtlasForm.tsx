@@ -11,15 +11,13 @@ import { Card } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useNozologiesStore } from '@/shared/store/nozologiesStore';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { clinicTasksApi } from '@/shared/api/clinic-tasks';
-import type { ClinicTask } from '@/shared/models/ClinicTask';
+import { clinicAtlasesApi } from '@/shared/api/clinic-atlases';
+import type { ClinicAtlas } from '@/shared/models/ClinicAtlas';
 import { FeedbackQuestions } from '@/shared/ui/FeedBackQuestions/FeedbackQuestions';
 import { TaskDifficultyType } from '@/shared/models/types/TaskDifficultyType';
 import { ImagesField } from '@/shared/ui/ImagesField/ImagesField';
-
 import Image from 'next/image';
 import { getContentUrl } from '@/shared/utils/url';
-import { DiagnosesField } from './DiagnosesField';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Название обязательно'),
@@ -30,17 +28,12 @@ const formSchema = z.object({
     image: z.any(),
     is_open: z.boolean()
   })).default([]),
-  treatment: z.string().min(1, 'Лечение обязательно'),
+  clinical_picture: z.string().min(1, 'Клиническая картина обязательна'),
   additional_info: z.string().optional(),
   difficulty_type: z.nativeEnum(TaskDifficultyType),
   ai_scenario: z.string().optional(),
   stars: z.number().min(0),
   nozology: z.string().min(1, 'Нозология обязательна'),
-  diagnoses: z.array(z.object({
-    name: z.string(),
-    is_correct: z.boolean(),
-    description: z.string()
-  })).default([]),
   feedback: z.array(z.object({
     question: z.string(),
     has_correct: z.boolean(),
@@ -51,11 +44,11 @@ const formSchema = z.object({
   })).default([])
 });
 
-interface ClinicTaskFormProps {
-  initialData?: ClinicTask;
+interface ClinicAtlasFormProps {
+  initialData?: ClinicAtlas;
 }
 
-export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
+export function ClinicAtlasForm({ initialData }: ClinicAtlasFormProps) {
   const router = useRouter();
   const { items: nozologies } = useNozologiesStore();
 
@@ -65,16 +58,15 @@ export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
       name: initialData?.name || '',
       difficulty: initialData?.difficulty || 1,
       description: initialData?.description || '',
-      treatment: initialData?.treatment || '',
+      clinical_picture: initialData?.clinical_picture || '',
       additional_info: initialData?.additional_info || '',
-      difficulty_type: initialData?.difficulty_type || TaskDifficultyType.EASY,
+      difficulty_type: initialData?.difficulty_type || TaskDifficultyType['easy'],
       ai_scenario: initialData?.ai_scenario || '',
       stars: initialData?.stars || 0,
       nozology: initialData?.nozology || '',
-      diagnoses: initialData?.diagnoses || [],
+      images: initialData?.images || [],
       feedback: initialData?.feedback || [],
       cover_image: undefined,
-      images: initialData?.images || [],
     },
   });
 
@@ -83,14 +75,14 @@ export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
       const formData = new FormData();
       
       if (!initialData && !values.cover_image?.[0]) {
-        throw new Error('Обложка обязательна при создании задачи');
+        throw new Error('Обложка обязательна при создании атласа');
       }
 
       // Базовые поля
       formData.append('name', values.name);
       formData.append('difficulty', values.difficulty.toString());
       formData.append('description', values.description);
-      formData.append('treatment', values.treatment);
+      formData.append('clinical_picture', values.clinical_picture);
       formData.append('additional_info', values.additional_info || '');
       formData.append('difficulty_type', values.difficulty_type);
       formData.append('ai_scenario', values.ai_scenario || '');
@@ -104,7 +96,6 @@ export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
 
       // Массивы и объекты
       formData.append('feedback', JSON.stringify(values.feedback));
-      formData.append('diagnoses', JSON.stringify(values.diagnoses));
 
       // Подготовка данных изображений
       const imagesData = values.images.map((img, counter) => ({
@@ -121,16 +112,16 @@ export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
       });
 
       if (initialData?._id) {
-        await clinicTasksApi.update(initialData._id.toString(), formData);
+        await clinicAtlasesApi.update(initialData._id.toString(), formData);
       } else {
-        await clinicTasksApi.create(formData);
+        await clinicAtlasesApi.create(formData);
       }
       
-      router.push('/knowledge/clinic-tasks');
+      router.push('/knowledge/clinic-atlases');
       router.refresh();
     } catch (error: any) {
-      console.error('Error saving clinic task:', error);
-      alert(error.message || 'Произошла ошибка при сохранении задачи');
+      console.error('Error saving clinic atlas:', error);
+      alert(error.message || 'Произошла ошибка при сохранении атласа');
     }
   };
 
@@ -178,11 +169,12 @@ export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
               name="stars"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Звёзды</FormLabel>
+                  <FormLabel>Звёзды </FormLabel>
                   <FormControl>
                     <Input
                       type="number"
                       min={0}
+
                       {...field}
                       onChange={(e) => field.onChange(Number(e.target.value))}
                     />
@@ -234,12 +226,12 @@ export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
 
           <FormField
             control={form.control}
-            name="treatment"
+            name="clinical_picture"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Лечение</FormLabel>
+                <FormLabel>Клиническая картина</FormLabel>
                 <FormControl>
-                  <Textarea {...field} placeholder="Введите лечение" />
+                  <Textarea {...field} placeholder="Введите клиническую картину" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -327,10 +319,6 @@ export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
               </FormItem>
             )}
           />
-        </Card>
-
-        <Card className="p-6">
-          <DiagnosesField />
           <ImagesField />
         </Card>
 
@@ -340,7 +328,7 @@ export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
 
         <div className="flex gap-4">
           <Button type="submit">
-            {initialData ? 'Сохранить изменения' : 'Создать клиническую задачу'}
+            {initialData ? 'Сохранить изменения' : 'Создать клинический атлас'}
           </Button>
           <Button
             type="button"

@@ -1,11 +1,11 @@
 import { API } from '../api';
 import { axiosInstance } from '../axios';
 import type { InteractiveTask } from '@/shared/models/InteractiveTask';
-import type { BaseQueryParams } from '../types';
+import type { BaseQueryParams, PaginatedResponse } from '../types';
 
 export const interactiveTasksApi = {
   getAll: async (params?: BaseQueryParams) => {
-    const { data } = await axiosInstance.get<InteractiveTask[]>(API.getInteractiveTasks, { 
+    const { data } = await axiosInstance.get<PaginatedResponse<InteractiveTask>>(API.getInteractiveTasks, { 
       params 
     });
     return data;
@@ -16,13 +16,29 @@ export const interactiveTasksApi = {
     return data;
   },
 
-  create: async (task: Omit<InteractiveTask, '_id'>) => {
-    const { data } = await axiosInstance.post<InteractiveTask>(API.createInteractiveTask, task);
+  create: async (formData: FormData) => {
+    const { data } = await axiosInstance.post<InteractiveTask>(
+      API.createInteractiveTask, 
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
     return data;
   },
 
-  update: async (id: string, task: Partial<InteractiveTask>) => {
-    const { data } = await axiosInstance.put<InteractiveTask>(API.updateInteractiveTask(id), task);
+  update: async (id: string, formData: FormData) => {
+    const { data } = await axiosInstance.put<InteractiveTask>(
+      API.updateInteractiveTask(id), 
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
     return data;
   },
 

@@ -1,5 +1,4 @@
 "use client"
-
 import Image from "next/image"
 import { useState } from "react"
 import { Star, Edit, Trash2, Eye, AlertCircle } from "lucide-react"
@@ -10,33 +9,28 @@ import { Badge } from "@/components/ui/badge"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
-import type { ClinicTask } from "@/shared/models/ClinicTask"
+import type { InteractiveTask } from "@/shared/models/InteractiveTask"
 import { getContentUrl } from "@/shared/utils/url"
 import { TaskBadges } from "@/shared/ui/TaskBadges/TaskBadges"
 
-interface ClinicTaskCardProps extends ClinicTask {
+interface InteractiveTaskCardProps extends InteractiveTask {
   onEdit: (id: string) => void
   onDelete: (id: string) => void
 }
 
-export default function ClinicalCaseCard({
+export default function InteractiveTaskCard({
   _id,
   name,
   difficulty,
   cover_image,
-  images,
-  description,
-  diagnoses,
-  treatment,
-  additional_info,
+  answers,
   difficulty_type,
-  ai_scenario,
-  stars,
+  available_errors,
   feedback,
-  nozology,
+  nozology, stars,
   onEdit,
   onDelete,
-}: ClinicTaskCardProps) {
+}: InteractiveTaskCardProps) {
   const [imagesOpen, setImagesOpen] = useState(false)
 
   return (
@@ -49,7 +43,6 @@ export default function ClinicalCaseCard({
           <div className="flex items-start justify-between">
             <div className="space-y-1">
               <h3 className="font-semibold leading-none tracking-tight">{name}</h3>
-              <p className="text-sm text-muted-foreground">{description}</p>
             </div>
             <div className="flex -ml-1 text-yellow-400">
             <Star
@@ -64,41 +57,9 @@ export default function ClinicalCaseCard({
             <Badge variant="secondary">Сложность: {difficulty}/10</Badge>
             <Badge variant="outline">{difficulty_type}</Badge>
           </div>
-
-          <div className="grid grid-cols-2 p-2 border-2 border-gray-200 rounded-lg gap-2">
-            <p className="text-sm font-semibold col-span-2">Диагнозы:</p>
-            {diagnoses.map((diagnosis, index) => (
-              <TooltipProvider key={index}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Badge variant={diagnosis.is_correct ? "default" : "secondary"} className="flex flex-col gap-1 items-start p-1">
-                      <p className="text-sm font-semibold">{diagnosis.name}</p>
-                      <p className="text-sm ">{diagnosis.description}</p>
-                    </Badge>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{diagnosis.description}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            ))}
-          </div>
-
           <div className="text-sm">
-            <strong>Лечение:</strong> {treatment}
+            <strong>Доступно ошибок:</strong> {available_errors}
           </div>
-
-          {additional_info && (
-            <div className="text-sm">
-              <strong>Дополнительно:</strong> {additional_info}
-            </div>
-          )}
-
-          {ai_scenario && (
-            <div className="text-sm">
-              <strong>AI сценарий:</strong> {ai_scenario}
-            </div>
-          )}
           <div className="flex items-center gap-2">
             <TaskBadges feedback={feedback} />
           </div>
@@ -125,28 +86,22 @@ export default function ClinicalCaseCard({
             <DialogTitle>{name} - Изображения</DialogTitle>
           </DialogHeader>
           <div className="grid grid-cols-2 gap-4">
-            {images.map((img, index) => (
-              <div key={index} className="relative aspect-[16/9]">
-                <Image
-                  src={getContentUrl(img.image)}
-                  alt={`Image ${index + 1}`}
-                  fill
-                  className={`object-cover ${!img.is_open ? "border-4 border-red-500" : ""}`}
-                />
-                {!img.is_open && (
-                  <div className="absolute top-2 right-2">
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <AlertCircle className="w-6 h-6 text-red-500" />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Это изображение закрыто</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
-                )}
+            {answers.map((img, index) => (
+              <div 
+                key={index} 
+                className="relative flex flex-col gap-2 w-full"
+              >
+                <div className="relative aspect-square w-full">
+                  <Image
+                    src={getContentUrl(img.image)}
+                    alt={`Image ${index + 1}`}
+                    fill
+                    className="object-cover rounded-lg"
+                  />
+                </div>
+                <div className="p-2 border rounded-lg">
+                <p className="text-sm font-medium">{img.answer}</p> 
+                </div>
               </div>
             ))}
           </div>
