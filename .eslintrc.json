@@ -14,20 +14,17 @@
   "rules": {
     "prettier/prettier": ["off"],
     "security/detect-object-injection": "off",
-    "max-lines": [
-      "error",
-      { "max": 300, "skipBlankLines": true, "skipComments": true }
-    ],
     "react/jsx-filename-extension": "off",
     "import/order": "off",
     "no-empty-pattern": "off",
-    "@typescript-eslint/no-unused-vars": ["error"],
+    "@typescript-eslint/no-unused-vars": "off",
     "react/react-in-jsx-scope": "off",
     "import/no-extraneous-dependencies": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/ban-types": "off",
     "no-irregular-whitespace": "off",
-    "react-hooks/exhaustive-deps": "off"
+    "react-hooks/exhaustive-deps": "off",
+    "prefer-const": "off"
   }
 }

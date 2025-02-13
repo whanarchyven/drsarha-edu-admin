@@ -5,8 +5,8 @@ import type { BaseQueryParams } from '../types';
 
 export const coursesApi = {
   getAll: async (params?: BaseQueryParams) => {
-    const { data } = await axiosInstance.get<Course[]>(API.getCourses, { 
-      params 
+    const { data } = await axiosInstance.get<Course[]>(API.getCourses, {
+      params,
     });
     return data;
   },
@@ -22,11 +22,14 @@ export const coursesApi = {
   },
 
   update: async (id: string, course: Partial<Course>) => {
-    const { data } = await axiosInstance.put<Course>(API.updateCourse(id), course);
+    const { data } = await axiosInstance.put<Course>(
+      API.updateCourse(id),
+      course
+    );
     return data;
   },
 
   delete: async (id: string) => {
     await axiosInstance.delete(API.deleteCourse(id));
-  }
-}; 
+  },
+};

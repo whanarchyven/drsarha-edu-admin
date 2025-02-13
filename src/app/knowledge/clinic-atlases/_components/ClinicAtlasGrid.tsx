@@ -3,17 +3,13 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Edit, Trash2 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Pagination } from '@/shared/ui/pagination';
 
-import ClinicAtlasCard from '@/entities/clinic-atlas/ui/ClinicalAtlasCard'
+import ClinicAtlasCard from '@/entities/clinic-atlas/ui/ClinicalAtlasCard';
 import { ClinicAtlas } from '@/shared/models/ClinicAtlas';
 import { clinicAtlasesApi } from '@/shared/api/clinic-atlases';
 import { DeleteDialog } from '@/shared/ui/DeleteDialog/DeleteDialog';
-
-
 
 interface ClinicAtlasGridProps {
   data: ClinicAtlas[];
@@ -27,11 +23,18 @@ interface ClinicAtlasGridProps {
   onPageChange: (page: number) => void;
 }
 
-export function ClinicAtlasGrid({ data, isLoading, pagination, onPageChange }: ClinicAtlasGridProps) {
+export function ClinicAtlasGrid({
+  data,
+  isLoading,
+  pagination,
+  onPageChange,
+}: ClinicAtlasGridProps) {
   const router = useRouter();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [clinicAtlasToDelete, setClinicAtlasToDelete] = useState<string | null>(null);
+  const [clinicAtlasToDelete, setClinicAtlasToDelete] = useState<string | null>(
+    null
+  );
 
   const handleDelete = async () => {
     if (!clinicAtlasToDelete) return;
@@ -71,7 +74,7 @@ export function ClinicAtlasGrid({ data, isLoading, pagination, onPageChange }: C
   }
 
   const handleEdit = (id: string) => {
-      router.push(`/knowledge/clinic-atlases/${id}/edit`);
+    router.push(`/knowledge/clinic-atlases/${id}/edit`);
   };
 
   return (
@@ -79,14 +82,16 @@ export function ClinicAtlasGrid({ data, isLoading, pagination, onPageChange }: C
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {data.map((atlas) => {
-            if(atlas._id) {
+            if (atlas._id) {
               return (
-                <ClinicAtlasCard 
-                  key={atlas._id} 
-                  _id={atlas._id} 
-                  {...atlas}  
+                <ClinicAtlasCard
+                  key={atlas._id}
+                  _id={atlas._id}
+                  {...atlas}
                   onDelete={() => openDeleteDialog(atlas._id!)}
-                  onEdit={()=>{handleEdit(atlas._id!)}}
+                  onEdit={() => {
+                    handleEdit(atlas._id!);
+                  }}
                 />
               );
             }
@@ -112,10 +117,9 @@ export function ClinicAtlasGrid({ data, isLoading, pagination, onPageChange }: C
         isOpen={isDeleteDialogOpen}
         onClose={() => setIsDeleteDialogOpen(false)}
         onConfirm={handleDelete}
-        isLoading={isDeleting}
-      >
+        isLoading={isDeleting}>
         Вы уверены, что хотите удалить клинический атлас?
       </DeleteDialog>
     </>
   );
-} 
+}

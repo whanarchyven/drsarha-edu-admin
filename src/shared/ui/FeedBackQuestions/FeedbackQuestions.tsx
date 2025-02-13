@@ -1,18 +1,28 @@
 'use client';
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Plus, Trash2 } from "lucide-react";
-import { useFieldArray, useFormContext } from "react-hook-form";
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
-import { Card } from "@/components/ui/card";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Plus, Trash2 } from 'lucide-react';
+import { useFieldArray, useFormContext } from 'react-hook-form';
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from '@/components/ui/form';
+import { Card } from '@/components/ui/card';
 
 export function FeedbackQuestions() {
   const { control, watch } = useFormContext();
-  const { fields: questions, append: appendQuestion, remove: removeQuestion } = useFieldArray({
+  const {
+    fields: questions,
+    append: appendQuestion,
+    remove: removeQuestion,
+  } = useFieldArray({
     control,
-    name: "feedback"
+    name: 'feedback',
   });
 
   return (
@@ -23,12 +33,13 @@ export function FeedbackQuestions() {
           type="button"
           variant="outline"
           size="sm"
-          onClick={() => appendQuestion({ 
-            question: '', 
-            has_correct: false, 
-            answers: [] 
-          })}
-        >
+          onClick={() =>
+            appendQuestion({
+              question: '',
+              has_correct: false,
+              answers: [],
+            })
+          }>
           <Plus className="h-4 w-4 mr-2" />
           Добавить вопрос
         </Button>
@@ -66,15 +77,17 @@ export function FeedbackQuestions() {
                           onCheckedChange={field.onChange}
                         />
                       </FormControl>
-                      <FormLabel className="!mt-0">Есть правильный ответ</FormLabel>
+                      <FormLabel className="!mt-0">
+                        Есть правильный ответ
+                      </FormLabel>
                     </FormItem>
                   )}
                 />
 
                 {hasCorrect && (
-                  <AnswersList 
-                    control={control} 
-                    questionIndex={questionIndex} 
+                  <AnswersList
+                    control={control}
+                    questionIndex={questionIndex}
                   />
                 )}
               </div>
@@ -83,8 +96,7 @@ export function FeedbackQuestions() {
                 type="button"
                 variant="ghost"
                 size="sm"
-                onClick={() => removeQuestion(questionIndex)}
-              >
+                onClick={() => removeQuestion(questionIndex)}>
                 <Trash2 className="h-4 w-4" />
               </Button>
             </div>
@@ -95,10 +107,20 @@ export function FeedbackQuestions() {
   );
 }
 
-function AnswersList({ control, questionIndex }: { control: any; questionIndex: number }) {
-  const { fields: answers, append, remove } = useFieldArray({
+function AnswersList({
+  control,
+  questionIndex,
+}: {
+  control: any;
+  questionIndex: number;
+}) {
+  const {
+    fields: answers,
+    append,
+    remove,
+  } = useFieldArray({
     control,
-    name: `feedback.${questionIndex}.answers`
+    name: `feedback.${questionIndex}.answers`,
   });
 
   return (
@@ -109,8 +131,7 @@ function AnswersList({ control, questionIndex }: { control: any; questionIndex: 
           type="button"
           variant="outline"
           size="sm"
-          onClick={() => append({ answer: '', is_correct: false })}
-        >
+          onClick={() => append({ answer: '', is_correct: false })}>
           <Plus className="h-4 w-4 mr-2" />
           Добавить вариант ответа
         </Button>
@@ -151,12 +172,11 @@ function AnswersList({ control, questionIndex }: { control: any; questionIndex: 
             type="button"
             variant="ghost"
             size="sm"
-            onClick={() => remove(answerIndex)}
-          >
+            onClick={() => remove(answerIndex)}>
             <Trash2 className="h-4 w-4" />
           </Button>
         </div>
       ))}
     </div>
   );
-} 
+}

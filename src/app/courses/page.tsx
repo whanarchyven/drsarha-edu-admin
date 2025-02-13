@@ -29,11 +29,15 @@ export default function CoursesPage() {
         <h1 className="text-2xl font-bold">Курсы</h1>
         <Button>Создать курс</Button>
       </div>
-      
+
       <div className="grid grid-cols-3 gap-4">
         {courses.map((course) => (
           <div key={course.id} className="border rounded-lg p-4">
-            <img src={course.cover_image} alt={course.name} className="w-full h-40 object-cover rounded mb-2" />
+            <img
+              src={course.cover_image}
+              alt={course.name}
+              className="w-full h-40 object-cover rounded mb-2"
+            />
             <h3 className="font-bold">{course.name}</h3>
             <p>Длительность: {course.duration}</p>
             <p>Рейтинг: {course.stars}/5</p>
@@ -42,4 +46,4 @@ export default function CoursesPage() {
       </div>
     </div>
   );
-} 
+}

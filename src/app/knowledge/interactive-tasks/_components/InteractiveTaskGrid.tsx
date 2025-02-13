@@ -8,12 +8,10 @@ import { Edit, Trash2 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Pagination } from '@/shared/ui/pagination';
 
-import InteractiveTaskCard from '@/entities/interactive-task/ui/InteractiveTaskCard'
+import InteractiveTaskCard from '@/entities/interactive-task/ui/InteractiveTaskCard';
 import { InteractiveTask } from '@/shared/models/InteractiveTask';
 import { interactiveTasksApi } from '@/shared/api/interactive-tasks';
 import { DeleteDialog } from '@/shared/ui/DeleteDialog/DeleteDialog';
-
-
 
 interface InteractiveTaskGridProps {
   data: InteractiveTask[];
@@ -27,11 +25,18 @@ interface InteractiveTaskGridProps {
   onPageChange: (page: number) => void;
 }
 
-export function InteractiveTaskGrid({ data, isLoading, pagination, onPageChange }: InteractiveTaskGridProps) {
+export function InteractiveTaskGrid({
+  data,
+  isLoading,
+  pagination,
+  onPageChange,
+}: InteractiveTaskGridProps) {
   const router = useRouter();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [interactiveTaskToDelete, setInteractiveTaskToDelete] = useState<string | null>(null);
+  const [interactiveTaskToDelete, setInteractiveTaskToDelete] = useState<
+    string | null
+  >(null);
 
   const handleDelete = async () => {
     if (!interactiveTaskToDelete) return;
@@ -71,7 +76,7 @@ export function InteractiveTaskGrid({ data, isLoading, pagination, onPageChange 
   }
 
   const handleEdit = (id: string) => {
-      router.push(`/knowledge/interactive-tasks/${id}/edit`);
+    router.push(`/knowledge/interactive-tasks/${id}/edit`);
   };
 
   return (
@@ -79,14 +84,16 @@ export function InteractiveTaskGrid({ data, isLoading, pagination, onPageChange 
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {data.map((task) => {
-            if(task._id) {
+            if (task._id) {
               return (
-                <InteractiveTaskCard 
-                  key={task._id} 
-                  _id={task._id} 
-                  {...task}  
+                <InteractiveTaskCard
+                  key={task._id}
+                  _id={task._id}
+                  {...task}
                   onDelete={() => openDeleteDialog(task._id!)}
-                  onEdit={()=>{handleEdit(task._id!)}}
+                  onEdit={() => {
+                    handleEdit(task._id!);
+                  }}
                 />
               );
             }
@@ -112,10 +119,9 @@ export function InteractiveTaskGrid({ data, isLoading, pagination, onPageChange 
         isOpen={isDeleteDialogOpen}
         onClose={() => setIsDeleteDialogOpen(false)}
         onConfirm={handleDelete}
-        isLoading={isDeleting}
-      >
+        isLoading={isDeleting}>
         Вы уверены, что хотите удалить интерактивную задачу?
       </DeleteDialog>
     </>
   );
-} 
+}

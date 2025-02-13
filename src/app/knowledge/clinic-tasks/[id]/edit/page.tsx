@@ -37,8 +37,10 @@ export default function EditClinicTaskPage({
 
   return (
     <div className="max-w-2xl mx-auto py-8">
-      <h1 className="text-2xl font-bold mb-8">Редактирование клинической задачи</h1>
+      <h1 className="text-2xl font-bold mb-8">
+        Редактирование клинической задачи
+      </h1>
       <ClinicTaskForm initialData={clinicTask} />
     </div>
   );
-} 
+}

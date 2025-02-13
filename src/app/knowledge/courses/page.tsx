@@ -10,7 +10,7 @@ import type { BaseQueryParams } from '@/shared/api/types';
 const columns = [
   { key: 'name', label: 'Название' },
   { key: 'duration', label: 'Длительность' },
-  { key: 'stars', label: 'Рейтинг' }
+  { key: 'stars', label: 'Рейтинг' },
 ];
 
 export default function CoursesPage() {
@@ -19,7 +19,7 @@ export default function CoursesPage() {
     total: 0,
     page: 1,
     totalPages: 1,
-    hasMore: false
+    hasMore: false,
   });
   const [isLoading, setIsLoading] = useState(false);
   const searchParams = useSearchParams();
@@ -32,14 +32,14 @@ export default function CoursesPage() {
         ...params,
         nozologyId: currentNozologyId || undefined,
         page: params?.page || 1,
-        limit: 10
+        limit: 10,
       });
       setData(response.items);
       setPagination({
         total: response.total,
         page: response.page,
         totalPages: response.totalPages,
-        hasMore: response.hasMore
+        hasMore: response.hasMore,
       });
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -88,4 +88,4 @@ export default function CoursesPage() {
       onCreate={handleCreate}
     />
   );
-} 
+}

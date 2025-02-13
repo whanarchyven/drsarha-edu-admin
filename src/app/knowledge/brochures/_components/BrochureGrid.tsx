@@ -1,14 +1,24 @@
-"use client"
+'use client';
 
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { FileText, Download, Plus, Edit, Trash2, Search } from "lucide-react"
-import Image from "next/image"
-import type { Brochure } from "@/shared/models/Brochure"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { MoreVertical } from "lucide-react"
-import { BrochureSkeletonGrid } from "./BrochureSkeleton"
-import { Input } from "@/components/ui/input"
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { FileText, Download, Plus, Edit, Trash2, Search } from 'lucide-react';
+import Image from 'next/image';
+import type { Brochure } from '@/shared/models/Brochure';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { MoreVertical } from 'lucide-react';
+import { BrochureSkeletonGrid } from './BrochureSkeleton';
+import { Input } from '@/components/ui/input';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -18,49 +28,49 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { useState, useEffect } from "react"
-import { Pagination } from "@/shared/ui/pagination"
-import { useDebounce } from "@/shared/hooks/useDebounce"
-import { getContentUrl } from "@/shared/utils/url"
+} from '@/components/ui/alert-dialog';
+import { useState, useEffect } from 'react';
+import { Pagination } from '@/shared/ui/pagination';
+import { useDebounce } from '@/shared/hooks/useDebounce';
+import { getContentUrl } from '@/shared/utils/url';
 
 interface BrochureGridProps {
-  data: Brochure[]
-  isLoading: boolean
+  data: Brochure[];
+  isLoading: boolean;
   pagination: {
-    total: number
-    page: number
-    totalPages: number
-    hasMore: boolean
-  }
-  onEdit: (id: string) => void
-  onDelete: (id: string) => void
-  onCreate: () => void
-  onSearch: (params: { search?: string; page?: number }) => void
+    total: number;
+    page: number;
+    totalPages: number;
+    hasMore: boolean;
+  };
+  onEdit: (id: string) => void;
+  onDelete: (id: string) => void;
+  onCreate: () => void;
+  onSearch: (params: { search?: string; page?: number }) => void;
 }
 
-export function BrochureGrid({ 
-  data, 
-  isLoading, 
-  pagination, 
-  onEdit, 
-  onDelete, 
-  onCreate, 
-  onSearch 
+export function BrochureGrid({
+  data,
+  isLoading,
+  pagination,
+  onEdit,
+  onDelete,
+  onCreate,
+  onSearch,
 }: BrochureGridProps) {
-  const [deleteId, setDeleteId] = useState<string | null>(null)
-  const [searchTerm, setSearchTerm] = useState("")
-  const debouncedSearch = useDebounce(searchTerm, 300)
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearch = useDebounce(searchTerm, 300);
 
   // Эффект для поиска
   useEffect(() => {
-    onSearch({ search: debouncedSearch, page: 1 })
-  }, [debouncedSearch])
+    onSearch({ search: debouncedSearch, page: 1 });
+  }, [debouncedSearch]);
 
   const handleDelete = async (id: string) => {
-    setDeleteId(null)
-    onDelete(id)
-  }
+    setDeleteId(null);
+    onDelete(id);
+  };
 
   return (
     <div className="container p-6">
@@ -101,28 +111,31 @@ export function BrochureGrid({
                     </div>
                   </CardHeader>
                   <CardContent className="pt-4">
-                    <h2 className="font-semibold text-lg line-clamp-2">{brochure.name}</h2>
+                    <h2 className="font-semibold text-lg line-clamp-2">
+                      {brochure.name}
+                    </h2>
                   </CardContent>
                   <CardFooter className="gap-2">
                     <Button variant="outline" className="w-full" asChild>
-                      <a href={getContentUrl(brochure.pdf_file)} target="_blank" rel="noopener noreferrer">
+                      <a
+                        href={getContentUrl(brochure.pdf_file)}
+                        target="_blank"
+                        rel="noopener noreferrer">
                         <FileText className="mr-2 h-4 w-4" />
                         Просмотр
                       </a>
                     </Button>
                     <div className="flex gap-2 w-full">
-                      <Button 
-                        variant="outline" 
+                      <Button
+                        variant="outline"
                         className="flex-1"
-                        onClick={() => onEdit(brochure._id)}
-                      >
-                        <Edit className="h-4 w-4" />  
+                        onClick={() => onEdit(brochure._id)}>
+                        <Edit className="h-4 w-4" />
                       </Button>
-                      <Button 
-                        variant="destructive" 
+                      <Button
+                        variant="destructive"
                         className="flex-1"
-                        onClick={() => setDeleteId(brochure._id)}
-                      >
+                        onClick={() => setDeleteId(brochure._id)}>
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
@@ -151,20 +164,20 @@ export function BrochureGrid({
           <AlertDialogHeader>
             <AlertDialogTitle>Подтверждение удаления</AlertDialogTitle>
             <AlertDialogDescription>
-              Вы уверены, что хотите удалить эту брошюру? Это действие нельзя отменить.
+              Вы уверены, что хотите удалить эту брошюру? Это действие нельзя
+              отменить.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Отмена</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => deleteId && handleDelete(deleteId)}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
               Удалить
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
-} 
+  );
+}

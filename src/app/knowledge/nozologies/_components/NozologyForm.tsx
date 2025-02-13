@@ -72,18 +72,12 @@ export function NozologyForm({ initialData }: NozologyFormProps) {
           )}
         />
         <div className="flex gap-4">
-          <Button type="submit">
-            {initialData ? 'Сохранить' : 'Создать'}
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => router.back()}
-          >
+          <Button type="submit">{initialData ? 'Сохранить' : 'Создать'}</Button>
+          <Button type="button" variant="outline" onClick={() => router.back()}>
             Отмена
           </Button>
         </div>
       </form>
     </Form>
   );
-} 
+}

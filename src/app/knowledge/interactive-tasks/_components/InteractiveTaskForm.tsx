@@ -7,9 +7,22 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { useNozologiesStore } from '@/shared/store/nozologiesStore';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { interactiveTasksApi } from '@/shared/api/interactive-tasks';
 import type { InteractiveTask } from '@/shared/models/InteractiveTask';
 import { FeedbackQuestions } from '@/shared/ui/FeedBackQuestions/FeedbackQuestions';
@@ -23,22 +36,34 @@ const formSchema = z.object({
   name: z.string().min(1, 'Название обязательно'),
   difficulty: z.number().min(1).max(10),
   cover_image: z.any(),
-  answers: z.array(z.object({
-    image: z.any(),
-    answer: z.string()
-  })).default([]),
+  answers: z
+    .array(
+      z.object({
+        image: z.any(),
+        answer: z.string(),
+      })
+    )
+    .default([]),
   difficulty_type: z.nativeEnum(TaskDifficultyType),
   available_errors: z.number().min(0),
   stars: z.number().min(0).max(5),
   nozology: z.string().min(1, 'Нозология обязательна'),
-  feedback: z.array(z.object({
-    question: z.string(),
-    has_correct: z.boolean(),
-    answers: z.array(z.object({
-      answer: z.string(),
-      is_correct: z.boolean()
-    })).optional()
-  })).default([])
+  feedback: z
+    .array(
+      z.object({
+        question: z.string(),
+        has_correct: z.boolean(),
+        answers: z
+          .array(
+            z.object({
+              answer: z.string(),
+              is_correct: z.boolean(),
+            })
+          )
+          .optional(),
+      })
+    )
+    .default([]),
 });
 
 interface InteractiveTaskFormProps {
@@ -54,7 +79,8 @@ export function InteractiveTaskForm({ initialData }: InteractiveTaskFormProps) {
     defaultValues: {
       name: initialData?.name || '',
       difficulty: initialData?.difficulty || 1,
-      difficulty_type: initialData?.difficulty_type || TaskDifficultyType['easy'],
+      difficulty_type:
+        initialData?.difficulty_type || TaskDifficultyType['easy'],
       available_errors: initialData?.available_errors || 0,
       stars: initialData?.stars || 0,
       nozology: initialData?.nozology || '',
@@ -67,9 +93,11 @@ export function InteractiveTaskForm({ initialData }: InteractiveTaskFormProps) {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const formData = new FormData();
-      
+
       if (!initialData && !values.cover_image?.[0]) {
-        throw new Error('Обложка обязательна при создании интерактивной задачи');
+        throw new Error(
+          'Обложка обязательна при создании интерактивной задачи'
+        );
       }
 
       // Базовые поля
@@ -90,8 +118,9 @@ export function InteractiveTaskForm({ initialData }: InteractiveTaskFormProps) {
 
       // Подготовка данных ответов
       const answersData = values.answers.map((ans, counter) => ({
-        image: typeof ans.image === 'string' ? ans.image : `image_file_${counter}`,
-        answer: ans.answer
+        image:
+          typeof ans.image === 'string' ? ans.image : `image_file_${counter}`,
+        answer: ans.answer,
       }));
       formData.append('answers', JSON.stringify(answersData));
 
@@ -104,7 +133,7 @@ export function InteractiveTaskForm({ initialData }: InteractiveTaskFormProps) {
 
       // Для отладки
       console.log('FormData contents:');
-      for (let [key, value] of formData.entries()) {
+      for (const [key, value] of formData.entries()) {
         console.log(key, ':', value);
       }
 
@@ -113,12 +142,14 @@ export function InteractiveTaskForm({ initialData }: InteractiveTaskFormProps) {
       } else {
         await interactiveTasksApi.create(formData);
       }
-      
+
       router.push('/knowledge/interactive-tasks');
       router.refresh();
     } catch (error: any) {
       console.error('Error saving interactive task:', error);
-      alert(error.message || 'Произошла ошибка при сохранении интерактивной задачи');
+      alert(
+        error.message || 'Произошла ошибка при сохранении интерактивной задачи'
+      );
     }
   };
 
@@ -187,7 +218,9 @@ export function InteractiveTaskForm({ initialData }: InteractiveTaskFormProps) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Тип сложности</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Выберите тип" />
@@ -212,7 +245,9 @@ export function InteractiveTaskForm({ initialData }: InteractiveTaskFormProps) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Нозология</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Выберите нозологию" />
@@ -268,17 +303,15 @@ export function InteractiveTaskForm({ initialData }: InteractiveTaskFormProps) {
 
         <div className="flex gap-4">
           <Button type="submit">
-            {initialData ? 'Сохранить изменения' : 'Создать интерактивную задачу'}
+            {initialData
+              ? 'Сохранить изменения'
+              : 'Создать интерактивную задачу'}
           </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => router.back()}
-          >
+          <Button type="button" variant="outline" onClick={() => router.back()}>
             Отмена
           </Button>
         </div>
       </form>
     </Form>
   );
-} 
+}

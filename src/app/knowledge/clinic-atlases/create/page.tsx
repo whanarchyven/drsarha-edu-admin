@@ -18,4 +18,4 @@ export default function CreateClinicTaskPage() {
       <ClinicAtlasForm />
     </div>
   );
-} 
+}

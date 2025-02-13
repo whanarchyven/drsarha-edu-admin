@@ -18,11 +18,11 @@ export const useNozologiesStore = create<NozologiesState>((set) => ({
       const response = await nozologiesApi.getAll(params);
       set({
         items: Array.isArray(response) ? response : [],
-        isLoading: false
+        isLoading: false,
       });
     } catch (error) {
       console.error('Error fetching nozologies:', error);
       set({ isLoading: false });
     }
   },
-})); 
+}));

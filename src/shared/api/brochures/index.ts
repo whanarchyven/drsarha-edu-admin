@@ -7,7 +7,7 @@ import type { PaginatedResponse } from '../types';
 export const brochuresApi = {
   getAll: async (params?: BaseQueryParams) => {
     const { data } = await axiosInstance.get<PaginatedResponse<Brochure>>(
-      API.getBrochures, 
+      API.getBrochures,
       { params }
     );
     return data;
@@ -20,7 +20,7 @@ export const brochuresApi = {
 
   create: async (formData: FormData) => {
     const { data } = await axiosInstance.post<Brochure>(
-      API.createBrochure, 
+      API.createBrochure,
       formData,
       {
         headers: {
@@ -33,7 +33,7 @@ export const brochuresApi = {
 
   update: async (id: string, formData: FormData) => {
     const { data } = await axiosInstance.put<Brochure>(
-      API.updateBrochure(id), 
+      API.updateBrochure(id),
       formData,
       {
         headers: {
@@ -46,5 +46,5 @@ export const brochuresApi = {
 
   delete: async (id: string) => {
     await axiosInstance.delete(API.deleteBrochure(id));
-  }
-}; 
+  },
+};

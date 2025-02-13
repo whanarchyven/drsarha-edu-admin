@@ -11,7 +11,8 @@ export default function EditInteractiveTaskPage({
 }: {
   params: { id: string };
 }) {
-  const [interactiveTask, setInteractiveTask] = useState<InteractiveTask | null>(null);
+  const [interactiveTask, setInteractiveTask] =
+    useState<InteractiveTask | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -38,8 +39,10 @@ export default function EditInteractiveTaskPage({
 
   return (
     <div className="max-w-2xl mx-auto py-8">
-      <h1 className="text-2xl font-bold mb-8">Редактирование интерактивной задачи</h1>
+      <h1 className="text-2xl font-bold mb-8">
+        Редактирование интерактивной задачи
+      </h1>
       <InteractiveTaskForm initialData={interactiveTask} />
     </div>
   );
-} 
+}

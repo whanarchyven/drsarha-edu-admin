@@ -8,9 +8,22 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { useNozologiesStore } from '@/shared/store/nozologiesStore';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { clinicTasksApi } from '@/shared/api/clinic-tasks';
 import type { ClinicTask } from '@/shared/models/ClinicTask';
 import { FeedbackQuestions } from '@/shared/ui/FeedBackQuestions/FeedbackQuestions';
@@ -26,29 +39,45 @@ const formSchema = z.object({
   difficulty: z.number().min(1).max(10),
   description: z.string().min(1, 'Описание обязательно'),
   cover_image: z.any(),
-  images: z.array(z.object({
-    image: z.any(),
-    is_open: z.boolean()
-  })).default([]),
+  images: z
+    .array(
+      z.object({
+        image: z.any(),
+        is_open: z.boolean(),
+      })
+    )
+    .default([]),
   treatment: z.string().min(1, 'Лечение обязательно'),
   additional_info: z.string().optional(),
   difficulty_type: z.nativeEnum(TaskDifficultyType),
   ai_scenario: z.string().optional(),
   stars: z.number().min(0),
   nozology: z.string().min(1, 'Нозология обязательна'),
-  diagnoses: z.array(z.object({
-    name: z.string(),
-    is_correct: z.boolean(),
-    description: z.string()
-  })).default([]),
-  feedback: z.array(z.object({
-    question: z.string(),
-    has_correct: z.boolean(),
-    answers: z.array(z.object({
-      answer: z.string(),
-      is_correct: z.boolean()
-    })).optional()
-  })).default([])
+  diagnoses: z
+    .array(
+      z.object({
+        name: z.string(),
+        is_correct: z.boolean(),
+        description: z.string(),
+      })
+    )
+    .default([]),
+  feedback: z
+    .array(
+      z.object({
+        question: z.string(),
+        has_correct: z.boolean(),
+        answers: z
+          .array(
+            z.object({
+              answer: z.string(),
+              is_correct: z.boolean(),
+            })
+          )
+          .optional(),
+      })
+    )
+    .default([]),
 });
 
 interface ClinicTaskFormProps {
@@ -81,7 +110,7 @@ export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const formData = new FormData();
-      
+
       if (!initialData && !values.cover_image?.[0]) {
         throw new Error('Обложка обязательна при создании задачи');
       }
@@ -108,8 +137,9 @@ export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
 
       // Подготовка данных изображений
       const imagesData = values.images.map((img, counter) => ({
-        image: typeof img.image === 'string' ? img.image : `image_file_${counter}`,
-        is_open: img.is_open
+        image:
+          typeof img.image === 'string' ? img.image : `image_file_${counter}`,
+        is_open: img.is_open,
       }));
       formData.append('images', JSON.stringify(imagesData));
 
@@ -125,7 +155,7 @@ export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
       } else {
         await clinicTasksApi.create(formData);
       }
-      
+
       router.push('/knowledge/clinic-tasks');
       router.refresh();
     } catch (error: any) {
@@ -198,7 +228,9 @@ export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Тип сложности</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Выберите тип" />
@@ -253,7 +285,10 @@ export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
               <FormItem>
                 <FormLabel>Дополнительная информация</FormLabel>
                 <FormControl>
-                  <Textarea {...field} placeholder="Дополнительная информация" />
+                  <Textarea
+                    {...field}
+                    placeholder="Дополнительная информация"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -280,7 +315,9 @@ export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Нозология</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Выберите нозологию" />
@@ -342,15 +379,11 @@ export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
           <Button type="submit">
             {initialData ? 'Сохранить изменения' : 'Создать клиническую задачу'}
           </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => router.back()}
-          >
+          <Button type="button" variant="outline" onClick={() => router.back()}>
             Отмена
           </Button>
         </div>
       </form>
     </Form>
   );
-} 
+}

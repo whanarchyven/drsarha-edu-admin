@@ -1,17 +1,23 @@
 'use client';
 
-import { useFieldArray, useFormContext } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Plus, Trash2 } from "lucide-react";
-import Image from "next/image";
-import { getContentUrl } from "@/shared/utils/url";
+import { useFieldArray, useFormContext } from 'react-hook-form';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Plus, Trash2 } from 'lucide-react';
+import Image from 'next/image';
+import { getContentUrl } from '@/shared/utils/url';
 
 export function AnswersField() {
   const form = useFormContext();
   const { fields, append, remove } = useFieldArray({
-    name: "answers",
+    name: 'answers',
     control: form.control,
   });
 
@@ -23,15 +29,16 @@ export function AnswersField() {
           type="button"
           variant="outline"
           size="sm"
-          onClick={() => append({ image: undefined, answer: '' })}
-        >
+          onClick={() => append({ image: undefined, answer: '' })}>
           <Plus className="w-4 h-4 mr-2" />
           Добавить ответ
         </Button>
       </div>
 
       {fields.map((field, index) => (
-        <div key={field.id} className="flex flex-col gap-4 p-4 border rounded-lg">
+        <div
+          key={field.id}
+          className="flex flex-col gap-4 p-4 border rounded-lg">
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1 space-y-4">
               <FormField
@@ -88,8 +95,7 @@ export function AnswersField() {
               variant="ghost"
               size="icon"
               className="text-destructive"
-              onClick={() => remove(index)}
-            >
+              onClick={() => remove(index)}>
               <Trash2 className="w-4 h-4" />
             </Button>
           </div>
@@ -97,4 +103,4 @@ export function AnswersField() {
       ))}
     </div>
   );
-} 
+}

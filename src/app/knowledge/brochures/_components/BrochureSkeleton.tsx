@@ -1,5 +1,10 @@
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export function BrochureSkeleton() {
   return (
@@ -15,7 +20,7 @@ export function BrochureSkeleton() {
         <Skeleton className="h-10 flex-1" />
       </CardFooter>
     </Card>
-  )
+  );
 }
 
 export function BrochureSkeletonGrid() {
@@ -25,5 +30,5 @@ export function BrochureSkeletonGrid() {
         <BrochureSkeleton key={i} />
       ))}
     </div>
-  )
-} 
+  );
+}

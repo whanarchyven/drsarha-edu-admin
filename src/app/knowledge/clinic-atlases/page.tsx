@@ -24,7 +24,7 @@ export default function ClinicAtlasesPage() {
     total: 0,
     page: 1,
     totalPages: 1,
-    hasMore: false
+    hasMore: false,
   });
 
   const fetchData = async (params?: BaseQueryParams) => {
@@ -35,7 +35,7 @@ export default function ClinicAtlasesPage() {
         nozologyId: currentNozologyId || undefined,
         search: searchQuery || undefined,
         page: params?.page || 1,
-        limit: 12
+        limit: 12,
       });
       console.log(response);
       setData(response.items);
@@ -43,7 +43,7 @@ export default function ClinicAtlasesPage() {
         total: response.total,
         page: response.page,
         totalPages: response.totalPages,
-        hasMore: response.hasMore
+        hasMore: response.hasMore,
       });
     } catch (error) {
       console.error('Error fetching clinic atlases:', error);
@@ -84,4 +84,4 @@ export default function ClinicAtlasesPage() {
       />
     </div>
   );
-} 
+}

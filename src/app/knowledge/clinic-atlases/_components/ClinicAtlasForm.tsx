@@ -8,9 +8,22 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { useNozologiesStore } from '@/shared/store/nozologiesStore';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { clinicAtlasesApi } from '@/shared/api/clinic-atlases';
 import type { ClinicAtlas } from '@/shared/models/ClinicAtlas';
 import { FeedbackQuestions } from '@/shared/ui/FeedBackQuestions/FeedbackQuestions';
@@ -24,24 +37,36 @@ const formSchema = z.object({
   difficulty: z.number().min(1).max(10),
   description: z.string().min(1, 'Описание обязательно'),
   cover_image: z.any(),
-  images: z.array(z.object({
-    image: z.any(),
-    is_open: z.boolean()
-  })).default([]),
+  images: z
+    .array(
+      z.object({
+        image: z.any(),
+        is_open: z.boolean(),
+      })
+    )
+    .default([]),
   clinical_picture: z.string().min(1, 'Клиническая картина обязательна'),
   additional_info: z.string().optional(),
   difficulty_type: z.nativeEnum(TaskDifficultyType),
   ai_scenario: z.string().optional(),
   stars: z.number().min(0),
   nozology: z.string().min(1, 'Нозология обязательна'),
-  feedback: z.array(z.object({
-    question: z.string(),
-    has_correct: z.boolean(),
-    answers: z.array(z.object({
-      answer: z.string(),
-      is_correct: z.boolean()
-    })).optional()
-  })).default([])
+  feedback: z
+    .array(
+      z.object({
+        question: z.string(),
+        has_correct: z.boolean(),
+        answers: z
+          .array(
+            z.object({
+              answer: z.string(),
+              is_correct: z.boolean(),
+            })
+          )
+          .optional(),
+      })
+    )
+    .default([]),
 });
 
 interface ClinicAtlasFormProps {
@@ -60,7 +85,8 @@ export function ClinicAtlasForm({ initialData }: ClinicAtlasFormProps) {
       description: initialData?.description || '',
       clinical_picture: initialData?.clinical_picture || '',
       additional_info: initialData?.additional_info || '',
-      difficulty_type: initialData?.difficulty_type || TaskDifficultyType['easy'],
+      difficulty_type:
+        initialData?.difficulty_type || TaskDifficultyType['easy'],
       ai_scenario: initialData?.ai_scenario || '',
       stars: initialData?.stars || 0,
       nozology: initialData?.nozology || '',
@@ -73,7 +99,7 @@ export function ClinicAtlasForm({ initialData }: ClinicAtlasFormProps) {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const formData = new FormData();
-      
+
       if (!initialData && !values.cover_image?.[0]) {
         throw new Error('Обложка обязательна при создании атласа');
       }
@@ -99,8 +125,9 @@ export function ClinicAtlasForm({ initialData }: ClinicAtlasFormProps) {
 
       // Подготовка данных изображений
       const imagesData = values.images.map((img, counter) => ({
-        image: typeof img.image === 'string' ? img.image : `image_file_${counter}`,
-        is_open: img.is_open
+        image:
+          typeof img.image === 'string' ? img.image : `image_file_${counter}`,
+        is_open: img.is_open,
       }));
       formData.append('images', JSON.stringify(imagesData));
 
@@ -116,7 +143,7 @@ export function ClinicAtlasForm({ initialData }: ClinicAtlasFormProps) {
       } else {
         await clinicAtlasesApi.create(formData);
       }
-      
+
       router.push('/knowledge/clinic-atlases');
       router.refresh();
     } catch (error: any) {
@@ -125,99 +152,38 @@ export function ClinicAtlasForm({ initialData }: ClinicAtlasFormProps) {
     }
   };
 
-  return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <Card className="p-6 space-y-6">
+  const FormFields = ({ form }: { form: any }) => {
+    return (
+      <>
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Название</FormLabel>
+              <FormControl>
+                <Input {...field} placeholder="Введите название" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <div className="grid grid-cols-2 gap-4">
           <FormField
             control={form.control}
-            name="name"
+            name="difficulty"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Название</FormLabel>
+                <FormLabel>Сложность (1-10)</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="Введите название" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <div className="grid grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="difficulty"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Сложность (1-10)</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      min={1}
-                      max={10}
-                      {...field}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="stars"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Звёзды </FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      min={0}
-
-                      {...field}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="difficulty_type"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Тип сложности</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Выберите тип" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {Object.values(TaskDifficultyType).map((type) => (
-                        <SelectItem key={type} value={type}>
-                          {type}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Описание</FormLabel>
-                <FormControl>
-                  <Textarea {...field} placeholder="Введите описание" />
+                  <Input
+                    type="number"
+                    min={1}
+                    max={10}
+                    {...field}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -226,12 +192,17 @@ export function ClinicAtlasForm({ initialData }: ClinicAtlasFormProps) {
 
           <FormField
             control={form.control}
-            name="clinical_picture"
+            name="stars"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Клиническая картина</FormLabel>
+                <FormLabel>Звёзды </FormLabel>
                 <FormControl>
-                  <Textarea {...field} placeholder="Введите клиническую картину" />
+                  <Input
+                    type="number"
+                    min={0}
+                    {...field}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -240,48 +211,22 @@ export function ClinicAtlasForm({ initialData }: ClinicAtlasFormProps) {
 
           <FormField
             control={form.control}
-            name="additional_info"
+            name="difficulty_type"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Дополнительная информация</FormLabel>
-                <FormControl>
-                  <Textarea {...field} placeholder="Дополнительная информация" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="ai_scenario"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>AI сценарий</FormLabel>
-                <FormControl>
-                  <Textarea {...field} placeholder="Опишите AI сценарий" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="nozology"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Нозология</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormLabel>Тип сложности</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Выберите нозологию" />
+                      <SelectValue placeholder="Выберите тип" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {nozologies.map((nozology) => (
-                      <SelectItem key={nozology._id} value={nozology._id}>
-                        {nozology.name}
+                    {Object.values(TaskDifficultyType).map((type) => (
+                      <SelectItem key={type} value={type}>
+                        {type}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -290,36 +235,130 @@ export function ClinicAtlasForm({ initialData }: ClinicAtlasFormProps) {
               </FormItem>
             )}
           />
+        </div>
 
-          <FormField
-            control={form.control}
-            name="cover_image"
-            render={({ field: { value, onChange, ...field } }) => (
-              <FormItem>
-                <FormLabel>Обложка</FormLabel>
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Описание</FormLabel>
+              <FormControl>
+                <Textarea {...field} placeholder="Введите описание" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="clinical_picture"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Клиническая картина</FormLabel>
+              <FormControl>
+                <Textarea
+                  {...field}
+                  placeholder="Введите клиническую картину"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="additional_info"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Дополнительная информация</FormLabel>
+              <FormControl>
+                <Textarea {...field} placeholder="Дополнительная информация" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="ai_scenario"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>AI сценарий</FormLabel>
+              <FormControl>
+                <Textarea {...field} placeholder="Опишите AI сценарий" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="nozology"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Нозология</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => onChange(e.target.files)}
-                    {...field}
-                  />
+                  <SelectTrigger>
+                    <SelectValue placeholder="Выберите нозологию" />
+                  </SelectTrigger>
                 </FormControl>
-                <FormMessage />
-                {initialData?.cover_image && (
-                  <div className="relative aspect-video w-full">
-                    <Image
-                      src={getContentUrl(initialData.cover_image)}
-                      alt="Preview"
-                      fill
-                      className="object-cover rounded-lg"
-                    />
-                  </div>
-                )}
-              </FormItem>
-            )}
-          />
-          <ImagesField />
+                <SelectContent>
+                  {nozologies.map((nozology) => (
+                    <SelectItem key={nozology._id} value={nozology._id}>
+                      {nozology.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="cover_image"
+          render={({ field: { onChange, ...field } }) => (
+            <FormItem>
+              <FormLabel>Обложка</FormLabel>
+              <FormControl>
+                <Input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => onChange(e.target.files)}
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+              {initialData?.cover_image && (
+                <div className="relative aspect-video w-full">
+                  <Image
+                    src={getContentUrl(initialData.cover_image)}
+                    alt="Preview"
+                    fill
+                    className="object-cover rounded-lg"
+                  />
+                </div>
+              )}
+            </FormItem>
+          )}
+        />
+        <ImagesField />
+      </>
+    );
+  };
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <Card className="p-6 space-y-6">
+          <FormFields form={form} />
         </Card>
 
         <Card className="p-6">
@@ -330,15 +369,11 @@ export function ClinicAtlasForm({ initialData }: ClinicAtlasFormProps) {
           <Button type="submit">
             {initialData ? 'Сохранить изменения' : 'Создать клинический атлас'}
           </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => router.back()}
-          >
+          <Button type="button" variant="outline" onClick={() => router.back()}>
             Отмена
           </Button>
         </div>
       </form>
     </Form>
   );
-} 
+}

@@ -19,7 +19,7 @@ export const lectionsApi = {
 
   create: async (formData: FormData) => {
     const { data } = await axiosInstance.post<Lection>(
-      API.createLection, 
+      API.createLection,
       formData,
       {
         headers: {
@@ -32,7 +32,7 @@ export const lectionsApi = {
 
   update: async (id: string, formData: FormData) => {
     const { data } = await axiosInstance.put<Lection>(
-      API.updateLection(id), 
+      API.updateLection(id),
       formData,
       {
         headers: {
@@ -45,5 +45,5 @@ export const lectionsApi = {
 
   delete: async (id: string) => {
     await axiosInstance.delete(API.deleteLection(id));
-  }
-}; 
+  },
+};

@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/table';
 import { EntityContextMenu } from './EntityContextMenu';
 import { useRouter } from 'next/navigation';
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface Column {
   key: string;
@@ -26,7 +26,13 @@ interface EntityListProps {
   onDelete: (id: string) => void;
 }
 
-export function EntityList({ data = [], columns, isLoading, onEdit, onDelete }: EntityListProps) {
+export function EntityList({
+  data = [],
+  columns,
+  isLoading,
+  onEdit,
+  onDelete,
+}: EntityListProps) {
   const router = useRouter();
 
   if (isLoading) {
@@ -50,20 +56,20 @@ export function EntityList({ data = [], columns, isLoading, onEdit, onDelete }: 
         </TableRow>
       </TableHeader>
       <TableBody>
-        {Array.isArray(data) && data.map((item) => (
-          <EntityContextMenu
-            key={item._id}
-            onEdit={() => onEdit(item._id)}
-            onDelete={() => onDelete(item._id)}
-          >
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell key={column.key}>{item[column.key]}</TableCell>
-              ))}
-            </TableRow>
-          </EntityContextMenu>
-        ))}
+        {Array.isArray(data) &&
+          data.map((item) => (
+            <EntityContextMenu
+              key={item._id}
+              onEdit={() => onEdit(item._id)}
+              onDelete={() => onDelete(item._id)}>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableCell key={column.key}>{item[column.key]}</TableCell>
+                ))}
+              </TableRow>
+            </EntityContextMenu>
+          ))}
       </TableBody>
     </Table>
   );
-} 
+}

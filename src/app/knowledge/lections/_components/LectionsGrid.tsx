@@ -24,7 +24,12 @@ interface LectionsGridProps {
   onPageChange: (page: number) => void;
 }
 
-export function LectionsGrid({ data, isLoading, pagination, onPageChange }: LectionsGridProps) {
+export function LectionsGrid({
+  data,
+  isLoading,
+  pagination,
+  onPageChange,
+}: LectionsGridProps) {
   const router = useRouter();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -76,14 +81,16 @@ export function LectionsGrid({ data, isLoading, pagination, onPageChange }: Lect
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {data.map((lection) => {
-            if(lection._id) {
+            if (lection._id) {
               return (
-                <LectionCard 
-                  key={lection._id} 
-                  id={lection._id} 
-                  {...lection}  
+                <LectionCard
+                  key={lection._id}
+                  id={lection._id}
+                  {...lection}
                   onDelete={() => openDeleteDialog(lection._id!)}
-                  onEdit={()=>{handleEdit(lection._id!)}}
+                  onEdit={() => {
+                    handleEdit(lection._id!);
+                  }}
                 />
               );
             }
@@ -113,4 +120,4 @@ export function LectionsGrid({ data, isLoading, pagination, onPageChange }: Lect
       />
     </>
   );
-} 
+}

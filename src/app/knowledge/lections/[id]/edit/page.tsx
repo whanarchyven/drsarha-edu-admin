@@ -44,4 +44,4 @@ export default function EditLectionPage() {
       <LectionForm initialData={lection} />
     </div>
   );
-} 
+}

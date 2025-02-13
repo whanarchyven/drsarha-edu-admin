@@ -5,20 +5,24 @@ import type { BaseQueryParams, PaginatedResponse } from '../types';
 
 export const interactiveTasksApi = {
   getAll: async (params?: BaseQueryParams) => {
-    const { data } = await axiosInstance.get<PaginatedResponse<InteractiveTask>>(API.getInteractiveTasks, { 
-      params 
+    const { data } = await axiosInstance.get<
+      PaginatedResponse<InteractiveTask>
+    >(API.getInteractiveTasks, {
+      params,
     });
     return data;
   },
 
   getById: async (id: string) => {
-    const { data } = await axiosInstance.get<InteractiveTask>(API.getInteractiveTaskById(id));
+    const { data } = await axiosInstance.get<InteractiveTask>(
+      API.getInteractiveTaskById(id)
+    );
     return data;
   },
 
   create: async (formData: FormData) => {
     const { data } = await axiosInstance.post<InteractiveTask>(
-      API.createInteractiveTask, 
+      API.createInteractiveTask,
       formData,
       {
         headers: {
@@ -31,7 +35,7 @@ export const interactiveTasksApi = {
 
   update: async (id: string, formData: FormData) => {
     const { data } = await axiosInstance.put<InteractiveTask>(
-      API.updateInteractiveTask(id), 
+      API.updateInteractiveTask(id),
       formData,
       {
         headers: {
@@ -44,5 +48,5 @@ export const interactiveTasksApi = {
 
   delete: async (id: string) => {
     await axiosInstance.delete(API.deleteInteractiveTask(id));
-  }
-}; 
+  },
+};

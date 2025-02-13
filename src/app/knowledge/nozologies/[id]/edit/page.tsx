@@ -41,4 +41,4 @@ export default function EditNozologyPage({
       <NozologyForm initialData={nozology} />
     </div>
   );
-} 
+}

@@ -18,16 +18,22 @@ export const nozologiesApi = {
   },
 
   create: async (nozology: Omit<Nozology, '_id'>) => {
-    const { data } = await axiosInstance.post<Nozology>(API.createNozology, nozology);
+    const { data } = await axiosInstance.post<Nozology>(
+      API.createNozology,
+      nozology
+    );
     return data;
   },
 
   update: async (id: string, nozology: Partial<Nozology>) => {
-    const { data } = await axiosInstance.put<Nozology>(API.updateNozology(id), nozology);
+    const { data } = await axiosInstance.put<Nozology>(
+      API.updateNozology(id),
+      nozology
+    );
     return data;
   },
 
   delete: async (id: string) => {
     await axiosInstance.delete(API.deleteNozology(id));
-  }
-}; 
+  },
+};

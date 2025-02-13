@@ -2,7 +2,7 @@
 
 import { EntityList } from './EntityList';
 import type { BaseQueryParams } from '@/shared/api/types';
-import { Pagination } from "@/shared/ui/pagination";
+import { Pagination } from '@/shared/ui/pagination';
 
 interface EntityLayoutProps {
   title: string;
@@ -30,7 +30,7 @@ export const EntityLayout = ({
   onEdit,
   onDelete,
   onCreate,
-  pagination
+  pagination,
 }: EntityLayoutProps) => {
   const handlePageChange = (page: number) => {
     onSearch({ page });
@@ -40,14 +40,13 @@ export const EntityLayout = ({
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">{title}</h1>
-        <button 
+        <button
           onClick={onCreate}
-          className="px-4 py-2 bg-primary text-white rounded-md"
-        >
+          className="px-4 py-2 bg-primary text-white rounded-md">
           Создать
         </button>
       </div>
-      
+
       {isLoading ? (
         <div>Загрузка...</div>
       ) : (
@@ -73,4 +72,4 @@ export const EntityLayout = ({
       </div>
     </div>
   );
-}; 
+};

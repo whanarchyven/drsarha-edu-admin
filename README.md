@@ -58,7 +58,6 @@ npm run build
 | NEXT_PUBLIC_BASIC_AUTH_PASSWORD | Пароль базовой аутентификации для запросов на бекенд. Если бекенд не защищен базовой аутентификацией, можно оставлять пустым.        | нет         |
 | UNOPTIMIZED_IMAGES              | Нужно ли пропускать оптимизацию изображений. 0 - нет, 1 - да. Оптимизацией изображений занимается бекенд. Значение по умолчанию - 0. | нет         |
 
-
 # Регламент по стилизации
 
 ## Вступление
@@ -317,59 +316,62 @@ function Counter() {
 ```tsx
 // app/posts/[id]/page.tsx
 
-import {FC} from 'react';
-import {axiosInstance} from "./axios";
+import { FC } from 'react';
+import { axiosInstance } from './axios';
 
-interface Post { //Написали интерфейсы для каждой прилетающей с АПИ сущности
-    id: string;
-    title: string;
-    content: string;
+interface Post {
+  //Написали интерфейсы для каждой прилетающей с АПИ сущности
+  id: string;
+  title: string;
+  content: string;
 }
 
-interface PageProps { // Параметры для страницы
-    params: { id: string };
+interface PageProps {
+  // Параметры для страницы
+  params: { id: string };
 }
 
 // Функция для получения данных о посте
 async function fetchPostById(id: string): Promise<Post> {
-    const res = await axiosInstance(API.getPost(id));
-    if (res.data.error) {
-        throw new Error(res.data.error);
-    }
-    return res.json();
+  const res = await axiosInstance(API.getPost(id));
+  if (res.data.error) {
+    throw new Error(res.data.error);
+  }
+  return res.json();
 }
 
 // Генерация статических параметров (аналог getStaticPaths)
 export async function generateStaticParams() {
-    const res = await axiosInstance(API.getPosts);
-    const posts: Post[] = await res.json();
-    
-    return posts.map((post) => ({
-        id: post.id.toString(),
-    }));
+  const res = await axiosInstance(API.getPosts);
+  const posts: Post[] = await res.json();
+
+  return posts.map((post) => ({
+    id: post.id.toString(),
+  }));
 }
 
-export const revalidate = 60 //ревалидация каждые 60 секунд
-//export const dynamic = "force-dynamic" 
+export const revalidate = 60; //ревалидация каждые 60 секунд
+//export const dynamic = "force-dynamic"
 // при необходимости отключения ревалидации совсем
 
 // Основной компонент страницы
-const PostPage: FC<PageProps> = async ({params}) => {
-    const post = await fetchPostById(params.id);
-    return (
-        <div>
-            <h1>{post.title}</h1>
-            <p>{post.content}</p>
-        </div>
-    );
+const PostPage: FC<PageProps> = async ({ params }) => {
+  const post = await fetchPostById(params.id);
+  return (
+    <div>
+      <h1>{post.title}</h1>
+      <p>{post.content}</p>
+    </div>
+  );
 };
 
 export default PostPage;
-
 ```
+
 Мы ещё вернёмся к регламенту работы с API при рассмотрении архитектуры проекта.
 
 # Архитектура проекта FSD
+
 Документация по FSD [тут](https://feature-sliced.design/docs/get-started/overview)
 
 Статья с кратким резюме FSD [тут](https://habr.com/ru/companies/piter/articles/744824/)
@@ -378,17 +380,15 @@ export default PostPage;
 
 /app/**_directory-name/page.tsx_** - страница, которая влияет на роутинг next.js. Здесь размещаются необходимые страницы проекта.
 
-/app/**_widgets_**/* - здесь размещаются так называемые _**виджеты**_ , отдельные программные сущности, которые выполняют определённые глобальные функции. Такими могут быть например - Каталог на странице интернет магазина, какой то кальлкулятор, конструктор и т.д.
+/app/**_widgets_**/\* - здесь размещаются так называемые _**виджеты**_ , отдельные программные сущности, которые выполняют определённые глобальные функции. Такими могут быть например - Каталог на странице интернет магазина, какой то кальлкулятор, конструктор и т.д.
 
-/app/**_features_**/* - здесь размещаются **_фичи_** - утилиты, которые могут влиять на все выше слои архитектуры. Например - Theming, пуш уведомления и тд.
+/app/**_features_**/\* - здесь размещаются **_фичи_** - утилиты, которые могут влиять на все выше слои архитектуры. Например - Theming, пуш уведомления и тд.
 
-/app/**_entities_**/* - слой для бизнес-сущностей, например Post, User и тд. 
+/app/**_entities_**/\* - слой для бизнес-сущностей, например Post, User и тд.
 
-/app/**_shared_**/* - слой для UI элементов и часто переиспользуемых функций/элементов. 
+/app/**_shared_**/\* - слой для UI элементов и часто переиспользуемых функций/элементов.
 
-
-
---------------
+---
 
 **_В /shared/api/ - Возвращаемся к API. Базово, там находятся:_**
 
@@ -403,8 +403,8 @@ export default PostPage;
 ```typescript
 //types.ts
 export interface IPageProps {
-    title:string,
-    content:string
+  title: string;
+  content: string;
 }
 ```
 
@@ -414,19 +414,18 @@ import { API } from '../api';
 import { axiosInstance } from '../axios';
 
 export const getPage = async (slug?: string) => {
-    const result = await axiosInstance.get<IPageProps>(API.getPages, { //Взяли эндпоинт с API
-        params: {
-            slug,
-        },
-    });
+  const result = await axiosInstance.get<IPageProps>(API.getPages, {
+    //Взяли эндпоинт с API
+    params: {
+      slug,
+    },
+  });
 
-    return result.data;
+  return result.data;
 };
-
 ```
 
-
--------------------
+---
 
 Кастомные хуки размещаем /app/shared/hooks/
 
@@ -434,14 +433,16 @@ export const getPage = async (slug?: string) => {
 
 В /shared/utils - часто переиспользуемые функции (форматтеры, валидаторы и тд)
 
-------
-Свой UI мы базируем на [ShadCN](https://ui.shadcn.com/docs). При установке компонента из библиотеки ShadCN, он попадает в /app/shared/ui/. 
+---
+
+Свой UI мы базируем на [ShadCN](https://ui.shadcn.com/docs). При установке компонента из библиотеки ShadCN, он попадает в /app/shared/ui/.
 
 Для добавления компонента из библиотеки ShadCn используем
+
 ```
 npx shadcn@latest add имя_компонента
 ```
 
 При необходимости, можно добавлять кастомные UI компоненты.
 
---------
+---

@@ -5,7 +5,7 @@ import {
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
-} from "@/components/ui/context-menu";
+} from '@/components/ui/context-menu';
 import { Pencil, Trash2 } from 'lucide-react';
 
 interface EntityContextMenuProps {
@@ -14,7 +14,11 @@ interface EntityContextMenuProps {
   onDelete: () => void;
 }
 
-export function EntityContextMenu({ children, onEdit, onDelete }: EntityContextMenuProps) {
+export function EntityContextMenu({
+  children,
+  onEdit,
+  onDelete,
+}: EntityContextMenuProps) {
   return (
     <ContextMenu>
       <ContextMenuTrigger>{children}</ContextMenuTrigger>
@@ -30,4 +34,4 @@ export function EntityContextMenu({ children, onEdit, onDelete }: EntityContextM
       </ContextMenuContent>
     </ContextMenu>
   );
-} 
+}

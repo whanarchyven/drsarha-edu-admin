@@ -28,7 +28,7 @@ const nextConfig = {
       {
         source: '/api/proxy/:path*',
         destination: 'http://localhost:3000/:path*',
-      }
+      },
     ];
   },
   webpack: (config) => {

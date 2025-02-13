@@ -9,7 +9,7 @@ import type { BaseQueryParams } from '@/shared/api/types';
 
 const columns = [
   { key: 'name', label: 'Название' },
-  { key: 'description', label: 'Описание' }
+  { key: 'description', label: 'Описание' },
 ];
 
 export default function NozologiesPage() {
@@ -18,7 +18,7 @@ export default function NozologiesPage() {
     total: 0,
     page: 1,
     totalPages: 1,
-    hasMore: false
+    hasMore: false,
   });
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -29,14 +29,14 @@ export default function NozologiesPage() {
       const response = await nozologiesApi.getAll({
         ...params,
         page: params?.page || 1,
-        limit: 10
+        limit: 10,
       });
       setData(response.items);
       setPagination({
         total: response.total,
         page: response.page,
         totalPages: response.totalPages,
-        hasMore: response.hasMore
+        hasMore: response.hasMore,
       });
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -83,4 +83,4 @@ export default function NozologiesPage() {
       onCreate={handleCreate}
     />
   );
-} 
+}

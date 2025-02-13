@@ -1,10 +1,15 @@
 'use client';
 
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { CheckSquare, ClipboardList } from "lucide-react";
-import type { FeedBackQuestions } from "@/shared/models/types/FeedBackQuestions";
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { CheckSquare, ClipboardList } from 'lucide-react';
+import type { FeedBackQuestions } from '@/shared/models/types/FeedBackQuestions';
 
 interface TaskBadgesProps {
   feedback: FeedBackQuestions;
@@ -12,7 +17,7 @@ interface TaskBadgesProps {
 
 export function TaskBadges({ feedback }: TaskBadgesProps) {
   const questionCount = feedback.length;
-  const hasTest = feedback.some(q => q.has_correct);
+  const hasTest = feedback.some((q) => q.has_correct);
 
   return (
     <div className="flex items-center gap-2">
@@ -27,7 +32,9 @@ export function TaskBadges({ feedback }: TaskBadgesProps) {
         <Tooltip delayDuration={0.2}>
           <TooltipTrigger asChild>
             <div>
-              <Badge variant="outline" className="flex items-center cursor-pointer gap-1">
+              <Badge
+                variant="outline"
+                className="flex items-center cursor-pointer gap-1">
                 <ClipboardList className="w-3 h-3" />
                 {questionCount} вопрос(ов)
               </Badge>
@@ -47,7 +54,7 @@ export function TaskBadges({ feedback }: TaskBadgesProps) {
                               {q.has_correct && (
                                 <div
                                   className={`w-2 h-2 rounded-full ${
-                                    a.is_correct ? "bg-green-500" : "bg-red-500"
+                                    a.is_correct ? 'bg-green-500' : 'bg-red-500'
                                   }`}
                                 />
                               )}
@@ -56,7 +63,9 @@ export function TaskBadges({ feedback }: TaskBadgesProps) {
                           ))}
                         </div>
                       )}
-                      {i < feedback.length - 1 && <Separator className="my-2" />}
+                      {i < feedback.length - 1 && (
+                        <Separator className="my-2" />
+                      )}
                     </div>
                   );
                 }
@@ -67,4 +76,4 @@ export function TaskBadges({ feedback }: TaskBadgesProps) {
       </TooltipProvider>
     </div>
   );
-} 
+}

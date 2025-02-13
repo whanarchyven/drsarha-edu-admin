@@ -1,21 +1,36 @@
-"use client"
-import Image from "next/image"
-import { useState } from "react"
-import { Star, Edit, Trash2, Eye, AlertCircle } from "lucide-react"
+'use client';
+import Image from 'next/image';
+import { useState } from 'react';
+import { Star, Edit, Trash2, Eye, AlertCircle } from 'lucide-react';
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
-import type { InteractiveTask } from "@/shared/models/InteractiveTask"
-import { getContentUrl } from "@/shared/utils/url"
-import { TaskBadges } from "@/shared/ui/TaskBadges/TaskBadges"
+import type { InteractiveTask } from '@/shared/models/InteractiveTask';
+import { getContentUrl } from '@/shared/utils/url';
+import { TaskBadges } from '@/shared/ui/TaskBadges/TaskBadges';
 
 interface InteractiveTaskCardProps extends InteractiveTask {
-  onEdit: (id: string) => void
-  onDelete: (id: string) => void
+  onEdit: (id: string) => void;
+  onDelete: (id: string) => void;
 }
 
 export default function InteractiveTaskCard({
@@ -27,28 +42,34 @@ export default function InteractiveTaskCard({
   difficulty_type,
   available_errors,
   feedback,
-  nozology, stars,
+  nozology,
+  stars,
   onEdit,
   onDelete,
 }: InteractiveTaskCardProps) {
-  const [imagesOpen, setImagesOpen] = useState(false)
+  const [imagesOpen, setImagesOpen] = useState(false);
 
   return (
     <>
       <Card className="overflow-hidden">
         <div className="relative aspect-[16/9]">
-            <Image src={getContentUrl(cover_image)} alt={name} fill className="object-cover" />
+          <Image
+            src={getContentUrl(cover_image)}
+            alt={name}
+            fill
+            className="object-cover"
+          />
         </div>
         <CardHeader>
           <div className="flex items-start justify-between">
             <div className="space-y-1">
-              <h3 className="font-semibold leading-none tracking-tight">{name}</h3>
+              <h3 className="font-semibold leading-none tracking-tight">
+                {name}
+              </h3>
             </div>
             <div className="flex -ml-1 text-yellow-400">
-            <Star
-                  className={`w-4 h-4 fill-current`}
-                />
-                <p className="text-sm text-black">{stars}</p>
+              <Star className={`w-4 h-4 fill-current`} />
+              <p className="text-sm text-black">{stars}</p>
             </div>
           </div>
         </CardHeader>
@@ -65,7 +86,10 @@ export default function InteractiveTaskCard({
           </div>
         </CardContent>
         <CardFooter className="gap-2">
-          <Button variant="secondary" className="flex-1" onClick={() => setImagesOpen(true)}>
+          <Button
+            variant="secondary"
+            className="flex-1"
+            onClick={() => setImagesOpen(true)}>
             <Eye className="w-4 h-4 mr-2" />
             Просмотр
           </Button>
@@ -73,7 +97,10 @@ export default function InteractiveTaskCard({
             <Edit className="w-4 h-4" />
             <span className="sr-only">Редактировать</span>
           </Button>
-          <Button variant="destructive" size="icon" onClick={() => onDelete?.(_id)}>
+          <Button
+            variant="destructive"
+            size="icon"
+            onClick={() => onDelete?.(_id)}>
             <Trash2 className="w-4 h-4" />
             <span className="sr-only">Удалить</span>
           </Button>
@@ -87,10 +114,7 @@ export default function InteractiveTaskCard({
           </DialogHeader>
           <div className="grid grid-cols-2 gap-4">
             {answers.map((img, index) => (
-              <div 
-                key={index} 
-                className="relative flex flex-col gap-2 w-full"
-              >
+              <div key={index} className="relative flex flex-col gap-2 w-full">
                 <div className="relative aspect-square w-full">
                   <Image
                     src={getContentUrl(img.image)}
@@ -100,7 +124,7 @@ export default function InteractiveTaskCard({
                   />
                 </div>
                 <div className="p-2 border rounded-lg">
-                <p className="text-sm font-medium">{img.answer}</p> 
+                  <p className="text-sm font-medium">{img.answer}</p>
                 </div>
               </div>
             ))}
@@ -108,6 +132,5 @@ export default function InteractiveTaskCard({
         </DialogContent>
       </Dialog>
     </>
-  )
+  );
 }
-

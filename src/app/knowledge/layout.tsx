@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/shared/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -9,25 +9,19 @@ import { useNozologiesStore } from '@/shared/store/nozologiesStore';
 import { EntityContextMenu } from './_components/EntityContextMenu';
 import { nozologiesApi } from '@/shared/api/nozologies';
 
-export default function KnowledgeLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function KnowledgeLayoutContent() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentNozologyId = searchParams.get('nozologyId');
-  
+
   const { items, fetchNozologies } = useNozologiesStore();
 
   useEffect(() => {
     fetchNozologies({
-      limit: 100 // Получаем все нозологии для табов
+      limit: 100,
     });
   }, [pathname, fetchNozologies]);
-
-  
 
   const handleNozologyChange = (nozologyId: string) => {
     const params = new URLSearchParams(searchParams);
@@ -46,11 +40,10 @@ export default function KnowledgeLayout({
   const handleDeleteNozology = async (id: string) => {
     try {
       await nozologiesApi.delete(id);
-      // Перезагружаем список нозологий
       await fetchNozologies({
-        limit: 100
+        limit: 100,
       });
-      
+
       if (currentNozologyId === id) {
         const params = new URLSearchParams(searchParams);
         params.delete('nozologyId');
@@ -65,40 +58,49 @@ export default function KnowledgeLayout({
     router.push('/knowledge/nozologies/create');
   };
 
-  
-
   return (
     <div className="space-y-6">
       <div className="flex items-center pb-4 border-b border-gray-600 justify-between">
         <Tabs
           value={currentNozologyId || 'all'}
-          onValueChange={handleNozologyChange}
-        >
+          onValueChange={handleNozologyChange}>
           <TabsList>
             <TabsTrigger value="all">Все</TabsTrigger>
-            {Array.isArray(items) && items.map((nozology) => (
-              <EntityContextMenu
-                key={nozology._id?.toString()}
-                onEdit={() => handleEditNozology(nozology._id?.toString() || '')}
-                onDelete={() => handleDeleteNozology(nozology._id?.toString() || '')}
-              >
-                <TabsTrigger value={nozology._id?.toString() || ''}>
-                  {nozology.name}
-                </TabsTrigger>
-              </EntityContextMenu>
-            ))}
+            {Array.isArray(items) &&
+              items.map((nozology) => (
+                <EntityContextMenu
+                  key={nozology._id?.toString()}
+                  onEdit={() =>
+                    handleEditNozology(nozology._id?.toString() || '')
+                  }
+                  onDelete={() =>
+                    handleDeleteNozology(nozology._id?.toString() || '')
+                  }>
+                  <TabsTrigger value={nozology._id?.toString() || ''}>
+                    {nozology.name}
+                  </TabsTrigger>
+                </EntityContextMenu>
+              ))}
           </TabsList>
         </Tabs>
-        <Button
-          onClick={handleCreateNozology}
-          size="sm"
-          className="gap-2"
-        >
+        <Button onClick={handleCreateNozology} size="sm" className="gap-2">
           <Plus size={16} />
           Добавить нозологию
         </Button>
       </div>
-      {children}
     </div>
   );
-} 
+}
+
+export default function KnowledgeLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <Suspense fallback={<div>Загрузка...</div>}>
+      <KnowledgeLayoutContent />
+      {children}
+    </Suspense>
+  );
+}

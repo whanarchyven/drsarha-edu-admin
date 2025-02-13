@@ -24,7 +24,7 @@ export default function ClinicTasksPage() {
     total: 0,
     page: 1,
     totalPages: 1,
-    hasMore: false
+    hasMore: false,
   });
 
   const fetchData = async (params?: BaseQueryParams) => {
@@ -35,14 +35,14 @@ export default function ClinicTasksPage() {
         nozologyId: currentNozologyId || undefined,
         search: searchQuery || undefined,
         page: params?.page || 1,
-        limit: 12
+        limit: 12,
       });
       setData(response.items);
       setPagination({
         total: response.total,
         page: response.page,
         totalPages: response.totalPages,
-        hasMore: response.hasMore
+        hasMore: response.hasMore,
       });
     } catch (error) {
       console.error('Error fetching lections:', error);
@@ -83,4 +83,4 @@ export default function ClinicTasksPage() {
       />
     </div>
   );
-} 
+}

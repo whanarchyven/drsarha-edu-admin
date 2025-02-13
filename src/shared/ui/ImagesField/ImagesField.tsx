@@ -1,18 +1,24 @@
 'use client';
 
-import { useFieldArray, useFormContext } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Plus, Trash2 } from "lucide-react";
-import Image from "next/image";
-import { getContentUrl } from "@/shared/utils/url";
+import { useFieldArray, useFormContext } from 'react-hook-form';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Plus, Trash2 } from 'lucide-react';
+import Image from 'next/image';
+import { getContentUrl } from '@/shared/utils/url';
 
 export function ImagesField() {
   const form = useFormContext();
   const { fields, append, remove } = useFieldArray({
-    name: "images",
+    name: 'images',
     control: form.control,
   });
 
@@ -24,15 +30,16 @@ export function ImagesField() {
           type="button"
           variant="outline"
           size="sm"
-          onClick={() => append({ image: undefined, is_open: true })}
-        >
+          onClick={() => append({ image: undefined, is_open: true })}>
           <Plus className="w-4 h-4 mr-2" />
           Добавить изображение
         </Button>
       </div>
 
       {fields.map((field, index) => (
-        <div key={field.id} className="flex flex-col gap-4 p-4 border rounded-lg">
+        <div
+          key={field.id}
+          className="flex flex-col gap-4 p-4 border rounded-lg">
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1 space-y-4">
               <FormField
@@ -89,8 +96,7 @@ export function ImagesField() {
               variant="ghost"
               size="icon"
               className="text-destructive"
-              onClick={() => remove(index)}
-            >
+              onClick={() => remove(index)}>
               <Trash2 className="w-4 h-4" />
             </Button>
           </div>
@@ -98,4 +104,4 @@ export function ImagesField() {
       ))}
     </div>
   );
-} 
+}

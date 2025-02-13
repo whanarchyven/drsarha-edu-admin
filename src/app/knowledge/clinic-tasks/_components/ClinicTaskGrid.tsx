@@ -8,11 +8,10 @@ import { Edit, Trash2 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Pagination } from '@/shared/ui/pagination';
 
-import ClinicTaskCard from '@/entities/clinical-case/ui/ClinicalCaseCard'
+import ClinicTaskCard from '@/entities/clinical-case/ui/ClinicalCaseCard';
 import { ClinicTask } from '@/shared/models/ClinicTask';
 import { clinicTasksApi } from '@/shared/api/clinic-tasks';
 import { DeleteDialog } from '@/shared/ui/DeleteDialog/DeleteDialog';
-
 
 interface ClinicTaskGridProps {
   data: ClinicTask[];
@@ -26,11 +25,18 @@ interface ClinicTaskGridProps {
   onPageChange: (page: number) => void;
 }
 
-export function ClinicTaskGrid({ data, isLoading, pagination, onPageChange }: ClinicTaskGridProps) {
+export function ClinicTaskGrid({
+  data,
+  isLoading,
+  pagination,
+  onPageChange,
+}: ClinicTaskGridProps) {
   const router = useRouter();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [clinicTaskToDelete, setClinicTaskToDelete] = useState<string | null>(null);
+  const [clinicTaskToDelete, setClinicTaskToDelete] = useState<string | null>(
+    null
+  );
 
   const handleDelete = async () => {
     if (!clinicTaskToDelete) return;
@@ -70,7 +76,7 @@ export function ClinicTaskGrid({ data, isLoading, pagination, onPageChange }: Cl
   }
 
   const handleEdit = (id: string) => {
-      router.push(`/knowledge/clinic-tasks/${id}/edit`);
+    router.push(`/knowledge/clinic-tasks/${id}/edit`);
   };
 
   return (
@@ -78,14 +84,16 @@ export function ClinicTaskGrid({ data, isLoading, pagination, onPageChange }: Cl
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {data.map((task) => {
-            if(task._id) {
+            if (task._id) {
               return (
-                <ClinicTaskCard 
-                  key={task._id} 
-                  _id={task._id} 
-                  {...task}  
+                <ClinicTaskCard
+                  key={task._id}
+                  _id={task._id}
+                  {...task}
                   onDelete={() => openDeleteDialog(task._id!)}
-                  onEdit={()=>{handleEdit(task._id!)}}
+                  onEdit={() => {
+                    handleEdit(task._id!);
+                  }}
                 />
               );
             }
@@ -111,10 +119,9 @@ export function ClinicTaskGrid({ data, isLoading, pagination, onPageChange }: Cl
         isOpen={isDeleteDialogOpen}
         onClose={() => setIsDeleteDialogOpen(false)}
         onConfirm={handleDelete}
-        isLoading={isDeleting}
-      >
+        isLoading={isDeleting}>
         Вы уверены, что хотите удалить клиническую задачу?
       </DeleteDialog>
     </>
   );
-} 
+}

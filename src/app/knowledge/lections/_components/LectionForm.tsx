@@ -8,12 +8,24 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { useNozologiesStore } from '@/shared/store/nozologiesStore';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { lectionsApi } from '@/shared/api/lections';
 import type { Lection } from '@/shared/models/Lection';
-import type { FeedBackQuestions } from '@/shared/models/types/FeedBackQuestions';
 import { FeedbackQuestions } from '@/shared/ui/FeedBackQuestions/FeedbackQuestions';
 import { getContentUrl } from '@/shared/utils/url';
 import Image from 'next/image';
@@ -26,14 +38,22 @@ const formSchema = z.object({
   nozology: z.string().min(1, 'Нозология обязательна'),
   cover_image: z.any(),
   video: z.any(),
-  feedback: z.array(z.object({
-    question: z.string(),
-    has_correct: z.boolean(),
-    answers: z.array(z.object({
-      answer: z.string(),
-      is_correct: z.boolean()
-    })).optional()
-  })).default([])
+  feedback: z
+    .array(
+      z.object({
+        question: z.string(),
+        has_correct: z.boolean(),
+        answers: z
+          .array(
+            z.object({
+              answer: z.string(),
+              is_correct: z.boolean(),
+            })
+          )
+          .optional(),
+      })
+    )
+    .default([]),
 });
 
 interface LectionFormProps {
@@ -61,7 +81,7 @@ export function LectionForm({ initialData }: LectionFormProps) {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const formData = new FormData();
-      
+
       // Проверяем наличие обязательных файлов при создании
       if (!initialData && (!values.cover_image?.[0] || !values.video?.[0])) {
         throw new Error('Обложка и видео обязательны при создании лекции');
@@ -90,7 +110,7 @@ export function LectionForm({ initialData }: LectionFormProps) {
       } else {
         await lectionsApi.create(formData);
       }
-      
+
       router.push('/knowledge/lections');
       router.refresh();
     } catch (error: any) {
@@ -162,7 +182,7 @@ export function LectionForm({ initialData }: LectionFormProps) {
                 <FormMessage />
                 {initialData?.cover_image && (
                   <div className="relative aspect-video w-full">
-                    <Image  
+                    <Image
                       src={getContentUrl(initialData.cover_image)}
                       alt="Preview"
                       fill
@@ -199,7 +219,9 @@ export function LectionForm({ initialData }: LectionFormProps) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Нозология</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Выберите нозологию" />
@@ -246,15 +268,11 @@ export function LectionForm({ initialData }: LectionFormProps) {
           <Button type="submit">
             {initialData ? 'Сохранить изменения' : 'Создать лекцию'}
           </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => router.back()}
-          >
+          <Button type="button" variant="outline" onClick={() => router.back()}>
             Отмена
           </Button>
         </div>
       </form>
     </Form>
   );
-} 
+}

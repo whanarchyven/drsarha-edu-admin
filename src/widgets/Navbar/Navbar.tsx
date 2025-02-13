@@ -6,16 +6,16 @@ import { cn } from '@/shared/lib/utils';
 
 const navItems = [
   { name: 'Курсы', path: '/courses' },
-  { 
-    name: 'База знаний', 
+  {
+    name: 'База знаний',
     path: '/knowledge',
     children: [
       { name: 'Брошюры', path: '/knowledge/brochures' },
       { name: 'Лекции', path: '/knowledge/lections' },
       { name: 'Клинические задачи', path: '/knowledge/clinic-tasks' },
       { name: 'Клинические атласы', path: '/knowledge/clinic-atlases' },
-      { name: 'Интерактивные задачи', path: '/knowledge/interactive-tasks' }
-    ]
+      { name: 'Интерактивные задачи', path: '/knowledge/interactive-tasks' },
+    ],
   },
 ];
 
@@ -33,11 +33,10 @@ export const Navbar = () => {
               className={cn(
                 'p-2 rounded hover:bg-gray-700 transition-colors block',
                 pathname === item.path && 'bg-gray-700'
-              )}
-            >
+              )}>
               {item.name}
             </Link>
-            
+
             {item.children && (
               <div className="ml-4 mt-2 flex flex-col gap-1">
                 {item.children.map((child) => (
@@ -47,8 +46,7 @@ export const Navbar = () => {
                     className={cn(
                       'p-2 rounded hover:bg-gray-700 transition-colors block text-sm',
                       pathname === child.path && 'bg-gray-700'
-                    )}
-                  >
+                    )}>
                     {child.name}
                   </Link>
                 ))}
@@ -59,4 +57,4 @@ export const Navbar = () => {
       </div>
     </nav>
   );
-}; 
+};

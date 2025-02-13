@@ -6,21 +6,23 @@ import type { BaseQueryParams, PaginatedResponse } from '../types';
 export const clinicTasksApi = {
   getAll: async (params?: BaseQueryParams) => {
     const { data } = await axiosInstance.get<PaginatedResponse<ClinicTask>>(
-      API.getClinicTasks, 
+      API.getClinicTasks,
       { params }
     );
     return data;
   },
 
   getById: async (id: string) => {
-    const { data } = await axiosInstance.get<ClinicTask>(API.getClinicTaskById(id));
+    const { data } = await axiosInstance.get<ClinicTask>(
+      API.getClinicTaskById(id)
+    );
     return data;
   },
 
   create: async (formData: any) => {
-    console.log(formData,"formData");
+    console.log(formData, 'formData');
     const { data } = await axiosInstance.post<ClinicTask>(
-      API.createClinicTask, 
+      API.createClinicTask,
       formData,
       {
         headers: {
@@ -33,7 +35,7 @@ export const clinicTasksApi = {
 
   update: async (id: string, formData: FormData) => {
     const { data } = await axiosInstance.put<ClinicTask>(
-      API.updateClinicTask(id), 
+      API.updateClinicTask(id),
       formData,
       {
         headers: {
@@ -46,5 +48,5 @@ export const clinicTasksApi = {
 
   delete: async (id: string) => {
     await axiosInstance.delete(API.deleteClinicTask(id));
-  }
-}; 
+  },
+};

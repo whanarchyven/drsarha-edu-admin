@@ -23,28 +23,26 @@ export function DeleteDialog({
   isOpen,
   onClose,
   onConfirm,
-  isLoading, children
+  isLoading,
+  children,
 }: DeleteDialogProps) {
   return (
     <AlertDialog open={isOpen} onOpenChange={onClose}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Вы уверены?</AlertDialogTitle>
-          <AlertDialogDescription>
-            {children}
-          </AlertDialogDescription>
+          <AlertDialogDescription>{children}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isLoading}>Отмена</AlertDialogCancel>
-          <AlertDialogAction 
-            className="bg-destructive text-destructive-foreground hover:bg-destructive/90" 
-            disabled={isLoading} 
-            onClick={onConfirm}
-          >
-            {isLoading ? "Удаление..." : "Удалить"}
+          <AlertDialogAction
+            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            disabled={isLoading}
+            onClick={onConfirm}>
+            {isLoading ? 'Удаление...' : 'Удалить'}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
   );
-} 
+}

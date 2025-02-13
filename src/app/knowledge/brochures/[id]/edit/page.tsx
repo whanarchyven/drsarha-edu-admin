@@ -41,4 +41,4 @@ export default function EditBrochurePage({
       <BrochureForm initialData={brochure} />
     </div>
   );
-} 
+}

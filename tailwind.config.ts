@@ -64,7 +64,7 @@ const config: Config = {
         },
       },
       aspectRatio: {
-        'video': '16 / 9',
+        video: '16 / 9',
         '169': '16 / 9',
         auto: 'auto',
         square: '1 / 1',
