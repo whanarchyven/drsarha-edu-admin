@@ -38,6 +38,15 @@ const nextConfig = {
     });
     return config;
   },
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/knowledge',
+        permanent: true,
+      },
+    ]
+  },
 };
 
 module.exports = nextConfig;
