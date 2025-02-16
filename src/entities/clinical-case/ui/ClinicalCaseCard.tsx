@@ -28,6 +28,7 @@ import {
 import type { ClinicTask } from '@/shared/models/ClinicTask';
 import { getContentUrl } from '@/shared/utils/url';
 import { TaskBadges } from '@/shared/ui/TaskBadges/TaskBadges';
+import { copyToClipboardWithToast } from '@/shared/utils/copyToClipboard';
 
 interface ClinicTaskCardProps extends ClinicTask {
   onEdit: (id: string) => void;
@@ -64,6 +65,12 @@ export default function ClinicalCaseCard({
             fill
             className="object-cover"
           />
+          <Button
+            variant="outline"
+            className="absolute top-2 right-2"
+            onClick={async () => await copyToClipboardWithToast(_id as string)}>
+            {_id}
+          </Button>
         </div>
         <CardHeader>
           <div className="flex items-start justify-between">

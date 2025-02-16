@@ -33,6 +33,7 @@ import { useState, useEffect } from 'react';
 import { Pagination } from '@/shared/ui/pagination';
 import { useDebounce } from '@/shared/hooks/useDebounce';
 import { getContentUrl } from '@/shared/utils/url';
+import { copyToClipboardWithToast } from '@/shared/utils/copyToClipboard';
 
 interface BrochureGridProps {
   data: Brochure[];
@@ -108,6 +109,14 @@ export function BrochureGrid({
                         fill
                         className="object-cover rounded-t-lg"
                       />
+                      <Button
+                        variant="outline"
+                        className="absolute top-2 right-2"
+                        onClick={async () =>
+                          await copyToClipboardWithToast(brochure._id as string)
+                        }>
+                        {brochure._id}
+                      </Button>
                     </div>
                   </CardHeader>
                   <CardContent className="pt-4">
@@ -129,13 +138,13 @@ export function BrochureGrid({
                       <Button
                         variant="outline"
                         className="flex-1"
-                        onClick={() => onEdit(brochure._id)}>
+                        onClick={() => onEdit(brochure._id as string)}>
                         <Edit className="h-4 w-4" />
                       </Button>
                       <Button
                         variant="destructive"
                         className="flex-1"
-                        onClick={() => setDeleteId(brochure._id)}>
+                        onClick={() => setDeleteId(brochure._id as string)}>
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>

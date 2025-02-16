@@ -36,6 +36,7 @@ import { Separator } from '@/components/ui/separator';
 import { getContentUrl } from '@/shared/utils/url';
 import { TaskBadges } from '@/shared/ui/TaskBadges/TaskBadges';
 import { FeedBackQuestions } from '@/shared/models/types/FeedBackQuestions';
+import { copyToClipboardWithToast } from '@/shared/utils/copyToClipboard';
 
 interface LectureCardProps {
   id: string;
@@ -81,6 +82,12 @@ export default function LectureCard({
             fill
             className="object-cover"
           />
+          <Button
+            variant="outline"
+            className="absolute top-2 right-2"
+            onClick={async () => await copyToClipboardWithToast(id as string)}>
+            {id}
+          </Button>
         </div>
         <CardHeader>
           <div className="flex items-start justify-between">

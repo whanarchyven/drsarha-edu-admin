@@ -1,29 +1,31 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { EntityLayout } from '../_components/EntityLayout';
-import { coursesApi } from '@/shared/api/courses';
+import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Plus } from 'lucide-react';
+
+import { useNozologiesStore } from '@/shared/store/nozologiesStore';
+
 import type { Course } from '@/shared/models/Course';
 import type { BaseQueryParams } from '@/shared/api/types';
-
-const columns = [
-  { key: 'name', label: 'Название' },
-  { key: 'duration', label: 'Длительность' },
-  { key: 'stars', label: 'Рейтинг' },
-];
-
+import { CoursesGrid } from './_components/CourseGrid';
+import { coursesApi } from '@/shared/api/courses';
 export default function CoursesPage() {
+  const router = useRouter();
   const [data, setData] = useState<Course[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const searchParams = useSearchParams();
+  const { fetchNozologies } = useNozologiesStore();
+  const currentNozologyId = searchParams.get('nozologyId');
   const [pagination, setPagination] = useState({
     total: 0,
     page: 1,
     totalPages: 1,
     hasMore: false,
   });
-  const [isLoading, setIsLoading] = useState(false);
-  const searchParams = useSearchParams();
-  const currentNozologyId = searchParams.get('nozologyId');
 
   const fetchData = async (params?: BaseQueryParams) => {
     setIsLoading(true);
@@ -31,8 +33,9 @@ export default function CoursesPage() {
       const response = await coursesApi.getAll({
         ...params,
         nozologyId: currentNozologyId || undefined,
+        search: searchQuery || undefined,
         page: params?.page || 1,
-        limit: 10,
+        limit: 12,
       });
       setData(response.items);
       setPagination({
@@ -42,50 +45,42 @@ export default function CoursesPage() {
         hasMore: response.hasMore,
       });
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error fetching courses:', error);
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
+    fetchNozologies();
     fetchData();
-  }, [currentNozologyId]);
-
-  const handleSearch = (params: BaseQueryParams) => {
-    fetchData(params);
-  };
-
-  const handleEdit = async (id: string) => {
-    // TODO: Реализовать редактирование
-    console.log('Edit:', id);
-  };
-
-  const handleDelete = async (id: string) => {
-    try {
-      await coursesApi.delete(id);
-      await fetchData();
-    } catch (error) {
-      console.error('Error deleting item:', error);
-    }
-  };
-
-  const handleCreate = () => {
-    // TODO: Реализовать создание
-    console.log('Create new course');
-  };
+  }, [currentNozologyId, searchQuery]);
 
   return (
-    <EntityLayout
-      title="Курсы"
-      data={data}
-      columns={columns}
-      isLoading={isLoading}
-      pagination={pagination}
-      onSearch={handleSearch}
-      onEdit={handleEdit}
-      onDelete={handleDelete}
-      onCreate={handleCreate}
-    />
+    <div className="p-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold">Курсы</h1>
+        <Button onClick={() => router.push('/knowledge/courses/create')}>
+          <Plus className="w-4 h-4 mr-2" />
+          Создать курс
+        </Button>
+      </div>
+
+      <div className="flex items-center gap-4">
+        <Input
+          placeholder="Поиск курсов..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full"
+        />
+      </div>
+
+      <CoursesGrid
+        data={data}
+        isLoading={isLoading}
+        pagination={pagination}
+        onPageChange={(page) => fetchData({ page })}
+      />
+    </div>
   );
 }

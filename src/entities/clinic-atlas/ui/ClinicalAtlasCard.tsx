@@ -36,7 +36,7 @@ import type { ClinicAtlas } from '@/shared/models/ClinicAtlas';
 import { getContentUrl } from '@/shared/utils/url';
 import { Separator } from '@/components/ui/separator';
 import { TaskBadges } from '@/shared/ui/TaskBadges/TaskBadges';
-
+import { copyToClipboardWithToast } from '@/shared/utils/copyToClipboard';
 interface ClinicAtlasCardProps extends ClinicAtlas {
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
@@ -72,6 +72,13 @@ export default function ClinicalAtlasCard({
             fill
             className="object-cover"
           />
+          <Button
+            variant="outline"
+            className="absolute top-2 right-2"
+            onClick={async () => await copyToClipboardWithToast(_id as string)}>
+            {' '}
+            {_id}{' '}
+          </Button>
         </div>
         <CardHeader>
           <div className="flex items-start justify-between">

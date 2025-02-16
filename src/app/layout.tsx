@@ -2,6 +2,7 @@ import './globals.css';
 import React from 'react';
 import type { Metadata } from 'next';
 import { Navbar } from '@/widgets/Navbar/Navbar';
+import { Toaster } from 'sonner';
 
 // import 'swiper/css';
 // import 'swiper/css/navigation';
@@ -41,6 +42,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <Navbar />
           <main className="flex-1 p-6">{children}</main>
         </div>
+        <Toaster richColors />
       </body>
     </html>
   );

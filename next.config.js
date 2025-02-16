@@ -45,7 +45,7 @@ const nextConfig = {
         destination: '/knowledge',
         permanent: true,
       },
-    ]
+    ];
   },
 };
 

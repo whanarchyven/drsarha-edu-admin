@@ -11,7 +11,7 @@ import { BrochureGrid } from './_components/BrochureGrid';
 const columns = [
   { key: 'name', label: 'Название' },
   { key: 'description', label: 'Описание' },
-  { key: 'fileUrl', label: 'Файл' }
+  { key: 'fileUrl', label: 'Файл' },
 ];
 
 export default function BrochuresPage() {
@@ -25,7 +25,7 @@ export default function BrochuresPage() {
     total: 0,
     page: 1,
     totalPages: 0,
-    hasMore: false
+    hasMore: false,
   });
   const [isLoading, setIsLoading] = useState(false);
   const searchParams = useSearchParams();
@@ -42,7 +42,7 @@ export default function BrochuresPage() {
         total: response.total,
         page: response.page,
         totalPages: response.totalPages,
-        hasMore: response.hasMore
+        hasMore: response.hasMore,
       });
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -63,7 +63,7 @@ export default function BrochuresPage() {
     fetchData({
       search: params.search,
       page: params.page,
-      limit: 12
+      limit: 12,
     });
   };
 

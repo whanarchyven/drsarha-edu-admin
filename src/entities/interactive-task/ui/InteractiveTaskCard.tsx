@@ -27,6 +27,7 @@ import {
 import type { InteractiveTask } from '@/shared/models/InteractiveTask';
 import { getContentUrl } from '@/shared/utils/url';
 import { TaskBadges } from '@/shared/ui/TaskBadges/TaskBadges';
+import { copyToClipboardWithToast } from '@/shared/utils/copyToClipboard';
 
 interface InteractiveTaskCardProps extends InteractiveTask {
   onEdit: (id: string) => void;
@@ -59,6 +60,12 @@ export default function InteractiveTaskCard({
             fill
             className="object-cover"
           />
+          <Button
+            variant="outline"
+            className="absolute top-2 right-2"
+            onClick={async () => await copyToClipboardWithToast(_id as string)}>
+            {_id}
+          </Button>
         </div>
         <CardHeader>
           <div className="flex items-start justify-between">
@@ -93,14 +100,17 @@ export default function InteractiveTaskCard({
             <Eye className="w-4 h-4 mr-2" />
             Просмотр
           </Button>
-          <Button variant="outline" size="icon" onClick={() => onEdit?.(_id)}>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => onEdit?.(_id as string)}>
             <Edit className="w-4 h-4" />
             <span className="sr-only">Редактировать</span>
           </Button>
           <Button
             variant="destructive"
             size="icon"
-            onClick={() => onDelete?.(_id)}>
+            onClick={() => onDelete?.(_id as string)}>
             <Trash2 className="w-4 h-4" />
             <span className="sr-only">Удалить</span>
           </Button>

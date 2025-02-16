@@ -5,11 +5,11 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/shared/lib/utils';
 
 const navItems = [
-  { name: 'Курсы', path: '/courses' },
   {
     name: 'База знаний',
     path: '/knowledge',
     children: [
+      { name: 'Курсы', path: '/knowledge/courses' },
       { name: 'Брошюры', path: '/knowledge/brochures' },
       { name: 'Лекции', path: '/knowledge/lections' },
       { name: 'Клинические задачи', path: '/knowledge/clinic-tasks' },

@@ -6,6 +6,8 @@ export interface Course {
   cover_image: string;
   duration: string;
   stars: number;
+  description: string;
+  nozology: string;
   stages: {
     name: string;
     type: KnowledgeBaseElementType;

@@ -1,13 +1,16 @@
 import { API } from '../api';
 import { axiosInstance } from '../axios';
 import type { Course } from '@/shared/models/Course';
-import type { BaseQueryParams } from '../types';
+import type { BaseQueryParams, PaginatedResponse } from '../types';
 
 export const coursesApi = {
   getAll: async (params?: BaseQueryParams) => {
-    const { data } = await axiosInstance.get<Course[]>(API.getCourses, {
-      params,
-    });
+    const { data } = await axiosInstance.get<PaginatedResponse<Course>>(
+      API.getCourses,
+      {
+        params,
+      }
+    );
     return data;
   },
 
@@ -16,8 +19,16 @@ export const coursesApi = {
     return data;
   },
 
-  create: async (course: Omit<Course, '_id'>) => {
-    const { data } = await axiosInstance.post<Course>(API.createCourse, course);
+  create: async (course: FormData) => {
+    const { data } = await axiosInstance.post<Course>(
+      API.createCourse,
+      course,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
     return data;
   },
 
