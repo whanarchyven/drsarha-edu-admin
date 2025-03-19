@@ -61,4 +61,11 @@ export const API = {
   createCourse: '/courses',
   updateCourse: (id: string) => `/courses/${id}`,
   deleteCourse: (id: string) => `/courses/${id}`,
+
+  // Интерактивные викторины
+  getInteractiveQuizzes: '/interactive-quizzes',
+  getInteractiveQuizById: (id: string) => `/interactive-quizzes/${id}`,
+  createInteractiveQuiz: '/interactive-quizzes',
+  updateInteractiveQuiz: (id: string) => `/interactive-quizzes/${id}`,
+  deleteInteractiveQuiz: (id: string) => `/interactive-quizzes/${id}`,
 } as const;
