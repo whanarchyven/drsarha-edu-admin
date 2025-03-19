@@ -9,6 +9,11 @@ const nextConfig = {
         port: '3000',
         pathname: '/public/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'api.drsarha.ru',
+        pathname: '/public/**',
+      },
       // Добавьте здесь конфигурацию для продакшн домена, когда он будет известен
       // {
       //   protocol: 'https',
