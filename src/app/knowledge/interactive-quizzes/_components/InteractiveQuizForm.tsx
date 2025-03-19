@@ -33,7 +33,7 @@ import QuestionCreator from '@/components/question-creator';
 import { useState } from 'react';
 import type { Question } from '@/shared/models/types/QuestionType';
 import { toast } from 'sonner';
-
+import { Textarea } from '@/components/ui/textarea';
 const formSchema = z.object({
   name: z.string().min(1, 'Название обязательно'),
   correct_answer_comment: z.string().min(1, 'Комментарий к правильному ответу обязателен'),
@@ -301,7 +301,7 @@ export function InteractiveQuizForm({ initialData }: InteractiveQuizFormProps) {
               <FormItem>
                 <FormLabel>Комментарий к правильному ответу</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="Введите комментарий" />
+                  <Textarea {...field} placeholder="Введите комментарий" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
