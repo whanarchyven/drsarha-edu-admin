@@ -50,6 +50,15 @@ export default function KnowledgePage() {
             Управление интерактивными заданиями
           </p>
         </Link>
+
+        <Link
+          href="/knowledge/interactive-quizzes"
+          className="p-6 border rounded-lg hover:border-primary transition-colors">
+          <h2 className="text-xl font-semibold mb-2">Интерактивные квизы</h2>
+          <p className="text-muted-foreground">
+            Управление интерактивными квизами
+          </p>
+        </Link>
       </div>
     </div>
   );

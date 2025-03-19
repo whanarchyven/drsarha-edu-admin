@@ -76,7 +76,9 @@ export function InteractiveQuizForm({ initialData }: InteractiveQuizFormProps) {
   const router = useRouter();
   const { items: nozologies } = useNozologiesStore();
 
-  const [questions, setQuestions] = useState<Question[]>(initialData?.questions || []);
+  const [questions, setQuestions] = useState<Question[]>(
+    initialData?.questions || []
+  );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -115,11 +117,11 @@ export function InteractiveQuizForm({ initialData }: InteractiveQuizFormProps) {
         formData.append('cover_image', values.cover_image[0]);
       }
 
-      // Подготовка данных вопросов 
+      // Подготовка данных вопросов
       const questionsData = questions.map((question, index) => {
         const questionData: any = {
           question: question.question,
-          type: question.type
+          type: question.type,
         };
 
         // Обработка изображения вопроса
@@ -143,7 +145,7 @@ export function InteractiveQuizForm({ initialData }: InteractiveQuizFormProps) {
           questionData.answers = question.answers.map((answer, answerIndex) => {
             const answerData: any = {
               answer: answer.answer,
-              isCorrect: answer.isCorrect
+              isCorrect: answer.isCorrect,
             };
 
             // Обработка изображения ответа
@@ -183,33 +185,59 @@ export function InteractiveQuizForm({ initialData }: InteractiveQuizFormProps) {
       // Загрузка файлов изображений для вопросов
       for (let qIndex = 0; qIndex < questions.length; qIndex++) {
         const question = questions[qIndex];
-        
+
         // Загрузка изображения вопроса
-        if (question.image && typeof question.image === 'string' && question.image.startsWith('blob:') && !question.image.includes('/images/')) {
+        if (
+          question.image &&
+          typeof question.image === 'string' &&
+          question.image.startsWith('blob:') &&
+          !question.image.includes('/images/')
+        ) {
           try {
             const response = await fetch(question.image);
             const blob = await response.blob();
-            const file = new File([blob], `question_image_${qIndex}.jpg`, { type: 'image/jpeg' });
+            const file = new File([blob], `question_image_${qIndex}.jpg`, {
+              type: 'image/jpeg',
+            });
             formData.append(`question_image_${qIndex}`, file);
           } catch (error) {
             console.error(`Error processing question ${qIndex} image:`, error);
-            throw new Error(`Ошибка при обработке изображения для вопроса ${qIndex + 1}`);
+            throw new Error(
+              `Ошибка при обработке изображения для вопроса ${qIndex + 1}`
+            );
           }
         }
-        
+
         // Загрузка изображений для ответов
         if (question.type === 'variants' && question.answers) {
           for (let aIndex = 0; aIndex < question.answers.length; aIndex++) {
             const answer = question.answers[aIndex];
-            if (answer.image && typeof answer.image === 'string' && answer.image.startsWith('blob:') && !answer.image.includes('/images/')) {
+            if (
+              answer.image &&
+              typeof answer.image === 'string' &&
+              answer.image.startsWith('blob:') &&
+              !answer.image.includes('/images/')
+            ) {
               try {
                 const response = await fetch(answer.image);
                 const blob = await response.blob();
-                const file = new File([blob], `answer_image_${qIndex}_${aIndex}.jpg`, { type: 'image/jpeg' });
-                formData.append(`question_${qIndex}_answer_${aIndex}_image`, file);
+                const file = new File(
+                  [blob],
+                  `answer_image_${qIndex}_${aIndex}.jpg`,
+                  { type: 'image/jpeg' }
+                );
+                formData.append(
+                  `question_${qIndex}_answer_${aIndex}_image`,
+                  file
+                );
               } catch (error) {
-                console.error(`Error processing answer ${aIndex} image for question ${qIndex}:`, error);
-                throw new Error(`Ошибка при обработке изображения для варианта ответа ${aIndex + 1} вопроса ${qIndex + 1}`);
+                console.error(
+                  `Error processing answer ${aIndex} image for question ${qIndex}:`,
+                  error
+                );
+                throw new Error(
+                  `Ошибка при обработке изображения для варианта ответа ${aIndex + 1} вопроса ${qIndex + 1}`
+                );
               }
             }
           }
@@ -223,11 +251,14 @@ export function InteractiveQuizForm({ initialData }: InteractiveQuizFormProps) {
       }
 
       if (initialData?._id) {
-        await interactiveQuizzesApi.update(initialData._id.toString(), formData);
+        await interactiveQuizzesApi.update(
+          initialData._id.toString(),
+          formData
+        );
         toast.success('Интерактивная викторина успешно обновлена');
       } else {
         formData.entries().forEach(([key, value]) => {
-          console.log(key, value, "AUE");
+          console.log(key, value, 'AUE');
         });
         await interactiveQuizzesApi.create(formData);
         toast.success('Интерактивная викторина успешно создана');
@@ -238,7 +269,8 @@ export function InteractiveQuizForm({ initialData }: InteractiveQuizFormProps) {
     } catch (error: any) {
       console.error('Error saving interactive quiz:', error);
       toast.error(
-        error.message || 'Произошла ошибка при сохранении интерактивной викторины'
+        error.message ||
+          'Произошла ошибка при сохранении интерактивной викторины'
       );
     }
   };

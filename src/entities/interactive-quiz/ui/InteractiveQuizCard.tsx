@@ -79,32 +79,55 @@ export default function InteractiveQuizCard({
           </div>
         </CardHeader>
         <CardContent className="space-y-3">
-          
           <div className="text-sm">
             <strong>Доступно ошибок:</strong> {available_errors}
           </div>
 
           <div className="flex flex-col gap-2">
             {questions.map((question, index) => (
-              <div className="grid grid-cols-2 gap-2 border-2 border-gray-300 rounded-md p-2" key={index}>
+              <div
+                className="grid grid-cols-2 gap-2 border-2 border-gray-300 rounded-md p-2"
+                key={index}>
                 <div className="flex flex-col gap-2">
                   <p className="text-lg font-bold">Вопрос {index + 1}</p>
                   <p>{question.question}</p>
-                  {question.image && <Image src={getContentUrl(question.image)} alt={question.question} width={300} height={300} />}
+                  {question.image && (
+                    <Image
+                      src={getContentUrl(question.image)}
+                      alt={question.question}
+                      width={300}
+                      height={300}
+                    />
+                  )}
                 </div>
                 <div className="flex p-3 flex-col gap-2">
                   <p className="text-md font-bold">Ответы</p>
-                  {question.type === 'variants' && question.answers?.map((answer, answerIndex) => (
-                    <div className="flex flex-col gap-2 border-2 border-gray-300 rounded-md p-2" key={answerIndex}>
-                      <p>{answerIndex + 1}. {answer.answer} - <span className={`${answer.isCorrect ? 'text-green-500' : 'text-red-500'}`}>{answer.isCorrect ? 'Правильный' : 'Неправильный'}</span></p>
-                      {answer.image && <Image src={getContentUrl(answer.image)} alt={answer.answer} width={100} height={100} />}
-                    </div>
-                  ))}
+                  {question.type === 'variants' &&
+                    question.answers?.map((answer, answerIndex) => (
+                      <div
+                        className="flex flex-col gap-2 border-2 border-gray-300 rounded-md p-2"
+                        key={answerIndex}>
+                        <p>
+                          {answerIndex + 1}. {answer.answer} -{' '}
+                          <span
+                            className={`${answer.isCorrect ? 'text-green-500' : 'text-red-500'}`}>
+                            {answer.isCorrect ? 'Правильный' : 'Неправильный'}
+                          </span>
+                        </p>
+                        {answer.image && (
+                          <Image
+                            src={getContentUrl(answer.image)}
+                            alt={answer.answer}
+                            width={100}
+                            height={100}
+                          />
+                        )}
+                      </div>
+                    ))}
                 </div>
               </div>
             ))}
           </div>
-
 
           <div className="flex items-center gap-2">
             <TaskBadges feedback={feedback} />
@@ -120,8 +143,6 @@ export default function InteractiveQuizCard({
           </Button>
         </CardFooter>
       </Card>
-
-      
     </>
   );
 }

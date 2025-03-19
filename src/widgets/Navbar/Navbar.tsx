@@ -15,6 +15,7 @@ const navItems = [
       { name: 'Клинические задачи', path: '/knowledge/clinic-tasks' },
       { name: 'Клинические атласы', path: '/knowledge/clinic-atlases' },
       { name: 'Интерактивные задачи', path: '/knowledge/interactive-tasks' },
+      { name: 'Интерактивные квизы', path: '/knowledge/interactive-quizzes' },
     ],
   },
 ];
