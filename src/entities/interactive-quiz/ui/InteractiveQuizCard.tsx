@@ -42,6 +42,7 @@ export default function InteractiveQuizCard({
   available_errors,
   feedback,
   nozology,
+  correct_answer_comment,
   stars,
   onEdit,
   onDelete,
@@ -81,6 +82,10 @@ export default function InteractiveQuizCard({
         <CardContent className="space-y-3">
           <div className="text-sm">
             <strong>Доступно ошибок:</strong> {available_errors}
+          </div>
+
+          <div className="text-sm">
+            <strong>Комментарий к правильному ответу:</strong> {correct_answer_comment}
           </div>
 
           <div className="flex flex-col gap-2">

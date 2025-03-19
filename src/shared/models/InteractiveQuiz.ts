@@ -5,6 +5,7 @@ export interface InteractiveQuiz {
   _id: string;
   name: string;
   cover_image: string;
+  correct_answer_comment: string;
   questions: Question[];
   available_errors: number;
   feedback: FeedBackQuestions;

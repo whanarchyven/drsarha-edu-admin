@@ -36,6 +36,7 @@ import { toast } from 'sonner';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Название обязательно'),
+  correct_answer_comment: z.string().min(1, 'Комментарий к правильному ответу обязателен'),
   cover_image: z.any(),
   questions: z
     .array(
@@ -287,6 +288,20 @@ export function InteractiveQuizForm({ initialData }: InteractiveQuizFormProps) {
                 <FormLabel>Название</FormLabel>
                 <FormControl>
                   <Input {...field} placeholder="Введите название" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="correct_answer_comment"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Комментарий к правильному ответу</FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder="Введите комментарий" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
