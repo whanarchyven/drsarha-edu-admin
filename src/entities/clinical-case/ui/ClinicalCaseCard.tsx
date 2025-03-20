@@ -62,7 +62,7 @@ export default function ClinicalCaseCard({
               <Image src={getContentUrl(cover_image)} alt={name} fill className="object-cover" />
             </div>
             {images.map((image) => (
-              <div className='relative aspect-[16/9]'>
+              <div key={image.image} className='relative aspect-[16/9]'>
                 <Image src={getContentUrl(image.image)} alt={name} fill className="object-cover" />
                 <div className='absolute top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center'>
                   <p className='text-white text-center'>{image.is_open ? 'Открыто' : 'Закрыто'}</p>
