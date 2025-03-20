@@ -35,6 +35,7 @@ export default function QuestionCreator({
       question: '',
       type: 'variants',
       answers: [{ answer: '', isCorrect: false }],
+      correct_answer_comment: '',
     };
     setQuestions([...questions, newQuestion]);
   };
@@ -50,6 +51,8 @@ export default function QuestionCreator({
           ...updatedQuestions[index],
           type: 'variants',
           answers: [{ answer: '', isCorrect: false }],
+          correct_answer_comment:
+            updatedQuestions[index].correct_answer_comment || '',
         };
       } else if (value === 'text') {
         updatedQuestions[index] = {
@@ -57,6 +60,8 @@ export default function QuestionCreator({
           type: 'text',
           answer: '',
           additional_info: '',
+          correct_answer_comment:
+            updatedQuestions[index].correct_answer_comment || '',
         };
       }
     }
@@ -181,7 +186,23 @@ export default function QuestionCreator({
                 placeholder="Введите текст вопроса"
               />
             </div>
-
+            <div className="space-y-2">
+              <Label htmlFor={`correct-answer-comment-${questionIndex}`}>
+                Комментарий к правильному ответу
+              </Label>
+              <Textarea
+                id={`correct-answer-comment-${questionIndex}`}
+                value={question.correct_answer_comment}
+                onChange={(e) =>
+                  updateQuestion(
+                    questionIndex,
+                    'correct_answer_comment',
+                    e.target.value
+                  )
+                }
+                placeholder="Введите комментарий к правильному ответу"
+              />
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor={`question-type-${questionIndex}`}>

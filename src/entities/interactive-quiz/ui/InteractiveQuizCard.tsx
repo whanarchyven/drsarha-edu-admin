@@ -85,7 +85,8 @@ export default function InteractiveQuizCard({
           </div>
 
           <div className="text-sm">
-            <strong>Комментарий к правильному ответу:</strong> {correct_answer_comment}
+            <strong>Комментарий к правильному ответу:</strong>{' '}
+            {correct_answer_comment}
           </div>
 
           <div className="flex flex-col gap-2">
@@ -96,6 +97,14 @@ export default function InteractiveQuizCard({
                 <div className="flex flex-col gap-2">
                   <p className="text-lg font-bold">Вопрос {index + 1}</p>
                   <p>{question.question}</p>
+                  <div className="flex flex-col gap-2">
+                    <p className="text-md font-bold">
+                      Комментарий к правильному ответу
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      {question.correct_answer_comment}
+                    </p>
+                  </div>
                   {question.image && (
                     <Image
                       src={getContentUrl(question.image)}

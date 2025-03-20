@@ -45,6 +45,7 @@
     "class-variance-authority": "^0.6.1",
     "clsx": "^1.2.1",
     "date-fns": "^2.30.0",
+    "embla-carousel-react": "^8.5.2",
     "eslint-config-next": "13.4.12",
     "eslint-plugin-next": "^0.0.0",
     "formik": "^2.4.3",

@@ -1,5 +1,6 @@
 import type { TaskDifficultyType } from './types/TaskDifficultyType.ts';
 import type { FeedBackQuestions } from './types/FeedBackQuestions.ts';
+import { Question } from './types/QuestionType.js';
 
 export interface ClinicTask {
   _id?: string;
@@ -11,14 +12,8 @@ export interface ClinicTask {
     is_open: boolean;
   }[];
   description: string;
-  diagnoses: {
-    name: string;
-    is_correct: boolean;
-    description: string;
-  }[];
-  treatment: string;
+  questions: Question[];
   additional_info: string;
-  difficulty_type: TaskDifficultyType;
   ai_scenario: string;
   stars: number;
   feedback: FeedBackQuestions;

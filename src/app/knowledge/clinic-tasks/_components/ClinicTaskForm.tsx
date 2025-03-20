@@ -29,10 +29,13 @@ import type { ClinicTask } from '@/shared/models/ClinicTask';
 import { FeedbackQuestions } from '@/shared/ui/FeedBackQuestions/FeedbackQuestions';
 import { TaskDifficultyType } from '@/shared/models/types/TaskDifficultyType';
 import { ImagesField } from '@/shared/ui/ImagesField/ImagesField';
-
+import { useState } from 'react';
 import Image from 'next/image';
 import { getContentUrl } from '@/shared/utils/url';
 import { DiagnosesField } from './DiagnosesField';
+import { Question } from '@/shared/models/types/QuestionType';
+import QuestionCreator from '@/components/question-creator';
+import { toast } from 'sonner';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Название обязательно'),
@@ -47,21 +50,10 @@ const formSchema = z.object({
       })
     )
     .default([]),
-  treatment: z.string().min(1, 'Лечение обязательно'),
   additional_info: z.string().optional(),
-  difficulty_type: z.nativeEnum(TaskDifficultyType),
   ai_scenario: z.string().optional(),
   stars: z.number().min(0),
   nozology: z.string().min(1, 'Нозология обязательна'),
-  diagnoses: z
-    .array(
-      z.object({
-        name: z.string(),
-        is_correct: z.boolean(),
-        description: z.string(),
-      })
-    )
-    .default([]),
   feedback: z
     .array(
       z.object({
@@ -94,13 +86,10 @@ export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
       name: initialData?.name || '',
       difficulty: initialData?.difficulty || 1,
       description: initialData?.description || '',
-      treatment: initialData?.treatment || '',
       additional_info: initialData?.additional_info || '',
-      difficulty_type: initialData?.difficulty_type || TaskDifficultyType.EASY,
       ai_scenario: initialData?.ai_scenario || '',
       stars: initialData?.stars || 0,
       nozology: initialData?.nozology || '',
-      diagnoses: initialData?.diagnoses || [],
       feedback: initialData?.feedback || [],
       cover_image: undefined,
       images: initialData?.images || [],
@@ -108,6 +97,7 @@ export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    console.log(values, 'VALUES');
     try {
       const formData = new FormData();
 
@@ -119,9 +109,7 @@ export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
       formData.append('name', values.name);
       formData.append('difficulty', values.difficulty.toString());
       formData.append('description', values.description);
-      formData.append('treatment', values.treatment);
       formData.append('additional_info', values.additional_info || '');
-      formData.append('difficulty_type', values.difficulty_type);
       formData.append('ai_scenario', values.ai_scenario || '');
       formData.append('stars', values.stars.toString());
       formData.append('nozology', values.nozology);
@@ -133,7 +121,9 @@ export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
 
       // Массивы и объекты
       formData.append('feedback', JSON.stringify(values.feedback));
-      formData.append('diagnoses', JSON.stringify(values.diagnoses));
+
+      // Добавляем массив вопросов
+      formData.append('questions', JSON.stringify(questions));
 
       // Подготовка данных изображений
       const imagesData = values.images.map((img, counter) => ({
@@ -150,19 +140,20 @@ export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
         }
       });
 
-      if (initialData?._id) {
-        await clinicTasksApi.update(initialData._id.toString(), formData);
-      } else {
-        await clinicTasksApi.create(formData);
-      }
-
-      router.push('/knowledge/clinic-tasks');
-      router.refresh();
+      const res = await clinicTasksApi.create(formData);
+      console.log(res, 'RES');
+      toast.success('Задача успешно создана');
+      // router.push('/knowledge/clinic-tasks');
+      // router.refresh();
     } catch (error: any) {
       console.error('Error saving clinic task:', error);
       alert(error.message || 'Произошла ошибка при сохранении задачи');
     }
   };
+
+  const [questions, setQuestions] = useState<Question[]>(
+    initialData?.questions || []
+  );
 
   return (
     <Form {...form}>
@@ -221,33 +212,6 @@ export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
                 </FormItem>
               )}
             />
-
-            <FormField
-              control={form.control}
-              name="difficulty_type"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Тип сложности</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Выберите тип" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {Object.values(TaskDifficultyType).map((type) => (
-                        <SelectItem key={type} value={type}>
-                          {type}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
           </div>
 
           <FormField
@@ -258,20 +222,6 @@ export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
                 <FormLabel>Описание</FormLabel>
                 <FormControl>
                   <Textarea {...field} placeholder="Введите описание" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="treatment"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Лечение</FormLabel>
-                <FormControl>
-                  <Textarea {...field} placeholder="Введите лечение" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -364,10 +314,10 @@ export function ClinicTaskForm({ initialData }: ClinicTaskFormProps) {
               </FormItem>
             )}
           />
+          <QuestionCreator questions={questions} setQuestions={setQuestions} />
         </Card>
 
         <Card className="p-6">
-          <DiagnosesField />
           <ImagesField />
         </Card>
 

@@ -29,7 +29,8 @@ import type { ClinicTask } from '@/shared/models/ClinicTask';
 import { getContentUrl } from '@/shared/utils/url';
 import { TaskBadges } from '@/shared/ui/TaskBadges/TaskBadges';
 import { copyToClipboardWithToast } from '@/shared/utils/copyToClipboard';
-
+import { Carousel, CarouselItem } from '@/components/ui/carousel';
+import { cn } from '@/shared/lib/utils';
 interface ClinicTaskCardProps extends ClinicTask {
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
@@ -42,10 +43,8 @@ export default function ClinicalCaseCard({
   cover_image,
   images,
   description,
-  diagnoses,
-  treatment,
   additional_info,
-  difficulty_type,
+  questions,
   ai_scenario,
   stars,
   feedback,
@@ -59,12 +58,30 @@ export default function ClinicalCaseCard({
     <>
       <Card className="overflow-hidden">
         <div className="relative aspect-[16/9]">
-          <Image
-            src={getContentUrl(cover_image)}
-            alt={name}
-            fill
-            className="object-cover"
-          />
+          <Carousel>
+            <CarouselItem>
+              <Image
+                src={getContentUrl(cover_image)}
+                alt={name}
+                fill
+                className="object-cover"
+              />
+            </CarouselItem>
+            {images.map((image) => (
+              <CarouselItem key={image.image}>
+                <Image
+                  src={getContentUrl(image.image)}
+                  alt={name}
+                  fill
+                  className={cn(
+                    image.is_open
+                      ? 'border-green-500 border-2'
+                      : 'border-red-500 border-2'
+                  )}
+                />
+              </CarouselItem>
+            ))}
+          </Carousel>
           <Button
             variant="outline"
             className="absolute top-2 right-2"
@@ -89,32 +106,49 @@ export default function ClinicalCaseCard({
         <CardContent className="space-y-3">
           <div className="flex items-center gap-2">
             <Badge variant="secondary">Сложность: {difficulty}/10</Badge>
-            <Badge variant="outline">{difficulty_type}</Badge>
           </div>
 
-          <div className="grid grid-cols-2 p-2 border-2 border-gray-200 rounded-lg gap-2">
-            <p className="text-sm font-semibold col-span-2">Диагнозы:</p>
-            {diagnoses.map((diagnosis, index) => (
-              <TooltipProvider key={index}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Badge
-                      variant={diagnosis.is_correct ? 'default' : 'secondary'}
-                      className="flex flex-col gap-1 items-start p-1">
-                      <p className="text-sm font-semibold">{diagnosis.name}</p>
-                      <p className="text-sm ">{diagnosis.description}</p>
-                    </Badge>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{diagnosis.description}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+          <div className="grid grid-cols-2 gap-2">
+            <div className="flex flex-col gap-2">
+              <p className="text-md font-bold">Дополнительная информация</p>
+              <p className="text-sm text-muted-foreground">{additional_info}</p>
+            </div>
+            <div className="flex flex-col gap-2">
+              <p className="text-md font-bold">AI сценарий</p>
+              <p className="text-sm text-muted-foreground">{ai_scenario}</p>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            {questions.map((question, index) => (
+              <div
+                className="grid grid-cols-2 gap-2 border-2 border-gray-300 rounded-md p-2"
+                key={index}>
+                <div className="flex flex-col gap-2">
+                  <p className="text-lg font-bold">Вопрос {index + 1}</p>
+                  <p>{question.question}</p>
+                  {question.image && (
+                    <Image
+                      src={getContentUrl(question.image)}
+                      alt={question.question}
+                      width={300}
+                      height={300}
+                    />
+                  )}
+                </div>
+                <div className="flex p-3 flex-col gap-2">
+                  <p className="text-md font-bold">Предполагаемый ответ</p>
+                  {question.type === 'text' && <p>{question.answer}</p>}
+
+                  <p className="text-md font-bold">
+                    Дополнительные указания ИИ (промпт)
+                  </p>
+                  {question.type === 'text' && (
+                    <p>{question.additional_info}</p>
+                  )}
+                </div>
+              </div>
             ))}
-          </div>
-
-          <div className="text-sm">
-            <strong>Лечение:</strong> {treatment}
           </div>
 
           {additional_info && (
@@ -134,59 +168,14 @@ export default function ClinicalCaseCard({
         </CardContent>
         <CardFooter className="gap-2">
           <Button
-            variant="secondary"
-            className="flex-1"
-            onClick={() => setImagesOpen(true)}>
-            <Eye className="w-4 h-4 mr-2" />
-            Просмотр
-          </Button>
-          <Button variant="outline" size="icon" onClick={() => onEdit?.(_id)}>
-            <Edit className="w-4 h-4" />
-            <span className="sr-only">Редактировать</span>
-          </Button>
-          <Button
             variant="destructive"
             size="icon"
-            onClick={() => onDelete?.(_id)}>
+            onClick={() => onDelete(_id as string)}>
             <Trash2 className="w-4 h-4" />
             <span className="sr-only">Удалить</span>
           </Button>
         </CardFooter>
       </Card>
-
-      <Dialog open={imagesOpen} onOpenChange={setImagesOpen}>
-        <DialogContent className="max-w-4xl">
-          <DialogHeader>
-            <DialogTitle>{name} - Изображения</DialogTitle>
-          </DialogHeader>
-          <div className="grid grid-cols-2 gap-4">
-            {images.map((img, index) => (
-              <div key={index} className="relative aspect-[16/9]">
-                <Image
-                  src={getContentUrl(img.image)}
-                  alt={`Image ${index + 1}`}
-                  fill
-                  className={`object-cover ${!img.is_open ? 'border-4 border-red-500' : ''}`}
-                />
-                {!img.is_open && (
-                  <div className="absolute top-2 right-2">
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <AlertCircle className="w-6 h-6 text-red-500" />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Это изображение закрыто</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </DialogContent>
-      </Dialog>
     </>
   );
 }

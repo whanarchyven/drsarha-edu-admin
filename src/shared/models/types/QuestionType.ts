@@ -4,6 +4,7 @@ export type Question = {
   question: string;
   image?: string;
   type: QuestionType;
+  correct_answer_comment: string;
 } & (
   | {
       type: 'variants';
@@ -11,6 +12,7 @@ export type Question = {
         image?: string;
         answer: string;
         isCorrect: boolean;
+        correct_answer_comment?: string;
       }[];
     }
   | {

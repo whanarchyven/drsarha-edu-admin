@@ -36,7 +36,7 @@ import { toast } from 'sonner';
 import { Textarea } from '@/components/ui/textarea';
 const formSchema = z.object({
   name: z.string().min(1, 'Название обязательно'),
-  correct_answer_comment: z.string().min(1, 'Комментарий к правильному ответу обязателен'),
+
   cover_image: z.any(),
   questions: z
     .array(
@@ -123,6 +123,7 @@ export function InteractiveQuizForm({ initialData }: InteractiveQuizFormProps) {
         const questionData: any = {
           question: question.question,
           type: question.type,
+          correct_answer_comment: question.correct_answer_comment,
         };
 
         // Обработка изображения вопроса
@@ -251,19 +252,7 @@ export function InteractiveQuizForm({ initialData }: InteractiveQuizFormProps) {
         console.log(pair[0], pair[1]);
       }
 
-      if (initialData?._id) {
-        await interactiveQuizzesApi.update(
-          initialData._id.toString(),
-          formData
-        );
-        toast.success('Интерактивная викторина успешно обновлена');
-      } else {
-        formData.entries().forEach(([key, value]) => {
-          console.log(key, value, 'AUE');
-        });
-        await interactiveQuizzesApi.create(formData);
-        toast.success('Интерактивная викторина успешно создана');
-      }
+      await interactiveQuizzesApi.create(formData);
 
       // router.push('/knowledge/interactive-quizzes');
       // router.refresh();
@@ -288,20 +277,6 @@ export function InteractiveQuizForm({ initialData }: InteractiveQuizFormProps) {
                 <FormLabel>Название</FormLabel>
                 <FormControl>
                   <Input {...field} placeholder="Введите название" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="correct_answer_comment"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Комментарий к правильному ответу</FormLabel>
-                <FormControl>
-                  <Textarea {...field} placeholder="Введите комментарий" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
