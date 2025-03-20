@@ -29,8 +29,7 @@ import type { ClinicTask } from '@/shared/models/ClinicTask';
 import { getContentUrl } from '@/shared/utils/url';
 import { TaskBadges } from '@/shared/ui/TaskBadges/TaskBadges';
 import { copyToClipboardWithToast } from '@/shared/utils/copyToClipboard';
-import { Carousel, CarouselItem } from '@/components/ui/carousel';
-import { cn } from '@/shared/lib/utils';
+
 interface ClinicTaskCardProps extends ClinicTask {
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
@@ -58,30 +57,19 @@ export default function ClinicalCaseCard({
     <>
       <Card className="overflow-hidden">
         <div className="relative aspect-[16/9]">
-          <Carousel>
-            <CarouselItem>
-              <Image
-                src={getContentUrl(cover_image)}
-                alt={name}
-                fill
-                className="object-cover"
-              />
-            </CarouselItem>
+          <div className='grid grid-cols-2 gap-2'>
+            <div className='relative aspect-[16/9]'>
+              <Image src={getContentUrl(cover_image)} alt={name} fill className="object-cover" />
+            </div>
             {images.map((image) => (
-              <CarouselItem key={image.image}>
-                <Image
-                  src={getContentUrl(image.image)}
-                  alt={name}
-                  fill
-                  className={cn(
-                    image.is_open
-                      ? 'border-green-500 border-2'
-                      : 'border-red-500 border-2'
-                  )}
-                />
-              </CarouselItem>
+              <div className='relative aspect-[16/9]'>
+                <Image src={getContentUrl(image.image)} alt={name} fill className="object-cover" />
+                <div className='absolute top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center'>
+                  <p className='text-white text-center'>{image.is_open ? 'Открыто' : 'Закрыто'}</p>
+                </div>
+              </div>
             ))}
-          </Carousel>
+          </div>
           <Button
             variant="outline"
             className="absolute top-2 right-2"
@@ -96,6 +84,7 @@ export default function ClinicalCaseCard({
                 {name}
               </h3>
               <p className="text-sm text-muted-foreground">{description}</p>
+              
             </div>
             <div className="flex -ml-1 text-yellow-400">
               <Star className={`w-4 h-4 fill-current`} />
@@ -106,6 +95,7 @@ export default function ClinicalCaseCard({
         <CardContent className="space-y-3">
           <div className="flex items-center gap-2">
             <Badge variant="secondary">Сложность: {difficulty}/10</Badge>
+           
           </div>
 
           <div className="grid grid-cols-2 gap-2">
@@ -138,14 +128,15 @@ export default function ClinicalCaseCard({
                 </div>
                 <div className="flex p-3 flex-col gap-2">
                   <p className="text-md font-bold">Предполагаемый ответ</p>
-                  {question.type === 'text' && <p>{question.answer}</p>}
+                  {question.type === 'text' && (
+                    <p>{question.answer}</p>
+                  )}
 
-                  <p className="text-md font-bold">
-                    Дополнительные указания ИИ (промпт)
-                  </p>
+                  <p className="text-md font-bold">Дополнительные указания ИИ (промпт)</p>
                   {question.type === 'text' && (
                     <p>{question.additional_info}</p>
                   )}
+                  
                 </div>
               </div>
             ))}
@@ -167,6 +158,8 @@ export default function ClinicalCaseCard({
           </div>
         </CardContent>
         <CardFooter className="gap-2">
+          
+          
           <Button
             variant="destructive"
             size="icon"
@@ -176,6 +169,8 @@ export default function ClinicalCaseCard({
           </Button>
         </CardFooter>
       </Card>
+
+      
     </>
   );
 }
