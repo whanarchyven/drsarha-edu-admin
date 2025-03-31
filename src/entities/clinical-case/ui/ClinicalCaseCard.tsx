@@ -1,8 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
-import { Star, Edit, Trash2, Eye, AlertCircle } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Star, Edit, Trash2, Eye, AlertCircle, BarChart } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -29,7 +29,7 @@ import type { ClinicTask } from '@/shared/models/ClinicTask';
 import { getContentUrl } from '@/shared/utils/url';
 import { TaskBadges } from '@/shared/ui/TaskBadges/TaskBadges';
 import { copyToClipboardWithToast } from '@/shared/utils/copyToClipboard';
-
+import { clinicTasksApi } from '@/shared/api/clinic-tasks';
 interface ClinicTaskCardProps extends ClinicTask {
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
@@ -52,7 +52,19 @@ export default function ClinicalCaseCard({
   onDelete,
 }: ClinicTaskCardProps) {
   const [imagesOpen, setImagesOpen] = useState(false);
+  const [statsPopOpen, setStatsPopOpen] = useState(false);
+  const [statistics, setStatistics] = useState<{
+    views: number;
+    completed: number;
+  }>({ views: 0, completed: 0 });
 
+  useEffect(() => {
+    const fetchStatistics = async () => {
+      const stats = await clinicTasksApi.getStatistics(_id as string);
+      setStatistics(stats);
+    };
+    fetchStatistics();
+  }, [_id]);
   return (
     <>
       <Card className="overflow-hidden">
@@ -167,10 +179,24 @@ export default function ClinicalCaseCard({
             <Trash2 className="w-4 h-4" />
             <span className="sr-only">Удалить</span>
           </Button>
+          <Button variant="outline" size="icon" onClick={() => setStatsPopOpen(true)}>
+            <BarChart className="w-4 h-4" />
+            <span className="sr-only">Статистика</span>
+          </Button>
         </CardFooter>
       </Card>
 
-      
+      <Dialog open={statsPopOpen} onOpenChange={setStatsPopOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Статистика</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p>Просмотров: {statistics.views}</p>
+            <p>Выполнено: {statistics.completed}</p>
+          </div>
+        </DialogContent>
+      </Dialog> 
     </>
   );
 }

@@ -33,14 +33,14 @@ export const API = {
   createLection: '/lections',
   updateLection: (id: string) => `/lections/${id}`,
   deleteLection: (id: string) => `/lections/${id}`,
-
+  getLectionStats: (id: string) => `/lections/${id}/statistics`,
   // Клинические задачи
   getClinicTasks: '/clinic-tasks',
   getClinicTaskById: (id: string) => `/clinic-tasks/${id}`,
   createClinicTask: '/clinic-tasks',
   updateClinicTask: (id: string) => `/clinic-tasks/${id}`,
   deleteClinicTask: (id: string) => `/clinic-tasks/${id}`,
-
+  getClinicTaskStats: (id: string) => `/clinic-tasks/${id}/statistics`,
   // Клинические атласы
   getClinicAtlases: '/clinic-atlases',
   getClinicAtlasById: (id: string) => `/clinic-atlases/${id}`,
@@ -54,7 +54,7 @@ export const API = {
   createInteractiveTask: '/interactive-tasks',
   updateInteractiveTask: (id: string) => `/interactive-tasks/${id}`,
   deleteInteractiveTask: (id: string) => `/interactive-tasks/${id}`,
-
+  
   // Курсы
   getCourses: '/courses',
   getCourseById: (id: string) => `/courses/${id}`,
@@ -68,4 +68,11 @@ export const API = {
   createInteractiveQuiz: '/interactive-quizzes',
   updateInteractiveQuiz: (id: string) => `/interactive-quizzes/${id}`,
   deleteInteractiveQuiz: (id: string) => `/interactive-quizzes/${id}`,
+  getInteractiveQuizStats: (id: string) => `/interactive-quizzes/${id}/statistics`,
+  // Компании
+  getCompanies: '/companies',
+  getCompanyById: (id: string) => `/companies/${id}`,
+  createCompany: '/companies',
+  updateCompany: (id: string) => `/companies/${id}`,
+  deleteCompany: (id: string) => `/companies/${id}`,
 } as const;

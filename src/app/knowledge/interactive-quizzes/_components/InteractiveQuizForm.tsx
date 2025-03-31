@@ -64,6 +64,7 @@ const formSchema = z.object({
             })
           )
           .optional(),
+        analytic_questions: z.array(z.string()).default([]),
       })
     )
     .default([]),
@@ -182,7 +183,12 @@ export function InteractiveQuizForm({ initialData }: InteractiveQuizFormProps) {
       formData.append('questions', JSON.stringify(questionsData));
 
       // Добавление данных обратной связи
-      formData.append('feedback', JSON.stringify(values.feedback));
+      const feedbackData = values.feedback.map(item => ({
+        ...item,
+        analytic_questions: item.analytic_questions || []
+      }));
+      
+      formData.append('feedback', JSON.stringify(feedbackData));
 
       // Загрузка файлов изображений для вопросов
       for (let qIndex = 0; qIndex < questions.length; qIndex++) {

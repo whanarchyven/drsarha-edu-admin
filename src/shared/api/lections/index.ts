@@ -43,6 +43,18 @@ export const lectionsApi = {
     return data;
   },
 
+  getStatistics: async (id: string) => {
+    const { data } = await axiosInstance.get<{
+      views: number;
+      active_time: number | null;
+      notes: number | null;
+      completed: number;
+      active_time_average: number | null;
+      notes_average: number | null;
+    }>(API.getLectionStats(id));
+    return data;
+  },
+
   delete: async (id: string) => {
     await axiosInstance.delete(API.deleteLection(id));
   },

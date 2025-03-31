@@ -18,6 +18,14 @@ const navItems = [
       { name: 'Интерактивные квизы', path: '/knowledge/interactive-quizzes' },
     ],
   },
+  {
+    name: 'Аналитика',
+    path: '/analytics',
+    children: [
+      { name: 'Вопросы', path: '/analytics/questions' },
+      { name: 'Компании', path: '/analytics/companies' },
+    ],
+  },
 ];
 
 export const Navbar = () => {

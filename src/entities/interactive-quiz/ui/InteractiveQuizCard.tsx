@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
-import { useState } from 'react';
-import { Star, Edit, Trash2, Eye, AlertCircle } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Star, Edit, Trash2, Eye, AlertCircle, BarChart } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -28,7 +28,7 @@ import type { InteractiveQuiz } from '@/shared/models/InteractiveQuiz';
 import { getContentUrl } from '@/shared/utils/url';
 import { TaskBadges } from '@/shared/ui/TaskBadges/TaskBadges';
 import { copyToClipboardWithToast } from '@/shared/utils/copyToClipboard';
-
+import { interactiveQuizzesApi } from '@/shared/api/interactive-quizzes';
 interface InteractiveQuizCardProps extends InteractiveQuiz {
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
@@ -48,7 +48,21 @@ export default function InteractiveQuizCard({
   onDelete,
 }: InteractiveQuizCardProps) {
   const [imagesOpen, setImagesOpen] = useState(false);
+  const [statsPopOpen, setStatsPopOpen] = useState(false);
+  const [statistics, setStatistics] = useState<{
+    views: number;
+    completed: number;
+    correct_answers: number;
+    incorrect_answers: number;
+  }>({ views: 0, completed: 0, correct_answers: 0, incorrect_answers: 0 });
 
+  useEffect(() => {
+    const fetchStatistics = async () => {
+      const stats = await interactiveQuizzesApi.getStatistics(_id as string);
+      setStatistics(stats);
+    };
+    fetchStatistics();
+  }, [_id]);
   return (
     <>
       <Card className="overflow-hidden">
@@ -155,8 +169,26 @@ export default function InteractiveQuizCard({
             <Trash2 className="w-4 h-4" />
             <span className="sr-only">Удалить</span>
           </Button>
+          <Button variant="outline" size="icon" onClick={() => setStatsPopOpen(true)}>
+            <BarChart className="w-4 h-4" />
+            <span className="sr-only">Статистика</span>
+          </Button>
         </CardFooter>
       </Card>
+
+      <Dialog open={statsPopOpen} onOpenChange={setStatsPopOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Статистика</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p>Просмотров: {statistics.views}</p>
+            <p>Выполнено: {statistics.completed}</p>
+            <p>Правильных ответов: {statistics.correct_answers}</p>
+            <p>Неправильных ответов: {statistics.incorrect_answers}</p>
+          </div>
+        </DialogContent>
+      </Dialog>   
     </>
   );
 }

@@ -46,6 +46,14 @@ export const clinicTasksApi = {
     return data;
   },
 
+  getStatistics: async (id: string) => {
+    const { data } = await axiosInstance.get<{
+      views: number;
+      completed: number;
+    }>(API.getClinicTaskStats(id));
+    return data;
+  },
+
   delete: async (id: string) => {
     await axiosInstance.delete(API.deleteClinicTask(id));
   },

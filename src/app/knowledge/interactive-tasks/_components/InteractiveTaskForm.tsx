@@ -61,6 +61,7 @@ const formSchema = z.object({
             })
           )
           .optional(),
+        analytic_questions: z.array(z.string()).optional(),
       })
     )
     .default([]),

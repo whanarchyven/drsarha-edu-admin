@@ -47,6 +47,15 @@ export const interactiveQuizzesApi = {
     return data;
   },
 
+  getStatistics: async (id: string) => {
+    const { data } = await axiosInstance.get<{
+      views: number;
+      completed: number;
+      correct_answers: number;
+      incorrect_answers: number;
+    }>(API.getInteractiveQuizStats(id));
+    return data;
+  },
   delete: async (id: string) => {
     await axiosInstance.delete(API.deleteInteractiveQuiz(id));
   },
