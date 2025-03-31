@@ -1,10 +1,45 @@
+"use client"
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { companiesApi } from '@/shared/api/companies';
 import { Badge } from '@/components/ui/badge';
-export default async function CompaniesAnalyticsPage() {
-  const companies = await companiesApi.getAll();
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { Company } from '@/entities/company/model';
+import { PaginatedResponse } from '@/shared/api/types';
+export default function CompaniesAnalyticsPage() {
+  const [companies, setCompanies] = useState<PaginatedResponse<Company>>({
+    items: [],
+    total: 0,
+    page: 1,
+    limit: 10,
+  });
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchCompanies = async () => {
+      try {
+        const companies = await companiesApi.getAll();
+        setCompanies(companies);
+      } catch (error) {
+        setError('Ошибка при загрузке компаний');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchCompanies();
+  }, []);
+
+  if (isLoading) {
+    return <div>Загрузка компаний...</div>;
+  }
+
+  if (error) {
+    return <div>Ошибка при загрузке компаний: {error}</div>;
+  }
+
   return (
     <div>
       <div className="flex justify-between items-center">
