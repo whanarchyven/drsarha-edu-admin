@@ -41,12 +41,14 @@ async function handleRequest(request: NextRequest) {
       body = await request.clone().text(); // клонируем запрос, чтобы не потерять тело
     }
 
+    // Фильтруем проблемные заголовки
+    const filteredHeaders = filterHeaders(request.headers);
+    // Добавляем host заголовок вручную
+    filteredHeaders.set('host', new URL(BACKEND_URL).host);
+
     const response = await fetch(url.toString(), {
       method: request.method,
-      headers: {
-        ...Object.fromEntries(request.headers),
-        host: new URL(BACKEND_URL).host,
-      },
+      headers: filteredHeaders,
       body: body,
       //@ts-ignore
       duplex: 'half' as const,
@@ -70,4 +72,37 @@ async function handleRequest(request: NextRequest) {
       }
     );
   }
+}
+
+/**
+ * Фильтрует проблемные HTTP-заголовки, которые не следует передавать в fetch
+ */
+function filterHeaders(headers: Headers): Headers {
+  const filteredHeaders = new Headers();
+  
+  // Список заголовков, которые следует исключить
+  const forbiddenHeaders = [
+    'connection',
+    'content-length',
+    'host',
+    'transfer-encoding',
+    'upgrade',
+    'keep-alive',
+    'proxy-authenticate',
+    'proxy-authorization',
+    'te',
+    'trailer',
+    'sec-fetch-dest',
+    'sec-fetch-mode',
+    'sec-fetch-site',
+  ].map(h => h.toLowerCase());
+
+  // Копируем все заголовки, кроме исключенных
+  headers.forEach((value, key) => {
+    if (!forbiddenHeaders.includes(key.toLowerCase())) {
+      filteredHeaders.append(key, value);
+    }
+  });
+
+  return filteredHeaders;
 }
