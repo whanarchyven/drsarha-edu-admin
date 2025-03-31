@@ -78,6 +78,7 @@ interface Company {
   updated_at: string;
   logo: string;
   description: string;
+  password: string;
   dashboards: Dashboard[];
 }
 
@@ -92,6 +93,7 @@ export default function DashboardForm() {
     updated_at: new Date().toISOString(),
     logo: '',
     description: '',
+    password: '',
     dashboards: [],
   });
 
@@ -215,6 +217,7 @@ export default function DashboardForm() {
     e.preventDefault();
     console.log('Submitted company:', company);
     try {
+      console.log('Company:', company);
       const response = await companiesApi.create(company);
       console.log('Company created:', response);
       toast.success('Компания успешно создана');
@@ -268,6 +271,19 @@ export default function DashboardForm() {
                   required
                 />
               </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Пароль компании</Label>
+              <Input
+                id="password"
+                
+                value={company.password}
+                onChange={(e) =>
+                  setCompany({ ...company, password: e.target.value })
+                }
+                placeholder="Введите пароль для доступа к компании"
+                required
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="logo">URL логотипа</Label>

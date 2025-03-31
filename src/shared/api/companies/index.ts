@@ -20,11 +20,17 @@ export const companiesApi = {
   create: async (
     companyData: Omit<Company, '_id' | 'created_at' | 'updated_at'>
   ) => {
-    const { data } = await axiosInstance.post<Company>(
-      API.createCompany,
-      companyData
-    );
-    return data;
+    console.log('companyData', companyData);
+    try {
+      const response = await axiosInstance.post<Company>(
+        API.createCompany,
+        companyData
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error creating company:', error);
+      throw error;
+    }
   },
 
   update: async (
