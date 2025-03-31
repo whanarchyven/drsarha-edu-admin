@@ -13,13 +13,13 @@ export const companiesApi = {
   },
 
   getById: async (id: string) => {
-    const { data } = await axiosInstance.get<Company>(
-      API.getCompanyById(id)
-    );
+    const { data } = await axiosInstance.get<Company>(API.getCompanyById(id));
     return data;
   },
 
-  create: async (companyData: Omit<Company, '_id' | 'created_at' | 'updated_at'>) => {
+  create: async (
+    companyData: Omit<Company, '_id' | 'created_at' | 'updated_at'>
+  ) => {
     const { data } = await axiosInstance.post<Company>(
       API.createCompany,
       companyData
@@ -27,7 +27,10 @@ export const companiesApi = {
     return data;
   },
 
-  update: async (id: string, companyData: Partial<Omit<Company, '_id' | 'created_at' | 'updated_at'>>) => {
+  update: async (
+    id: string,
+    companyData: Partial<Omit<Company, '_id' | 'created_at' | 'updated_at'>>
+  ) => {
     const { data } = await axiosInstance.put<Company>(
       API.updateCompany(id),
       companyData

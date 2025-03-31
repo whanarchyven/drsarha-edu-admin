@@ -183,11 +183,11 @@ export function InteractiveQuizForm({ initialData }: InteractiveQuizFormProps) {
       formData.append('questions', JSON.stringify(questionsData));
 
       // Добавление данных обратной связи
-      const feedbackData = values.feedback.map(item => ({
+      const feedbackData = values.feedback.map((item) => ({
         ...item,
-        analytic_questions: item.analytic_questions || []
+        analytic_questions: item.analytic_questions || [],
       }));
-      
+
       formData.append('feedback', JSON.stringify(feedbackData));
 
       // Загрузка файлов изображений для вопросов

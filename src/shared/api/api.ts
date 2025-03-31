@@ -54,7 +54,7 @@ export const API = {
   createInteractiveTask: '/interactive-tasks',
   updateInteractiveTask: (id: string) => `/interactive-tasks/${id}`,
   deleteInteractiveTask: (id: string) => `/interactive-tasks/${id}`,
-  
+
   // Курсы
   getCourses: '/courses',
   getCourseById: (id: string) => `/courses/${id}`,
@@ -68,7 +68,8 @@ export const API = {
   createInteractiveQuiz: '/interactive-quizzes',
   updateInteractiveQuiz: (id: string) => `/interactive-quizzes/${id}`,
   deleteInteractiveQuiz: (id: string) => `/interactive-quizzes/${id}`,
-  getInteractiveQuizStats: (id: string) => `/interactive-quizzes/${id}/statistics`,
+  getInteractiveQuizStats: (id: string) =>
+    `/interactive-quizzes/${id}/statistics`,
   // Компании
   getCompanies: '/companies',
   getCompanyById: (id: string) => `/companies/${id}`,

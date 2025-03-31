@@ -14,7 +14,13 @@ import {
 } from '@/components/ui/form';
 import { Card } from '@/components/ui/card';
 import { useInsightQuestions } from '@/shared/hooks/use-insight-questions';
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -40,21 +46,28 @@ export function FeedbackQuestions() {
 
   const [searchQuery, setSearchQuery] = useState('');
   const { questions: analyticQuestionsRaw } = useInsightQuestions(searchQuery);
-  
+
   // Создаем безопасную версию вопросов с гарантированными полями
-  const analyticQuestions: AnalyticQuestion[] = analyticQuestionsRaw.map(q => ({
-    id: q.id || '',
-    title: q.title || '',
-    prompt: q.prompt || ''
-  }));
-  
+  const analyticQuestions: AnalyticQuestion[] = analyticQuestionsRaw.map(
+    (q) => ({
+      id: q.id || '',
+      title: q.title || '',
+      prompt: q.prompt || '',
+    })
+  );
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [selectedQuestionIndex, setSelectedQuestionIndex] = useState<number | null>(null);
-  const [selectedAnalyticQuestions, setSelectedAnalyticQuestions] = useState<string[]>([]);
+  const [selectedQuestionIndex, setSelectedQuestionIndex] = useState<
+    number | null
+  >(null);
+  const [selectedAnalyticQuestions, setSelectedAnalyticQuestions] = useState<
+    string[]
+  >([]);
 
   // Открытие диалога для выбора вопросов аналитики
   const openAnalyticsDialog = (questionIndex: number) => {
-    const currentAnalyticQuestions = watch(`feedback.${questionIndex}.analytic_questions`) || [];
+    const currentAnalyticQuestions =
+      watch(`feedback.${questionIndex}.analytic_questions`) || [];
     setSelectedAnalyticQuestions(currentAnalyticQuestions);
     setSelectedQuestionIndex(questionIndex);
     setSearchQuery(''); // Сбрасываем поиск при каждом открытии
@@ -64,17 +77,18 @@ export function FeedbackQuestions() {
   // Сохранение выбранных вопросов аналитики
   const saveAnalyticQuestions = () => {
     if (selectedQuestionIndex !== null) {
-      setValue(`feedback.${selectedQuestionIndex}.analytic_questions`, selectedAnalyticQuestions);
+      setValue(
+        `feedback.${selectedQuestionIndex}.analytic_questions`,
+        selectedAnalyticQuestions
+      );
       setIsDialogOpen(false);
     }
   };
 
   // Переключение выбора вопроса аналитики
   const toggleAnalyticQuestion = (id: string) => {
-    setSelectedAnalyticQuestions(prev => 
-      prev.includes(id) 
-        ? prev.filter(item => item !== id) 
-        : [...prev, id]
+    setSelectedAnalyticQuestions((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
   };
 
@@ -106,8 +120,9 @@ export function FeedbackQuestions() {
 
       {questions.map((field, questionIndex) => {
         const hasCorrect = watch(`feedback.${questionIndex}.has_correct`);
-        const questionAnalytics = watch(`feedback.${questionIndex}.analytic_questions`) || [];
-        
+        const questionAnalytics =
+          watch(`feedback.${questionIndex}.analytic_questions`) || [];
+
         return (
           <Card key={field.id} className="p-4 space-y-4">
             <div className="flex items-start gap-4">
@@ -150,31 +165,36 @@ export function FeedbackQuestions() {
                     questionIndex={questionIndex}
                   />
                 )}
-                
+
                 {questionAnalytics.length > 0 && (
                   <div className="mt-2">
                     <FormLabel>Связанные вопросы аналитики:</FormLabel>
                     <div className="flex flex-wrap gap-2 mt-1">
                       {questionAnalytics.map((id: string) => {
-                        const question = analyticQuestions.find(q => q.id === id);
+                        const question = analyticQuestions.find(
+                          (q) => q.id === id
+                        );
                         return (
                           <Badge key={id} variant="secondary">
-                            {question ? `${question.title.substring(0, 30)}...` : id}
+                            {question
+                              ? `${question.title.substring(0, 30)}...`
+                              : id}
                           </Badge>
                         );
                       })}
                     </div>
                   </div>
                 )}
-                
+
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
-                  onClick={() => openAnalyticsDialog(questionIndex)}
-                >
+                  onClick={() => openAnalyticsDialog(questionIndex)}>
                   <BarChart className="h-4 w-4 mr-2" />
-                  {questionAnalytics.length > 0 ? 'Изменить аналитику' : 'Добавить аналитику'}
+                  {questionAnalytics.length > 0
+                    ? 'Изменить аналитику'
+                    : 'Добавить аналитику'}
                 </Button>
               </div>
 
@@ -189,13 +209,13 @@ export function FeedbackQuestions() {
           </Card>
         );
       })}
-      
+
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Выбор вопросов аналитики</DialogTitle>
           </DialogHeader>
-          
+
           <div className="relative my-2">
             <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
@@ -205,40 +225,42 @@ export function FeedbackQuestions() {
               className="pl-8"
             />
           </div>
-          
+
           <ScrollArea className="h-[400px] pr-4">
             <div className="space-y-4">
-              {analyticQuestions.map(question => (
-                <div key={question.id} className="flex items-start border rounded-md p-2 space-x-2">
-                  <Checkbox 
+              {analyticQuestions.map((question) => (
+                <div
+                  key={question.id}
+                  className="flex items-start border rounded-md p-2 space-x-2">
+                  <Checkbox
                     id={`analytic-${question.id}`}
                     checked={selectedAnalyticQuestions.includes(question.id)}
                     onCheckedChange={() => toggleAnalyticQuestion(question.id)}
                   />
-                  <label 
+                  <label
                     htmlFor={`analytic-${question.id}`}
-                    className="text-sm leading-tight cursor-pointer"
-                  >
-                    <span className='font-bold'>{question.title}</span> <br/> <br/> {question.prompt}
+                    className="text-sm leading-tight cursor-pointer">
+                    <span className="font-bold">{question.title}</span> <br />{' '}
+                    <br /> {question.prompt}
                   </label>
                 </div>
               ))}
-              
+
               {analyticQuestions.length === 0 && (
                 <p className="text-sm text-muted-foreground">
-                  {searchQuery ? 'Нет результатов по вашему запросу' : 'Нет доступных вопросов аналитики'}
+                  {searchQuery
+                    ? 'Нет результатов по вашему запросу'
+                    : 'Нет доступных вопросов аналитики'}
                 </p>
               )}
             </div>
           </ScrollArea>
-          
+
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
               Отмена
             </Button>
-            <Button onClick={saveAnalyticQuestions}>
-              Сохранить
-            </Button>
+            <Button onClick={saveAnalyticQuestions}>Сохранить</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

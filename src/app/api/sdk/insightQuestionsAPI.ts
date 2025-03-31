@@ -6,23 +6,13 @@
  * OpenAPI spec version: 1.0.0
  */
 import axios from 'axios';
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
+import type { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import useSwr from 'swr';
-import type {
-  Arguments,
-  Key,
-  SWRConfiguration
-} from 'swr';
+import type { Arguments, Key, SWRConfiguration } from 'swr';
 
 import useSWRMutation from 'swr/mutation';
-import type {
-  SWRMutationConfiguration
-} from 'swr/mutation';
+import type { SWRMutationConfiguration } from 'swr/mutation';
 
 import type {
   BaseInsightQuestionDto,
@@ -37,613 +27,1001 @@ import type {
   PushConfigNamesMapPushConfigPost200,
   PushConfigNamesMapPushConfigPostBody,
   SummaryByInsightQuestionIdInsightResultsSummaryByInsightQuestionIdInsightQuestionIdGet200,
-  UpdateInsightQuestionDto
+  UpdateInsightQuestionDto,
 } from '../client/schemas';
 
 /**
  * @summary Create Insight Question
  */
 export const createInsightQuestionInsightQuestionsPost = (
-    createInsightQuestionDto: CreateInsightQuestionDto, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<unknown>> => {
-    return axios.post(
-      `/api/insight-questions/`,
-      createInsightQuestionDto,options
-    );
-  }
+  createInsightQuestionDto: CreateInsightQuestionDto,
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<unknown>> => {
+  return axios.post(
+    `/api/insight-questions/`,
+    createInsightQuestionDto,
+    options
+  );
+};
 
-
-
-export const getCreateInsightQuestionInsightQuestionsPostMutationFetcher = ( options?: AxiosRequestConfig) => {
-  return (_: Key, { arg }: { arg: CreateInsightQuestionDto }): Promise<AxiosResponse<unknown>> => {
+export const getCreateInsightQuestionInsightQuestionsPostMutationFetcher = (
+  options?: AxiosRequestConfig
+) => {
+  return (
+    _: Key,
+    { arg }: { arg: CreateInsightQuestionDto }
+  ): Promise<AxiosResponse<unknown>> => {
     return createInsightQuestionInsightQuestionsPost(arg, options);
-  }
-}
-export const getCreateInsightQuestionInsightQuestionsPostMutationKey = () => [`/api/insight-questions/`] as const;
+  };
+};
+export const getCreateInsightQuestionInsightQuestionsPostMutationKey = () =>
+  [`/api/insight-questions/`] as const;
 
-export type CreateInsightQuestionInsightQuestionsPostMutationResult = NonNullable<Awaited<ReturnType<typeof createInsightQuestionInsightQuestionsPost>>>
-export type CreateInsightQuestionInsightQuestionsPostMutationError = AxiosError<HTTPValidationError>
+export type CreateInsightQuestionInsightQuestionsPostMutationResult =
+  NonNullable<
+    Awaited<ReturnType<typeof createInsightQuestionInsightQuestionsPost>>
+  >;
+export type CreateInsightQuestionInsightQuestionsPostMutationError =
+  AxiosError<HTTPValidationError>;
 
 /**
  * @summary Create Insight Question
  */
-export const useCreateInsightQuestionInsightQuestionsPost = <TError = AxiosError<HTTPValidationError>>(
-   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof createInsightQuestionInsightQuestionsPost>>, TError, Key, CreateInsightQuestionDto, Awaited<ReturnType<typeof createInsightQuestionInsightQuestionsPost>>> & { swrKey?: string }, axios?: AxiosRequestConfig}
-) => {
+export const useCreateInsightQuestionInsightQuestionsPost = <
+  TError = AxiosError<HTTPValidationError>,
+>(options?: {
+  swr?: SWRMutationConfiguration<
+    Awaited<ReturnType<typeof createInsightQuestionInsightQuestionsPost>>,
+    TError,
+    Key,
+    CreateInsightQuestionDto,
+    Awaited<ReturnType<typeof createInsightQuestionInsightQuestionsPost>>
+  > & { swrKey?: string };
+  axios?: AxiosRequestConfig;
+}) => {
+  const { swr: swrOptions, axios: axiosOptions } = options ?? {};
 
-  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+  const swrKey =
+    swrOptions?.swrKey ??
+    getCreateInsightQuestionInsightQuestionsPostMutationKey();
+  const swrFn =
+    getCreateInsightQuestionInsightQuestionsPostMutationFetcher(axiosOptions);
 
-  const swrKey = swrOptions?.swrKey ?? getCreateInsightQuestionInsightQuestionsPostMutationKey();
-  const swrFn = getCreateInsightQuestionInsightQuestionsPostMutationFetcher(axiosOptions);
-
-  const query = useSWRMutation(swrKey, swrFn, swrOptions)
+  const query = useSWRMutation(swrKey, swrFn, swrOptions);
 
   return {
     swrKey,
-    ...query
-  }
-}
+    ...query,
+  };
+};
 
 /**
  * @summary Update Insight Question
  */
 export const updateInsightQuestionInsightQuestionsUpdatePost = (
-    updateInsightQuestionDto: UpdateInsightQuestionDto, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<unknown>> => {
-    return axios.post(
-      `/api/insight-questions/update`,
-      updateInsightQuestionDto,options
-    );
-  }
+  updateInsightQuestionDto: UpdateInsightQuestionDto,
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<unknown>> => {
+  return axios.post(
+    `/api/insight-questions/update`,
+    updateInsightQuestionDto,
+    options
+  );
+};
 
+export const getUpdateInsightQuestionInsightQuestionsUpdatePostMutationFetcher =
+  (options?: AxiosRequestConfig) => {
+    return (
+      _: Key,
+      { arg }: { arg: UpdateInsightQuestionDto }
+    ): Promise<AxiosResponse<unknown>> => {
+      return updateInsightQuestionInsightQuestionsUpdatePost(arg, options);
+    };
+  };
+export const getUpdateInsightQuestionInsightQuestionsUpdatePostMutationKey =
+  () => [`/api/insight-questions/update`] as const;
 
-
-export const getUpdateInsightQuestionInsightQuestionsUpdatePostMutationFetcher = ( options?: AxiosRequestConfig) => {
-  return (_: Key, { arg }: { arg: UpdateInsightQuestionDto }): Promise<AxiosResponse<unknown>> => {
-    return updateInsightQuestionInsightQuestionsUpdatePost(arg, options);
-  }
-}
-export const getUpdateInsightQuestionInsightQuestionsUpdatePostMutationKey = () => [`/api/insight-questions/update`] as const;
-
-export type UpdateInsightQuestionInsightQuestionsUpdatePostMutationResult = NonNullable<Awaited<ReturnType<typeof updateInsightQuestionInsightQuestionsUpdatePost>>>
-export type UpdateInsightQuestionInsightQuestionsUpdatePostMutationError = AxiosError<HTTPValidationError>
+export type UpdateInsightQuestionInsightQuestionsUpdatePostMutationResult =
+  NonNullable<
+    Awaited<ReturnType<typeof updateInsightQuestionInsightQuestionsUpdatePost>>
+  >;
+export type UpdateInsightQuestionInsightQuestionsUpdatePostMutationError =
+  AxiosError<HTTPValidationError>;
 
 /**
  * @summary Update Insight Question
  */
-export const useUpdateInsightQuestionInsightQuestionsUpdatePost = <TError = AxiosError<HTTPValidationError>>(
-   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof updateInsightQuestionInsightQuestionsUpdatePost>>, TError, Key, UpdateInsightQuestionDto, Awaited<ReturnType<typeof updateInsightQuestionInsightQuestionsUpdatePost>>> & { swrKey?: string }, axios?: AxiosRequestConfig}
-) => {
+export const useUpdateInsightQuestionInsightQuestionsUpdatePost = <
+  TError = AxiosError<HTTPValidationError>,
+>(options?: {
+  swr?: SWRMutationConfiguration<
+    Awaited<ReturnType<typeof updateInsightQuestionInsightQuestionsUpdatePost>>,
+    TError,
+    Key,
+    UpdateInsightQuestionDto,
+    Awaited<ReturnType<typeof updateInsightQuestionInsightQuestionsUpdatePost>>
+  > & { swrKey?: string };
+  axios?: AxiosRequestConfig;
+}) => {
+  const { swr: swrOptions, axios: axiosOptions } = options ?? {};
 
-  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+  const swrKey =
+    swrOptions?.swrKey ??
+    getUpdateInsightQuestionInsightQuestionsUpdatePostMutationKey();
+  const swrFn =
+    getUpdateInsightQuestionInsightQuestionsUpdatePostMutationFetcher(
+      axiosOptions
+    );
 
-  const swrKey = swrOptions?.swrKey ?? getUpdateInsightQuestionInsightQuestionsUpdatePostMutationKey();
-  const swrFn = getUpdateInsightQuestionInsightQuestionsUpdatePostMutationFetcher(axiosOptions);
-
-  const query = useSWRMutation(swrKey, swrFn, swrOptions)
+  const query = useSWRMutation(swrKey, swrFn, swrOptions);
 
   return {
     swrKey,
-    ...query
-  }
-}
+    ...query,
+  };
+};
 
 /**
  * @summary List Questions
  */
 export const listQuestionsInsightQuestionsListGet = (
-    params?: ListQuestionsInsightQuestionsListGetParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<BaseInsightQuestionDto[]>> => {
-    return axios.get(
-      `/api/insight-questions/list`,{
+  params?: ListQuestionsInsightQuestionsListGetParams,
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<BaseInsightQuestionDto[]>> => {
+  return axios.get(`/api/insight-questions/list`, {
     ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
+    params: { ...params, ...options?.params },
+  });
+};
 
+export const getListQuestionsInsightQuestionsListGetKey = (
+  params?: ListQuestionsInsightQuestionsListGetParams
+) => [`/api/insight-questions/list`, ...(params ? [params] : [])] as const;
 
-
-export const getListQuestionsInsightQuestionsListGetKey = (params?: ListQuestionsInsightQuestionsListGetParams,) => [`/api/insight-questions/list`, ...(params ? [params]: [])] as const;
-
-export type ListQuestionsInsightQuestionsListGetQueryResult = NonNullable<Awaited<ReturnType<typeof listQuestionsInsightQuestionsListGet>>>
-export type ListQuestionsInsightQuestionsListGetQueryError = AxiosError<HTTPValidationError>
+export type ListQuestionsInsightQuestionsListGetQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listQuestionsInsightQuestionsListGet>>
+>;
+export type ListQuestionsInsightQuestionsListGetQueryError =
+  AxiosError<HTTPValidationError>;
 
 /**
  * @summary List Questions
  */
-export const useListQuestionsInsightQuestionsListGet = <TError = AxiosError<HTTPValidationError>>(
-  params?: ListQuestionsInsightQuestionsListGetParams, options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof listQuestionsInsightQuestionsListGet>>, TError> & { swrKey?: Key, enabled?: boolean }, axios?: AxiosRequestConfig }
+export const useListQuestionsInsightQuestionsListGet = <
+  TError = AxiosError<HTTPValidationError>,
+>(
+  params?: ListQuestionsInsightQuestionsListGetParams,
+  options?: {
+    swr?: SWRConfiguration<
+      Awaited<ReturnType<typeof listQuestionsInsightQuestionsListGet>>,
+      TError
+    > & { swrKey?: Key; enabled?: boolean };
+    axios?: AxiosRequestConfig;
+  }
 ) => {
-  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+  const { swr: swrOptions, axios: axiosOptions } = options ?? {};
 
-  const isEnabled = swrOptions?.enabled !== false
-  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getListQuestionsInsightQuestionsListGetKey(params) : null);
-  const swrFn = () => listQuestionsInsightQuestionsListGet(params, axiosOptions)
+  const isEnabled = swrOptions?.enabled !== false;
+  const swrKey =
+    swrOptions?.swrKey ??
+    (() =>
+      isEnabled ? getListQuestionsInsightQuestionsListGetKey(params) : null);
+  const swrFn = () =>
+    listQuestionsInsightQuestionsListGet(params, axiosOptions);
 
-  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+    swrKey,
+    swrFn,
+    swrOptions
+  );
 
   return {
     swrKey,
-    ...query
-  }
-}
+    ...query,
+  };
+};
 
 /**
  * @summary Filter By Title
  */
 export const filterByTitleInsightQuestionsFilterByTitleGet = (
-    params: FilterByTitleInsightQuestionsFilterByTitleGetParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<BaseInsightQuestionDto[]>> => {
-    return axios.get(
-      `/api/insight-questions/filter-by-title`,{
+  params: FilterByTitleInsightQuestionsFilterByTitleGetParams,
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<BaseInsightQuestionDto[]>> => {
+  return axios.get(`/api/insight-questions/filter-by-title`, {
     ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
+    params: { ...params, ...options?.params },
+  });
+};
 
+export const getFilterByTitleInsightQuestionsFilterByTitleGetKey = (
+  params: FilterByTitleInsightQuestionsFilterByTitleGetParams
+) =>
+  [
+    `/api/insight-questions/filter-by-title`,
+    ...(params ? [params] : []),
+  ] as const;
 
-
-export const getFilterByTitleInsightQuestionsFilterByTitleGetKey = (params: FilterByTitleInsightQuestionsFilterByTitleGetParams,) => [`/api/insight-questions/filter-by-title`, ...(params ? [params]: [])] as const;
-
-export type FilterByTitleInsightQuestionsFilterByTitleGetQueryResult = NonNullable<Awaited<ReturnType<typeof filterByTitleInsightQuestionsFilterByTitleGet>>>
-export type FilterByTitleInsightQuestionsFilterByTitleGetQueryError = AxiosError<HTTPValidationError>
+export type FilterByTitleInsightQuestionsFilterByTitleGetQueryResult =
+  NonNullable<
+    Awaited<ReturnType<typeof filterByTitleInsightQuestionsFilterByTitleGet>>
+  >;
+export type FilterByTitleInsightQuestionsFilterByTitleGetQueryError =
+  AxiosError<HTTPValidationError>;
 
 /**
  * @summary Filter By Title
  */
-export const useFilterByTitleInsightQuestionsFilterByTitleGet = <TError = AxiosError<HTTPValidationError>>(
-  params: FilterByTitleInsightQuestionsFilterByTitleGetParams, options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof filterByTitleInsightQuestionsFilterByTitleGet>>, TError> & { swrKey?: Key, enabled?: boolean }, axios?: AxiosRequestConfig }
+export const useFilterByTitleInsightQuestionsFilterByTitleGet = <
+  TError = AxiosError<HTTPValidationError>,
+>(
+  params: FilterByTitleInsightQuestionsFilterByTitleGetParams,
+  options?: {
+    swr?: SWRConfiguration<
+      Awaited<ReturnType<typeof filterByTitleInsightQuestionsFilterByTitleGet>>,
+      TError
+    > & { swrKey?: Key; enabled?: boolean };
+    axios?: AxiosRequestConfig;
+  }
 ) => {
-  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+  const { swr: swrOptions, axios: axiosOptions } = options ?? {};
 
-  const isEnabled = swrOptions?.enabled !== false
-  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getFilterByTitleInsightQuestionsFilterByTitleGetKey(params) : null);
-  const swrFn = () => filterByTitleInsightQuestionsFilterByTitleGet(params, axiosOptions)
+  const isEnabled = swrOptions?.enabled !== false;
+  const swrKey =
+    swrOptions?.swrKey ??
+    (() =>
+      isEnabled
+        ? getFilterByTitleInsightQuestionsFilterByTitleGetKey(params)
+        : null);
+  const swrFn = () =>
+    filterByTitleInsightQuestionsFilterByTitleGet(params, axiosOptions);
 
-  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+    swrKey,
+    swrFn,
+    swrOptions
+  );
 
   return {
     swrKey,
-    ...query
-  }
-}
+    ...query,
+  };
+};
 
 /**
  * @summary Delete Insight Question
  */
 export const deleteInsightQuestionInsightQuestionsQuestionIdDelete = (
-    questionId: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<unknown>> => {
-    return axios.delete(
-      `/api/insight-questions/${questionId}`,options
-    );
-  }
+  questionId: string,
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<unknown>> => {
+  return axios.delete(`/api/insight-questions/${questionId}`, options);
+};
 
+export const getDeleteInsightQuestionInsightQuestionsQuestionIdDeleteMutationFetcher =
+  (questionId: string, options?: AxiosRequestConfig) => {
+    return (
+      _: Key,
+      __: { arg: Arguments }
+    ): Promise<AxiosResponse<unknown>> => {
+      return deleteInsightQuestionInsightQuestionsQuestionIdDelete(
+        questionId,
+        options
+      );
+    };
+  };
+export const getDeleteInsightQuestionInsightQuestionsQuestionIdDeleteMutationKey =
+  (questionId: string) => [`/api/insight-questions/${questionId}`] as const;
 
-
-export const getDeleteInsightQuestionInsightQuestionsQuestionIdDeleteMutationFetcher = (questionId: string, options?: AxiosRequestConfig) => {
-  return (_: Key, __: { arg: Arguments }): Promise<AxiosResponse<unknown>> => {
-    return deleteInsightQuestionInsightQuestionsQuestionIdDelete(questionId, options);
-  }
-}
-export const getDeleteInsightQuestionInsightQuestionsQuestionIdDeleteMutationKey = (questionId: string,) => [`/api/insight-questions/${questionId}`] as const;
-
-export type DeleteInsightQuestionInsightQuestionsQuestionIdDeleteMutationResult = NonNullable<Awaited<ReturnType<typeof deleteInsightQuestionInsightQuestionsQuestionIdDelete>>>
-export type DeleteInsightQuestionInsightQuestionsQuestionIdDeleteMutationError = AxiosError<HTTPValidationError>
+export type DeleteInsightQuestionInsightQuestionsQuestionIdDeleteMutationResult =
+  NonNullable<
+    Awaited<
+      ReturnType<typeof deleteInsightQuestionInsightQuestionsQuestionIdDelete>
+    >
+  >;
+export type DeleteInsightQuestionInsightQuestionsQuestionIdDeleteMutationError =
+  AxiosError<HTTPValidationError>;
 
 /**
  * @summary Delete Insight Question
  */
-export const useDeleteInsightQuestionInsightQuestionsQuestionIdDelete = <TError = AxiosError<HTTPValidationError>>(
-  questionId: string, options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof deleteInsightQuestionInsightQuestionsQuestionIdDelete>>, TError, Key, Arguments, Awaited<ReturnType<typeof deleteInsightQuestionInsightQuestionsQuestionIdDelete>>> & { swrKey?: string }, axios?: AxiosRequestConfig}
+export const useDeleteInsightQuestionInsightQuestionsQuestionIdDelete = <
+  TError = AxiosError<HTTPValidationError>,
+>(
+  questionId: string,
+  options?: {
+    swr?: SWRMutationConfiguration<
+      Awaited<
+        ReturnType<typeof deleteInsightQuestionInsightQuestionsQuestionIdDelete>
+      >,
+      TError,
+      Key,
+      Arguments,
+      Awaited<
+        ReturnType<typeof deleteInsightQuestionInsightQuestionsQuestionIdDelete>
+      >
+    > & { swrKey?: string };
+    axios?: AxiosRequestConfig;
+  }
 ) => {
+  const { swr: swrOptions, axios: axiosOptions } = options ?? {};
 
-  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+  const swrKey =
+    swrOptions?.swrKey ??
+    getDeleteInsightQuestionInsightQuestionsQuestionIdDeleteMutationKey(
+      questionId
+    );
+  const swrFn =
+    getDeleteInsightQuestionInsightQuestionsQuestionIdDeleteMutationFetcher(
+      questionId,
+      axiosOptions
+    );
 
-  const swrKey = swrOptions?.swrKey ?? getDeleteInsightQuestionInsightQuestionsQuestionIdDeleteMutationKey(questionId);
-  const swrFn = getDeleteInsightQuestionInsightQuestionsQuestionIdDeleteMutationFetcher(questionId, axiosOptions);
-
-  const query = useSWRMutation(swrKey, swrFn, swrOptions)
+  const query = useSWRMutation(swrKey, swrFn, swrOptions);
 
   return {
     swrKey,
-    ...query
-  }
-}
+    ...query,
+  };
+};
 
 /**
  * @summary Get Insight Question
  */
 export const getInsightQuestionInsightQuestionsGetQuestionIdGet = (
-    questionId: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<unknown>> => {
-    return axios.get(
-      `/api/insight-questions/get/${questionId}`,options
-    );
-  }
+  questionId: string,
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<unknown>> => {
+  return axios.get(`/api/insight-questions/get/${questionId}`, options);
+};
 
+export const getGetInsightQuestionInsightQuestionsGetQuestionIdGetKey = (
+  questionId: string
+) => [`/api/insight-questions/get/${questionId}`] as const;
 
-
-export const getGetInsightQuestionInsightQuestionsGetQuestionIdGetKey = (questionId: string,) => [`/api/insight-questions/get/${questionId}`] as const;
-
-export type GetInsightQuestionInsightQuestionsGetQuestionIdGetQueryResult = NonNullable<Awaited<ReturnType<typeof getInsightQuestionInsightQuestionsGetQuestionIdGet>>>
-export type GetInsightQuestionInsightQuestionsGetQuestionIdGetQueryError = AxiosError<HTTPValidationError>
+export type GetInsightQuestionInsightQuestionsGetQuestionIdGetQueryResult =
+  NonNullable<
+    Awaited<
+      ReturnType<typeof getInsightQuestionInsightQuestionsGetQuestionIdGet>
+    >
+  >;
+export type GetInsightQuestionInsightQuestionsGetQuestionIdGetQueryError =
+  AxiosError<HTTPValidationError>;
 
 /**
  * @summary Get Insight Question
  */
-export const useGetInsightQuestionInsightQuestionsGetQuestionIdGet = <TError = AxiosError<HTTPValidationError>>(
-  questionId: string, options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof getInsightQuestionInsightQuestionsGetQuestionIdGet>>, TError> & { swrKey?: Key, enabled?: boolean }, axios?: AxiosRequestConfig }
+export const useGetInsightQuestionInsightQuestionsGetQuestionIdGet = <
+  TError = AxiosError<HTTPValidationError>,
+>(
+  questionId: string,
+  options?: {
+    swr?: SWRConfiguration<
+      Awaited<
+        ReturnType<typeof getInsightQuestionInsightQuestionsGetQuestionIdGet>
+      >,
+      TError
+    > & { swrKey?: Key; enabled?: boolean };
+    axios?: AxiosRequestConfig;
+  }
 ) => {
-  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+  const { swr: swrOptions, axios: axiosOptions } = options ?? {};
 
-  const isEnabled = swrOptions?.enabled !== false && !!(questionId)
-  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGetInsightQuestionInsightQuestionsGetQuestionIdGetKey(questionId) : null);
-  const swrFn = () => getInsightQuestionInsightQuestionsGetQuestionIdGet(questionId, axiosOptions)
+  const isEnabled = swrOptions?.enabled !== false && !!questionId;
+  const swrKey =
+    swrOptions?.swrKey ??
+    (() =>
+      isEnabled
+        ? getGetInsightQuestionInsightQuestionsGetQuestionIdGetKey(questionId)
+        : null);
+  const swrFn = () =>
+    getInsightQuestionInsightQuestionsGetQuestionIdGet(
+      questionId,
+      axiosOptions
+    );
 
-  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+    swrKey,
+    swrFn,
+    swrOptions
+  );
 
   return {
     swrKey,
-    ...query
-  }
-}
+    ...query,
+  };
+};
 
 /**
  * @summary List
  */
 export const listInsightResultsListGet = (
-     options?: AxiosRequestConfig
- ): Promise<AxiosResponse<BaseInsightResultDto[]>> => {
-    return axios.get(
-      `/api/insight-results/list`,options
-    );
-  }
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<BaseInsightResultDto[]>> => {
+  return axios.get(`/api/insight-results/list`, options);
+};
 
+export const getListInsightResultsListGetKey = () =>
+  [`/api/insight-results/list`] as const;
 
-
-export const getListInsightResultsListGetKey = () => [`/api/insight-results/list`] as const;
-
-export type ListInsightResultsListGetQueryResult = NonNullable<Awaited<ReturnType<typeof listInsightResultsListGet>>>
-export type ListInsightResultsListGetQueryError = AxiosError<unknown>
+export type ListInsightResultsListGetQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listInsightResultsListGet>>
+>;
+export type ListInsightResultsListGetQueryError = AxiosError<unknown>;
 
 /**
  * @summary List
  */
-export const useListInsightResultsListGet = <TError = AxiosError<unknown>>(
-   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof listInsightResultsListGet>>, TError> & { swrKey?: Key, enabled?: boolean }, axios?: AxiosRequestConfig }
-) => {
-  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+export const useListInsightResultsListGet = <
+  TError = AxiosError<unknown>,
+>(options?: {
+  swr?: SWRConfiguration<
+    Awaited<ReturnType<typeof listInsightResultsListGet>>,
+    TError
+  > & { swrKey?: Key; enabled?: boolean };
+  axios?: AxiosRequestConfig;
+}) => {
+  const { swr: swrOptions, axios: axiosOptions } = options ?? {};
 
-  const isEnabled = swrOptions?.enabled !== false
-  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getListInsightResultsListGetKey() : null);
-  const swrFn = () => listInsightResultsListGet(axiosOptions)
+  const isEnabled = swrOptions?.enabled !== false;
+  const swrKey =
+    swrOptions?.swrKey ??
+    (() => (isEnabled ? getListInsightResultsListGetKey() : null));
+  const swrFn = () => listInsightResultsListGet(axiosOptions);
 
-  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+    swrKey,
+    swrFn,
+    swrOptions
+  );
 
   return {
     swrKey,
-    ...query
-  }
-}
+    ...query,
+  };
+};
 
 /**
  * @summary List By Survey Response Id
  */
-export const listBySurveyResponseIdInsightResultsListBySurveyResponseIdSurveyResponseIdGet = (
-    surveyResponseId: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<BaseInsightResultDto[]>> => {
+export const listBySurveyResponseIdInsightResultsListBySurveyResponseIdSurveyResponseIdGet =
+  (
+    surveyResponseId: string,
+    options?: AxiosRequestConfig
+  ): Promise<AxiosResponse<BaseInsightResultDto[]>> => {
     return axios.get(
-      `/api/insight-results/list-by-survey-response-id/${surveyResponseId}`,options
+      `/api/insight-results/list-by-survey-response-id/${surveyResponseId}`,
+      options
     );
-  }
+  };
 
+export const getListBySurveyResponseIdInsightResultsListBySurveyResponseIdSurveyResponseIdGetKey =
+  (surveyResponseId: string) =>
+    [
+      `/api/insight-results/list-by-survey-response-id/${surveyResponseId}`,
+    ] as const;
 
-
-export const getListBySurveyResponseIdInsightResultsListBySurveyResponseIdSurveyResponseIdGetKey = (surveyResponseId: string,) => [`/api/insight-results/list-by-survey-response-id/${surveyResponseId}`] as const;
-
-export type ListBySurveyResponseIdInsightResultsListBySurveyResponseIdSurveyResponseIdGetQueryResult = NonNullable<Awaited<ReturnType<typeof listBySurveyResponseIdInsightResultsListBySurveyResponseIdSurveyResponseIdGet>>>
-export type ListBySurveyResponseIdInsightResultsListBySurveyResponseIdSurveyResponseIdGetQueryError = AxiosError<HTTPValidationError>
+export type ListBySurveyResponseIdInsightResultsListBySurveyResponseIdSurveyResponseIdGetQueryResult =
+  NonNullable<
+    Awaited<
+      ReturnType<
+        typeof listBySurveyResponseIdInsightResultsListBySurveyResponseIdSurveyResponseIdGet
+      >
+    >
+  >;
+export type ListBySurveyResponseIdInsightResultsListBySurveyResponseIdSurveyResponseIdGetQueryError =
+  AxiosError<HTTPValidationError>;
 
 /**
  * @summary List By Survey Response Id
  */
-export const useListBySurveyResponseIdInsightResultsListBySurveyResponseIdSurveyResponseIdGet = <TError = AxiosError<HTTPValidationError>>(
-  surveyResponseId: string, options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof listBySurveyResponseIdInsightResultsListBySurveyResponseIdSurveyResponseIdGet>>, TError> & { swrKey?: Key, enabled?: boolean }, axios?: AxiosRequestConfig }
-) => {
-  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+export const useListBySurveyResponseIdInsightResultsListBySurveyResponseIdSurveyResponseIdGet =
+  <TError = AxiosError<HTTPValidationError>>(
+    surveyResponseId: string,
+    options?: {
+      swr?: SWRConfiguration<
+        Awaited<
+          ReturnType<
+            typeof listBySurveyResponseIdInsightResultsListBySurveyResponseIdSurveyResponseIdGet
+          >
+        >,
+        TError
+      > & { swrKey?: Key; enabled?: boolean };
+      axios?: AxiosRequestConfig;
+    }
+  ) => {
+    const { swr: swrOptions, axios: axiosOptions } = options ?? {};
 
-  const isEnabled = swrOptions?.enabled !== false && !!(surveyResponseId)
-  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getListBySurveyResponseIdInsightResultsListBySurveyResponseIdSurveyResponseIdGetKey(surveyResponseId) : null);
-  const swrFn = () => listBySurveyResponseIdInsightResultsListBySurveyResponseIdSurveyResponseIdGet(surveyResponseId, axiosOptions)
+    const isEnabled = swrOptions?.enabled !== false && !!surveyResponseId;
+    const swrKey =
+      swrOptions?.swrKey ??
+      (() =>
+        isEnabled
+          ? getListBySurveyResponseIdInsightResultsListBySurveyResponseIdSurveyResponseIdGetKey(
+              surveyResponseId
+            )
+          : null);
+    const swrFn = () =>
+      listBySurveyResponseIdInsightResultsListBySurveyResponseIdSurveyResponseIdGet(
+        surveyResponseId,
+        axiosOptions
+      );
 
-  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
+    const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+      swrKey,
+      swrFn,
+      swrOptions
+    );
 
-  return {
-    swrKey,
-    ...query
-  }
-}
+    return {
+      swrKey,
+      ...query,
+    };
+  };
 
 /**
  * @summary List By Insight Question Id
  */
-export const listByInsightQuestionIdInsightResultsListByInsightQuestionIdInsightQuestionIdGet = (
-    insightQuestionId: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<BaseInsightResultDto[]>> => {
+export const listByInsightQuestionIdInsightResultsListByInsightQuestionIdInsightQuestionIdGet =
+  (
+    insightQuestionId: string,
+    options?: AxiosRequestConfig
+  ): Promise<AxiosResponse<BaseInsightResultDto[]>> => {
     return axios.get(
-      `/api/insight-results/list-by-insight-question-id/${insightQuestionId}`,options
+      `/api/insight-results/list-by-insight-question-id/${insightQuestionId}`,
+      options
     );
-  }
+  };
 
+export const getListByInsightQuestionIdInsightResultsListByInsightQuestionIdInsightQuestionIdGetKey =
+  (insightQuestionId: string) =>
+    [
+      `/api/insight-results/list-by-insight-question-id/${insightQuestionId}`,
+    ] as const;
 
-
-export const getListByInsightQuestionIdInsightResultsListByInsightQuestionIdInsightQuestionIdGetKey = (insightQuestionId: string,) => [`/api/insight-results/list-by-insight-question-id/${insightQuestionId}`] as const;
-
-export type ListByInsightQuestionIdInsightResultsListByInsightQuestionIdInsightQuestionIdGetQueryResult = NonNullable<Awaited<ReturnType<typeof listByInsightQuestionIdInsightResultsListByInsightQuestionIdInsightQuestionIdGet>>>
-export type ListByInsightQuestionIdInsightResultsListByInsightQuestionIdInsightQuestionIdGetQueryError = AxiosError<HTTPValidationError>
+export type ListByInsightQuestionIdInsightResultsListByInsightQuestionIdInsightQuestionIdGetQueryResult =
+  NonNullable<
+    Awaited<
+      ReturnType<
+        typeof listByInsightQuestionIdInsightResultsListByInsightQuestionIdInsightQuestionIdGet
+      >
+    >
+  >;
+export type ListByInsightQuestionIdInsightResultsListByInsightQuestionIdInsightQuestionIdGetQueryError =
+  AxiosError<HTTPValidationError>;
 
 /**
  * @summary List By Insight Question Id
  */
-export const useListByInsightQuestionIdInsightResultsListByInsightQuestionIdInsightQuestionIdGet = <TError = AxiosError<HTTPValidationError>>(
-  insightQuestionId: string, options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof listByInsightQuestionIdInsightResultsListByInsightQuestionIdInsightQuestionIdGet>>, TError> & { swrKey?: Key, enabled?: boolean }, axios?: AxiosRequestConfig }
-) => {
-  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+export const useListByInsightQuestionIdInsightResultsListByInsightQuestionIdInsightQuestionIdGet =
+  <TError = AxiosError<HTTPValidationError>>(
+    insightQuestionId: string,
+    options?: {
+      swr?: SWRConfiguration<
+        Awaited<
+          ReturnType<
+            typeof listByInsightQuestionIdInsightResultsListByInsightQuestionIdInsightQuestionIdGet
+          >
+        >,
+        TError
+      > & { swrKey?: Key; enabled?: boolean };
+      axios?: AxiosRequestConfig;
+    }
+  ) => {
+    const { swr: swrOptions, axios: axiosOptions } = options ?? {};
 
-  const isEnabled = swrOptions?.enabled !== false && !!(insightQuestionId)
-  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getListByInsightQuestionIdInsightResultsListByInsightQuestionIdInsightQuestionIdGetKey(insightQuestionId) : null);
-  const swrFn = () => listByInsightQuestionIdInsightResultsListByInsightQuestionIdInsightQuestionIdGet(insightQuestionId, axiosOptions)
+    const isEnabled = swrOptions?.enabled !== false && !!insightQuestionId;
+    const swrKey =
+      swrOptions?.swrKey ??
+      (() =>
+        isEnabled
+          ? getListByInsightQuestionIdInsightResultsListByInsightQuestionIdInsightQuestionIdGetKey(
+              insightQuestionId
+            )
+          : null);
+    const swrFn = () =>
+      listByInsightQuestionIdInsightResultsListByInsightQuestionIdInsightQuestionIdGet(
+        insightQuestionId,
+        axiosOptions
+      );
 
-  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
-
-  return {
-    swrKey,
-    ...query
-  }
-}
-
-/**
- * @summary Summary By Insight Question Id
- */
-export const summaryByInsightQuestionIdInsightResultsSummaryByInsightQuestionIdInsightQuestionIdGet = (
-    insightQuestionId: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<SummaryByInsightQuestionIdInsightResultsSummaryByInsightQuestionIdInsightQuestionIdGet200>> => {
-    return axios.get(
-      `/api/insight-results/summary-by-insight-question-id/${insightQuestionId}`,options
+    const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+      swrKey,
+      swrFn,
+      swrOptions
     );
-  }
 
-
-
-export const getSummaryByInsightQuestionIdInsightResultsSummaryByInsightQuestionIdInsightQuestionIdGetKey = (insightQuestionId: string,) => [`/api/insight-results/summary-by-insight-question-id/${insightQuestionId}`] as const;
-
-export type SummaryByInsightQuestionIdInsightResultsSummaryByInsightQuestionIdInsightQuestionIdGetQueryResult = NonNullable<Awaited<ReturnType<typeof summaryByInsightQuestionIdInsightResultsSummaryByInsightQuestionIdInsightQuestionIdGet>>>
-export type SummaryByInsightQuestionIdInsightResultsSummaryByInsightQuestionIdInsightQuestionIdGetQueryError = AxiosError<HTTPValidationError>
+    return {
+      swrKey,
+      ...query,
+    };
+  };
 
 /**
  * @summary Summary By Insight Question Id
  */
-export const useSummaryByInsightQuestionIdInsightResultsSummaryByInsightQuestionIdInsightQuestionIdGet = <TError = AxiosError<HTTPValidationError>>(
-  insightQuestionId: string, options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof summaryByInsightQuestionIdInsightResultsSummaryByInsightQuestionIdInsightQuestionIdGet>>, TError> & { swrKey?: Key, enabled?: boolean }, axios?: AxiosRequestConfig }
-) => {
-  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+export const summaryByInsightQuestionIdInsightResultsSummaryByInsightQuestionIdInsightQuestionIdGet =
+  (
+    insightQuestionId: string,
+    options?: AxiosRequestConfig
+  ): Promise<
+    AxiosResponse<SummaryByInsightQuestionIdInsightResultsSummaryByInsightQuestionIdInsightQuestionIdGet200>
+  > => {
+    return axios.get(
+      `/api/insight-results/summary-by-insight-question-id/${insightQuestionId}`,
+      options
+    );
+  };
 
-  const isEnabled = swrOptions?.enabled !== false && !!(insightQuestionId)
-  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getSummaryByInsightQuestionIdInsightResultsSummaryByInsightQuestionIdInsightQuestionIdGetKey(insightQuestionId) : null);
-  const swrFn = () => summaryByInsightQuestionIdInsightResultsSummaryByInsightQuestionIdInsightQuestionIdGet(insightQuestionId, axiosOptions)
+export const getSummaryByInsightQuestionIdInsightResultsSummaryByInsightQuestionIdInsightQuestionIdGetKey =
+  (insightQuestionId: string) =>
+    [
+      `/api/insight-results/summary-by-insight-question-id/${insightQuestionId}`,
+    ] as const;
 
-  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
+export type SummaryByInsightQuestionIdInsightResultsSummaryByInsightQuestionIdInsightQuestionIdGetQueryResult =
+  NonNullable<
+    Awaited<
+      ReturnType<
+        typeof summaryByInsightQuestionIdInsightResultsSummaryByInsightQuestionIdInsightQuestionIdGet
+      >
+    >
+  >;
+export type SummaryByInsightQuestionIdInsightResultsSummaryByInsightQuestionIdInsightQuestionIdGetQueryError =
+  AxiosError<HTTPValidationError>;
 
-  return {
-    swrKey,
-    ...query
-  }
-}
+/**
+ * @summary Summary By Insight Question Id
+ */
+export const useSummaryByInsightQuestionIdInsightResultsSummaryByInsightQuestionIdInsightQuestionIdGet =
+  <TError = AxiosError<HTTPValidationError>>(
+    insightQuestionId: string,
+    options?: {
+      swr?: SWRConfiguration<
+        Awaited<
+          ReturnType<
+            typeof summaryByInsightQuestionIdInsightResultsSummaryByInsightQuestionIdInsightQuestionIdGet
+          >
+        >,
+        TError
+      > & { swrKey?: Key; enabled?: boolean };
+      axios?: AxiosRequestConfig;
+    }
+  ) => {
+    const { swr: swrOptions, axios: axiosOptions } = options ?? {};
+
+    const isEnabled = swrOptions?.enabled !== false && !!insightQuestionId;
+    const swrKey =
+      swrOptions?.swrKey ??
+      (() =>
+        isEnabled
+          ? getSummaryByInsightQuestionIdInsightResultsSummaryByInsightQuestionIdInsightQuestionIdGetKey(
+              insightQuestionId
+            )
+          : null);
+    const swrFn = () =>
+      summaryByInsightQuestionIdInsightResultsSummaryByInsightQuestionIdInsightQuestionIdGet(
+        insightQuestionId,
+        axiosOptions
+      );
+
+    const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+      swrKey,
+      swrFn,
+      swrOptions
+    );
+
+    return {
+      swrKey,
+      ...query,
+    };
+  };
 
 /**
  * @summary Get Config
  */
 export const getConfigNamesMapGetConfigGet = (
-     options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetConfigNamesMapGetConfigGet200>> => {
-    return axios.get(
-      `/api/names-map/get-config`,options
-    );
-  }
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<GetConfigNamesMapGetConfigGet200>> => {
+  return axios.get(`/api/names-map/get-config`, options);
+};
 
+export const getGetConfigNamesMapGetConfigGetKey = () =>
+  [`/api/names-map/get-config`] as const;
 
-
-export const getGetConfigNamesMapGetConfigGetKey = () => [`/api/names-map/get-config`] as const;
-
-export type GetConfigNamesMapGetConfigGetQueryResult = NonNullable<Awaited<ReturnType<typeof getConfigNamesMapGetConfigGet>>>
-export type GetConfigNamesMapGetConfigGetQueryError = AxiosError<unknown>
+export type GetConfigNamesMapGetConfigGetQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getConfigNamesMapGetConfigGet>>
+>;
+export type GetConfigNamesMapGetConfigGetQueryError = AxiosError<unknown>;
 
 /**
  * @summary Get Config
  */
-export const useGetConfigNamesMapGetConfigGet = <TError = AxiosError<unknown>>(
-   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof getConfigNamesMapGetConfigGet>>, TError> & { swrKey?: Key, enabled?: boolean }, axios?: AxiosRequestConfig }
-) => {
-  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+export const useGetConfigNamesMapGetConfigGet = <
+  TError = AxiosError<unknown>,
+>(options?: {
+  swr?: SWRConfiguration<
+    Awaited<ReturnType<typeof getConfigNamesMapGetConfigGet>>,
+    TError
+  > & { swrKey?: Key; enabled?: boolean };
+  axios?: AxiosRequestConfig;
+}) => {
+  const { swr: swrOptions, axios: axiosOptions } = options ?? {};
 
-  const isEnabled = swrOptions?.enabled !== false
-  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGetConfigNamesMapGetConfigGetKey() : null);
-  const swrFn = () => getConfigNamesMapGetConfigGet(axiosOptions)
+  const isEnabled = swrOptions?.enabled !== false;
+  const swrKey =
+    swrOptions?.swrKey ??
+    (() => (isEnabled ? getGetConfigNamesMapGetConfigGetKey() : null));
+  const swrFn = () => getConfigNamesMapGetConfigGet(axiosOptions);
 
-  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+    swrKey,
+    swrFn,
+    swrOptions
+  );
 
   return {
     swrKey,
-    ...query
-  }
-}
+    ...query,
+  };
+};
 
 /**
  * @summary Push Config
  */
 export const pushConfigNamesMapPushConfigPost = (
-    pushConfigNamesMapPushConfigPostBody: PushConfigNamesMapPushConfigPostBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<PushConfigNamesMapPushConfigPost200>> => {
-    return axios.post(
-      `/api/names-map/push-config`,
-      pushConfigNamesMapPushConfigPostBody,options
-    );
-  }
+  pushConfigNamesMapPushConfigPostBody: PushConfigNamesMapPushConfigPostBody,
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<PushConfigNamesMapPushConfigPost200>> => {
+  return axios.post(
+    `/api/names-map/push-config`,
+    pushConfigNamesMapPushConfigPostBody,
+    options
+  );
+};
 
-
-
-export const getPushConfigNamesMapPushConfigPostMutationFetcher = ( options?: AxiosRequestConfig) => {
-  return (_: Key, { arg }: { arg: PushConfigNamesMapPushConfigPostBody }): Promise<AxiosResponse<PushConfigNamesMapPushConfigPost200>> => {
+export const getPushConfigNamesMapPushConfigPostMutationFetcher = (
+  options?: AxiosRequestConfig
+) => {
+  return (
+    _: Key,
+    { arg }: { arg: PushConfigNamesMapPushConfigPostBody }
+  ): Promise<AxiosResponse<PushConfigNamesMapPushConfigPost200>> => {
     return pushConfigNamesMapPushConfigPost(arg, options);
-  }
-}
-export const getPushConfigNamesMapPushConfigPostMutationKey = () => [`/api/names-map/push-config`] as const;
+  };
+};
+export const getPushConfigNamesMapPushConfigPostMutationKey = () =>
+  [`/api/names-map/push-config`] as const;
 
-export type PushConfigNamesMapPushConfigPostMutationResult = NonNullable<Awaited<ReturnType<typeof pushConfigNamesMapPushConfigPost>>>
-export type PushConfigNamesMapPushConfigPostMutationError = AxiosError<HTTPValidationError>
+export type PushConfigNamesMapPushConfigPostMutationResult = NonNullable<
+  Awaited<ReturnType<typeof pushConfigNamesMapPushConfigPost>>
+>;
+export type PushConfigNamesMapPushConfigPostMutationError =
+  AxiosError<HTTPValidationError>;
 
 /**
  * @summary Push Config
  */
-export const usePushConfigNamesMapPushConfigPost = <TError = AxiosError<HTTPValidationError>>(
-   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof pushConfigNamesMapPushConfigPost>>, TError, Key, PushConfigNamesMapPushConfigPostBody, Awaited<ReturnType<typeof pushConfigNamesMapPushConfigPost>>> & { swrKey?: string }, axios?: AxiosRequestConfig}
-) => {
+export const usePushConfigNamesMapPushConfigPost = <
+  TError = AxiosError<HTTPValidationError>,
+>(options?: {
+  swr?: SWRMutationConfiguration<
+    Awaited<ReturnType<typeof pushConfigNamesMapPushConfigPost>>,
+    TError,
+    Key,
+    PushConfigNamesMapPushConfigPostBody,
+    Awaited<ReturnType<typeof pushConfigNamesMapPushConfigPost>>
+  > & { swrKey?: string };
+  axios?: AxiosRequestConfig;
+}) => {
+  const { swr: swrOptions, axios: axiosOptions } = options ?? {};
 
-  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+  const swrKey =
+    swrOptions?.swrKey ?? getPushConfigNamesMapPushConfigPostMutationKey();
+  const swrFn =
+    getPushConfigNamesMapPushConfigPostMutationFetcher(axiosOptions);
 
-  const swrKey = swrOptions?.swrKey ?? getPushConfigNamesMapPushConfigPostMutationKey();
-  const swrFn = getPushConfigNamesMapPushConfigPostMutationFetcher(axiosOptions);
-
-  const query = useSWRMutation(swrKey, swrFn, swrOptions)
+  const query = useSWRMutation(swrKey, swrFn, swrOptions);
 
   return {
     swrKey,
-    ...query
-  }
-}
+    ...query,
+  };
+};
 
 /**
  * @summary List
  */
 export const listSurveyResponsesListGet = (
-     options?: AxiosRequestConfig
- ): Promise<AxiosResponse<BaseSurveyResponseDto[]>> => {
-    return axios.get(
-      `/api/survey-responses/list`,options
-    );
-  }
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<BaseSurveyResponseDto[]>> => {
+  return axios.get(`/api/survey-responses/list`, options);
+};
 
+export const getListSurveyResponsesListGetKey = () =>
+  [`/api/survey-responses/list`] as const;
 
-
-export const getListSurveyResponsesListGetKey = () => [`/api/survey-responses/list`] as const;
-
-export type ListSurveyResponsesListGetQueryResult = NonNullable<Awaited<ReturnType<typeof listSurveyResponsesListGet>>>
-export type ListSurveyResponsesListGetQueryError = AxiosError<unknown>
+export type ListSurveyResponsesListGetQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listSurveyResponsesListGet>>
+>;
+export type ListSurveyResponsesListGetQueryError = AxiosError<unknown>;
 
 /**
  * @summary List
  */
-export const useListSurveyResponsesListGet = <TError = AxiosError<unknown>>(
-   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof listSurveyResponsesListGet>>, TError> & { swrKey?: Key, enabled?: boolean }, axios?: AxiosRequestConfig }
-) => {
-  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+export const useListSurveyResponsesListGet = <
+  TError = AxiosError<unknown>,
+>(options?: {
+  swr?: SWRConfiguration<
+    Awaited<ReturnType<typeof listSurveyResponsesListGet>>,
+    TError
+  > & { swrKey?: Key; enabled?: boolean };
+  axios?: AxiosRequestConfig;
+}) => {
+  const { swr: swrOptions, axios: axiosOptions } = options ?? {};
 
-  const isEnabled = swrOptions?.enabled !== false
-  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getListSurveyResponsesListGetKey() : null);
-  const swrFn = () => listSurveyResponsesListGet(axiosOptions)
+  const isEnabled = swrOptions?.enabled !== false;
+  const swrKey =
+    swrOptions?.swrKey ??
+    (() => (isEnabled ? getListSurveyResponsesListGetKey() : null));
+  const swrFn = () => listSurveyResponsesListGet(axiosOptions);
 
-  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+    swrKey,
+    swrFn,
+    swrOptions
+  );
 
   return {
     swrKey,
-    ...query
-  }
-}
+    ...query,
+  };
+};
 
 /**
  * @summary Create And Gain Insights
  */
 export const createAndGainInsightsSurveyResponsesCreateAndGainInsightsPost = (
-    createSurveyResponseDto: CreateSurveyResponseDto, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<unknown>> => {
-    return axios.post(
-      `/api/survey-responses/create-and-gain-insights`,
-      createSurveyResponseDto,options
-    );
-  }
+  createSurveyResponseDto: CreateSurveyResponseDto,
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<unknown>> => {
+  return axios.post(
+    `/api/survey-responses/create-and-gain-insights`,
+    createSurveyResponseDto,
+    options
+  );
+};
 
+export const getCreateAndGainInsightsSurveyResponsesCreateAndGainInsightsPostMutationFetcher =
+  (options?: AxiosRequestConfig) => {
+    return (
+      _: Key,
+      { arg }: { arg: CreateSurveyResponseDto }
+    ): Promise<AxiosResponse<unknown>> => {
+      return createAndGainInsightsSurveyResponsesCreateAndGainInsightsPost(
+        arg,
+        options
+      );
+    };
+  };
+export const getCreateAndGainInsightsSurveyResponsesCreateAndGainInsightsPostMutationKey =
+  () => [`/api/survey-responses/create-and-gain-insights`] as const;
 
-
-export const getCreateAndGainInsightsSurveyResponsesCreateAndGainInsightsPostMutationFetcher = ( options?: AxiosRequestConfig) => {
-  return (_: Key, { arg }: { arg: CreateSurveyResponseDto }): Promise<AxiosResponse<unknown>> => {
-    return createAndGainInsightsSurveyResponsesCreateAndGainInsightsPost(arg, options);
-  }
-}
-export const getCreateAndGainInsightsSurveyResponsesCreateAndGainInsightsPostMutationKey = () => [`/api/survey-responses/create-and-gain-insights`] as const;
-
-export type CreateAndGainInsightsSurveyResponsesCreateAndGainInsightsPostMutationResult = NonNullable<Awaited<ReturnType<typeof createAndGainInsightsSurveyResponsesCreateAndGainInsightsPost>>>
-export type CreateAndGainInsightsSurveyResponsesCreateAndGainInsightsPostMutationError = AxiosError<HTTPValidationError>
+export type CreateAndGainInsightsSurveyResponsesCreateAndGainInsightsPostMutationResult =
+  NonNullable<
+    Awaited<
+      ReturnType<
+        typeof createAndGainInsightsSurveyResponsesCreateAndGainInsightsPost
+      >
+    >
+  >;
+export type CreateAndGainInsightsSurveyResponsesCreateAndGainInsightsPostMutationError =
+  AxiosError<HTTPValidationError>;
 
 /**
  * @summary Create And Gain Insights
  */
-export const useCreateAndGainInsightsSurveyResponsesCreateAndGainInsightsPost = <TError = AxiosError<HTTPValidationError>>(
-   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof createAndGainInsightsSurveyResponsesCreateAndGainInsightsPost>>, TError, Key, CreateSurveyResponseDto, Awaited<ReturnType<typeof createAndGainInsightsSurveyResponsesCreateAndGainInsightsPost>>> & { swrKey?: string }, axios?: AxiosRequestConfig}
-) => {
+export const useCreateAndGainInsightsSurveyResponsesCreateAndGainInsightsPost =
+  <TError = AxiosError<HTTPValidationError>>(options?: {
+    swr?: SWRMutationConfiguration<
+      Awaited<
+        ReturnType<
+          typeof createAndGainInsightsSurveyResponsesCreateAndGainInsightsPost
+        >
+      >,
+      TError,
+      Key,
+      CreateSurveyResponseDto,
+      Awaited<
+        ReturnType<
+          typeof createAndGainInsightsSurveyResponsesCreateAndGainInsightsPost
+        >
+      >
+    > & { swrKey?: string };
+    axios?: AxiosRequestConfig;
+  }) => {
+    const { swr: swrOptions, axios: axiosOptions } = options ?? {};
 
-  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+    const swrKey =
+      swrOptions?.swrKey ??
+      getCreateAndGainInsightsSurveyResponsesCreateAndGainInsightsPostMutationKey();
+    const swrFn =
+      getCreateAndGainInsightsSurveyResponsesCreateAndGainInsightsPostMutationFetcher(
+        axiosOptions
+      );
 
-  const swrKey = swrOptions?.swrKey ?? getCreateAndGainInsightsSurveyResponsesCreateAndGainInsightsPostMutationKey();
-  const swrFn = getCreateAndGainInsightsSurveyResponsesCreateAndGainInsightsPostMutationFetcher(axiosOptions);
+    const query = useSWRMutation(swrKey, swrFn, swrOptions);
 
-  const query = useSWRMutation(swrKey, swrFn, swrOptions)
-
-  return {
-    swrKey,
-    ...query
-  }
-}
+    return {
+      swrKey,
+      ...query,
+    };
+  };
 
 /**
  * @summary Delete
  */
 export const deleteSurveyResponsesSurveyResponseIdDelete = (
-    surveyResponseId: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<unknown>> => {
-    return axios.delete(
-      `/api/survey-responses/${surveyResponseId}`,options
-    );
-  }
+  surveyResponseId: string,
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<unknown>> => {
+  return axios.delete(`/api/survey-responses/${surveyResponseId}`, options);
+};
 
-
-
-export const getDeleteSurveyResponsesSurveyResponseIdDeleteMutationFetcher = (surveyResponseId: string, options?: AxiosRequestConfig) => {
+export const getDeleteSurveyResponsesSurveyResponseIdDeleteMutationFetcher = (
+  surveyResponseId: string,
+  options?: AxiosRequestConfig
+) => {
   return (_: Key, __: { arg: Arguments }): Promise<AxiosResponse<unknown>> => {
-    return deleteSurveyResponsesSurveyResponseIdDelete(surveyResponseId, options);
-  }
-}
-export const getDeleteSurveyResponsesSurveyResponseIdDeleteMutationKey = (surveyResponseId: string,) => [`/api/survey-responses/${surveyResponseId}`] as const;
+    return deleteSurveyResponsesSurveyResponseIdDelete(
+      surveyResponseId,
+      options
+    );
+  };
+};
+export const getDeleteSurveyResponsesSurveyResponseIdDeleteMutationKey = (
+  surveyResponseId: string
+) => [`/api/survey-responses/${surveyResponseId}`] as const;
 
-export type DeleteSurveyResponsesSurveyResponseIdDeleteMutationResult = NonNullable<Awaited<ReturnType<typeof deleteSurveyResponsesSurveyResponseIdDelete>>>
-export type DeleteSurveyResponsesSurveyResponseIdDeleteMutationError = AxiosError<HTTPValidationError>
+export type DeleteSurveyResponsesSurveyResponseIdDeleteMutationResult =
+  NonNullable<
+    Awaited<ReturnType<typeof deleteSurveyResponsesSurveyResponseIdDelete>>
+  >;
+export type DeleteSurveyResponsesSurveyResponseIdDeleteMutationError =
+  AxiosError<HTTPValidationError>;
 
 /**
  * @summary Delete
  */
-export const useDeleteSurveyResponsesSurveyResponseIdDelete = <TError = AxiosError<HTTPValidationError>>(
-  surveyResponseId: string, options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof deleteSurveyResponsesSurveyResponseIdDelete>>, TError, Key, Arguments, Awaited<ReturnType<typeof deleteSurveyResponsesSurveyResponseIdDelete>>> & { swrKey?: string }, axios?: AxiosRequestConfig}
+export const useDeleteSurveyResponsesSurveyResponseIdDelete = <
+  TError = AxiosError<HTTPValidationError>,
+>(
+  surveyResponseId: string,
+  options?: {
+    swr?: SWRMutationConfiguration<
+      Awaited<ReturnType<typeof deleteSurveyResponsesSurveyResponseIdDelete>>,
+      TError,
+      Key,
+      Arguments,
+      Awaited<ReturnType<typeof deleteSurveyResponsesSurveyResponseIdDelete>>
+    > & { swrKey?: string };
+    axios?: AxiosRequestConfig;
+  }
 ) => {
+  const { swr: swrOptions, axios: axiosOptions } = options ?? {};
 
-  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+  const swrKey =
+    swrOptions?.swrKey ??
+    getDeleteSurveyResponsesSurveyResponseIdDeleteMutationKey(surveyResponseId);
+  const swrFn = getDeleteSurveyResponsesSurveyResponseIdDeleteMutationFetcher(
+    surveyResponseId,
+    axiosOptions
+  );
 
-  const swrKey = swrOptions?.swrKey ?? getDeleteSurveyResponsesSurveyResponseIdDeleteMutationKey(surveyResponseId);
-  const swrFn = getDeleteSurveyResponsesSurveyResponseIdDeleteMutationFetcher(surveyResponseId, axiosOptions);
-
-  const query = useSWRMutation(swrKey, swrFn, swrOptions)
+  const query = useSWRMutation(swrKey, swrFn, swrOptions);
 
   return {
     swrKey,
-    ...query
-  }
-}
+    ...query,
+  };
+};

@@ -169,7 +169,10 @@ export default function InteractiveQuizCard({
             <Trash2 className="w-4 h-4" />
             <span className="sr-only">Удалить</span>
           </Button>
-          <Button variant="outline" size="icon" onClick={() => setStatsPopOpen(true)}>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => setStatsPopOpen(true)}>
             <BarChart className="w-4 h-4" />
             <span className="sr-only">Статистика</span>
           </Button>
@@ -188,7 +191,7 @@ export default function InteractiveQuizCard({
             <p>Неправильных ответов: {statistics.incorrect_answers}</p>
           </div>
         </DialogContent>
-      </Dialog>   
+      </Dialog>
     </>
   );
 }

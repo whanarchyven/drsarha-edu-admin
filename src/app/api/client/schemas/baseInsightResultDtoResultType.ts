@@ -9,8 +9,8 @@
 /**
  * Тип результата
  */
-export type BaseInsightResultDtoResultType = typeof BaseInsightResultDtoResultType[keyof typeof BaseInsightResultDtoResultType];
-
+export type BaseInsightResultDtoResultType =
+  (typeof BaseInsightResultDtoResultType)[keyof typeof BaseInsightResultDtoResultType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const BaseInsightResultDtoResultType = {

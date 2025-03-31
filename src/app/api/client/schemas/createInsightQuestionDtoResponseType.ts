@@ -9,8 +9,8 @@
 /**
  * Тип ожидаемого ответа: 'int' - числовой ответ, 'variants_multiple' - выбор из нескольких вариантов
  */
-export type CreateInsightQuestionDtoResponseType = typeof CreateInsightQuestionDtoResponseType[keyof typeof CreateInsightQuestionDtoResponseType];
-
+export type CreateInsightQuestionDtoResponseType =
+  (typeof CreateInsightQuestionDtoResponseType)[keyof typeof CreateInsightQuestionDtoResponseType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CreateInsightQuestionDtoResponseType = {

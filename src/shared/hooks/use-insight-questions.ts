@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState } from 'react';
 import {
   CreateInsightQuestionDto,
   CreateSurveyResponseDto,
-} from "@/app/api/client/schemas";
+} from '@/app/api/client/schemas';
 import {
   createInsightQuestionInsightQuestionsPost,
   useCreateInsightQuestionInsightQuestionsPost,
@@ -11,7 +11,7 @@ import {
   deleteInsightQuestionInsightQuestionsQuestionIdDelete,
   createAndGainInsightsSurveyResponsesCreateAndGainInsightsPost,
   summaryByInsightQuestionIdInsightResultsSummaryByInsightQuestionIdInsightQuestionIdGet,
-} from "@/app/api/sdk/insightQuestionsAPI";
+} from '@/app/api/sdk/insightQuestionsAPI';
 
 export const useInsightQuestions = (search?: string) => {
   const {
@@ -41,11 +41,11 @@ export const useInsightQuestions = (search?: string) => {
         .then((d) => {
           return d;
         });
-      return stats;
+    return stats;
   };
   const createSurveyResponse = async (response: string) => {
     if (!canCreateSurveyResponse) {
-      alert("Выберите хотя бы один вопрос");
+      alert('Выберите хотя бы один вопрос');
       return;
     }
     await createAndGainInsightsSurveyResponsesCreateAndGainInsightsPost({

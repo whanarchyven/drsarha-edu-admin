@@ -7,7 +7,7 @@
  */
 
 export type ListQuestionsInsightQuestionsListGetParams = {
-skip?: number;
-limit?: number;
-title?: string;
+  skip?: number;
+  limit?: number;
+  title?: string;
 };

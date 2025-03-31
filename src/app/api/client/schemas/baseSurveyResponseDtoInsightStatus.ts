@@ -9,8 +9,8 @@
 /**
  * Статус инсайта
  */
-export type BaseSurveyResponseDtoInsightStatus = typeof BaseSurveyResponseDtoInsightStatus[keyof typeof BaseSurveyResponseDtoInsightStatus];
-
+export type BaseSurveyResponseDtoInsightStatus =
+  (typeof BaseSurveyResponseDtoInsightStatus)[keyof typeof BaseSurveyResponseDtoInsightStatus];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const BaseSurveyResponseDtoInsightStatus = {

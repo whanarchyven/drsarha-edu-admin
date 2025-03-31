@@ -80,11 +80,16 @@ export default function LectureCard({
     notes: number | null;
     active_time_average: number | null;
     notes_average: number | null;
-  }>({ views: 0, completed: 0, active_time: null, notes: null, active_time_average: null, notes_average: null });
+  }>({
+    views: 0,
+    completed: 0,
+    active_time: null,
+    notes: null,
+    active_time_average: null,
+    notes_average: null,
+  });
 
   const [statsPopOpen, setStatsPopOpen] = useState(false);
-
-
 
   useEffect(() => {
     const fetchStatistics = async () => {
@@ -153,7 +158,10 @@ export default function LectureCard({
             <Trash2 className="w-4 h-4" />
             <span className="sr-only">Удалить</span>
           </Button>
-          <Button variant="outline" size="icon" onClick={() => setStatsPopOpen(true)}>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => setStatsPopOpen(true)}>
             <BarChart className="w-4 h-4" />
             <span className="sr-only">Статистика</span>
           </Button>

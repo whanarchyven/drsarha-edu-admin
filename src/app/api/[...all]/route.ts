@@ -1,7 +1,7 @@
-import { NextRequest } from "next/server";
+import { NextRequest } from 'next/server';
 
 const BACKEND_URL =
-  process.env.BACKEND_URL || "https://med-analytics-2.dev.reflectai.pro";
+  process.env.BACKEND_URL || 'https://med-analytics-2.dev.reflectai.pro';
 
 export async function GET(request: NextRequest) {
   return handleRequest(request);
@@ -24,16 +24,16 @@ export async function PATCH(request: NextRequest) {
 }
 
 async function handleRequest(request: NextRequest) {
-  console.log("Request method:", request.method);
-  console.log("Request path:", request.nextUrl.pathname);
+  console.log('Request method:', request.method);
+  console.log('Request path:', request.nextUrl.pathname);
 
   const pathname = request.nextUrl.pathname;
-  const apiPath = pathname.replace("/api", "");
+  const apiPath = pathname.replace('/api', '');
 
   const url = new URL(apiPath, BACKEND_URL);
   url.search = request.nextUrl.search;
 
-  console.log("Proxying to:", url.toString());
+  console.log('Proxying to:', url.toString());
 
   try {
     let body = null;
@@ -49,23 +49,23 @@ async function handleRequest(request: NextRequest) {
       },
       body: body,
       //@ts-ignore
-      duplex: "half" as const,
+      duplex: 'half' as const,
     });
 
-    console.log("Backend response status:", response.status);
+    console.log('Backend response status:', response.status);
     return new Response(response.body, {
       status: response.status,
       headers: response.headers,
     });
   } catch (error) {
-    console.error("Detailed error:", error);
+    console.error('Detailed error:', error);
     return new Response(
       //@ts-ignore
-      JSON.stringify({ error: "Proxy error", details: error.message }),
+      JSON.stringify({ error: 'Proxy error', details: error.message }),
       {
         status: 500,
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       }
     );
