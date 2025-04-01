@@ -12,7 +12,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Combine, X, Loader2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { pushConfigNamesMapPushConfigPost } from '@/app/api/sdk/insightQuestionsAPI';
+import { getConfigNamesMapGetConfigGet, pushConfigNamesMapPushConfigPost } from '@/app/api/sdk/insightQuestionsAPI';
 import { toast } from 'sonner';
 import {
   Dialog,
@@ -89,9 +89,11 @@ export default function MergeTable({ initialStats }: { initialStats: Stat[] }) {
       });
       
       console.log('Объект маппингов для API:', mappingsObject);
-      
+
+      const alreadyExistsConfig = await getConfigNamesMapGetConfigGet();
+      console.log('Уже существующие конфигурации:', alreadyExistsConfig);
       const res = await pushConfigNamesMapPushConfigPost({
-        mappings: mappingsObject
+        ...mappingsObject,...alreadyExistsConfig.data
       });
       
       console.log('Ответ от сервера:', res);
