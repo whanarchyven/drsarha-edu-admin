@@ -292,15 +292,6 @@ export default function EditDashboardForm({
         updated_at: new Date().toISOString(),
       };
 
-      // Убедимся, что у всех статистик есть поле cols
-      updatedCompany.dashboards.forEach(dashboard => {
-        dashboard.stats.forEach(stat => {
-          if (stat.cols === undefined) {
-            stat.cols = 1;
-          }
-        });
-      });
-
       // In a real app, you would send to your API
       // await fetch(`/api/companies/${companyId}`, {
       //   method: 'PUT',
@@ -309,7 +300,6 @@ export default function EditDashboardForm({
       // })
 
       // Simulate API call
-      console.log(updatedCompany,"updatedCompany");
       const response = await companiesApi.update(companyId, updatedCompany);
       console.log(response);
       toast.success('Компания успешно обновлена');
@@ -537,7 +527,7 @@ export default function EditDashboardForm({
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between bg-card z-10">
+          <CardHeader className="flex flex-row items-center justify-between">
             <div>
               <CardTitle>Дашборды</CardTitle>
               <CardDescription>
@@ -547,7 +537,7 @@ export default function EditDashboardForm({
             <Button
               type="button"
               onClick={addDashboard}
-              variant="default"
+              variant="secondary"
               size="sm">
               <PlusCircle className="mr-2 h-4 w-4" />
               Добавить дашборд
@@ -563,7 +553,7 @@ export default function EditDashboardForm({
                 <Button
                   type="button"
                   onClick={addDashboard}
-                  variant="outline"
+                  variant="secondary"
                   size="sm"
                   className="mt-4">
                   Добавить первый дашборд
@@ -671,7 +661,7 @@ export default function EditDashboardForm({
                         </div>
 
                         <div className="space-y-2">
-                          <div className="flex items-center justify-between sticky top-0 bg-background z-10 py-2">
+                          <div className="flex items-center justify-between">
                             <Label>Статистика</Label>
                             <Button
                               type="button"
@@ -898,15 +888,16 @@ export default function EditDashboardForm({
                                     </div>
 
                                     <div className="space-y-2">
-                                      <div className="flex items-center justify-between sticky top-0 bg-card z-10 py-2">
+                                      <div className="flex items-center justify-between">
                                         <Label>Масштабы</Label>
                                         <Button
                                           type="button"
                                           onClick={() =>
                                             addScale(dashboardIndex, statIndex)
                                           }
-                                          variant="default"
-                                          size="sm">
+                                          variant="outline"
+                                          size="sm"
+                                          className="bg-red-100 hover:bg-red-200 text-red-800">
                                           <PlusCircle className="mr-2 h-4 w-4" />
                                           Добавить масштаб
                                         </Button>
@@ -928,165 +919,4 @@ export default function EditDashboardForm({
                                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 flex-1">
                                                   <div className="space-y-1">
                                                     <Label
-                                                      htmlFor={`scale-name-${dashboardIndex}-${statIndex}-${scaleIndex}`}
-                                                      className="text-xs">
-                                                      Название
-                                                    </Label>
-                                                    <Input
-                                                      id={`scale-name-${dashboardIndex}-${statIndex}-${scaleIndex}`}
-                                                      value={scale.name}
-                                                      onChange={(e) =>
-                                                        updateScale(
-                                                          dashboardIndex,
-                                                          statIndex,
-                                                          scaleIndex,
-                                                          'name',
-                                                          e.target.value
-                                                        )
-                                                      }
-                                                      placeholder="Название масштаба"
-                                                      className="h-8"
-                                                    />
-                                                  </div>
-                                                  <div className="space-y-1">
-                                                    <Label
-                                                      htmlFor={`scale-value-${dashboardIndex}-${statIndex}-${scaleIndex}`}
-                                                      className="text-xs">
-                                                      Значение
-                                                    </Label>
-                                                    <Input
-                                                      id={`scale-value-${dashboardIndex}-${statIndex}-${scaleIndex}`}
-                                                      type="number"
-                                                      value={scale.value}
-                                                      onChange={(e) =>
-                                                        updateScale(
-                                                          dashboardIndex,
-                                                          statIndex,
-                                                          scaleIndex,
-                                                          'value',
-                                                          Number.parseFloat(
-                                                            e.target.value
-                                                          ) || 0
-                                                        )
-                                                      }
-                                                      placeholder="Значение"
-                                                      className="h-8"
-                                                      min="0"
-                                                      step="0.1"
-                                                    />
-                                                  </div>
-                                                  <div className="space-y-1">
-                                                    <Label className="text-xs">
-                                                      Тип
-                                                    </Label>
-                                                    <div className="flex gap-2">
-                                                      <Button
-                                                        type="button"
-                                                        variant={
-                                                          scale.type ===
-                                                          'linear'
-                                                            ? 'default'
-                                                            : 'outline'
-                                                        }
-                                                        size="sm"
-                                                        className="flex-1 h-8"
-                                                        onClick={() =>
-                                                          updateScale(
-                                                            dashboardIndex,
-                                                            statIndex,
-                                                            scaleIndex,
-                                                            'type',
-                                                            'linear'
-                                                          )
-                                                        }>
-                                                        <Plus className="h-4 w-4 mr-1" />
-                                                        Линейный
-                                                      </Button>
-                                                      <Button
-                                                        type="button"
-                                                        variant={
-                                                          scale.type ===
-                                                          'multiple'
-                                                            ? 'default'
-                                                            : 'outline'
-                                                        }
-                                                        size="sm"
-                                                        className="flex-1 h-8"
-                                                        onClick={() =>
-                                                          updateScale(
-                                                            dashboardIndex,
-                                                            statIndex,
-                                                            scaleIndex,
-                                                            'type',
-                                                            'multiple'
-                                                          )
-                                                        }>
-                                                        <X className="h-4 w-4 mr-1" />
-                                                        Множественный
-                                                      </Button>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                                <Button
-                                                  type="button"
-                                                  variant="ghost"
-                                                  size="sm"
-                                                  onClick={() =>
-                                                    removeScale(
-                                                      dashboardIndex,
-                                                      statIndex,
-                                                      scaleIndex
-                                                    )
-                                                  }
-                                                  className="h-8 w-8 p-0 mt-5">
-                                                  <X className="h-4 w-4" />
-                                                  <span className="sr-only">
-                                                    Удалить
-                                                  </span>
-                                                </Button>
-                                              </div>
-                                            )
-                                          )}
-                                        </div>
-                                      )}
-                                    </div>
-                                  </CardContent>
-                                </Card>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            )}
-          </CardContent>
-          <CardFooter className="flex justify-between">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => router.push('/companies')}>
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Отмена
-            </Button>
-            <Button type="submit" disabled={isSaving}>
-              {isSaving ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Сохранение...
-                </>
-              ) : (
-                <>
-                  <Save className="mr-2 h-4 w-4" />
-                  Сохранить изменения
-                </>
-              )}
-            </Button>
-          </CardFooter>
-        </Card>
-      </form>
-    </div>
-  );
-}
+                                                      htmlFor={`

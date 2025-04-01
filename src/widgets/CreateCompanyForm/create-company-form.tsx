@@ -62,6 +62,7 @@ interface Stat {
   question_id: string;
   scaleAll: number;
   scales: Scale[];
+  cols: number;
 }
 
 interface Dashboard {
@@ -135,6 +136,7 @@ export default function DashboardForm() {
       question_id: '',
       scaleAll: 1,
       scales: [],
+      cols: 1,
     });
     setCompany({ ...company, dashboards: updatedDashboards });
   };
@@ -217,6 +219,15 @@ export default function DashboardForm() {
     e.preventDefault();
     console.log('Submitted company:', company);
     try {
+      // Убедимся, что у всех статистик есть поле cols
+      company.dashboards.forEach(dashboard => {
+        dashboard.stats.forEach(stat => {
+          if (stat.cols === undefined) {
+            stat.cols = 1;
+          }
+        });
+      });
+      
       console.log('Company:', company);
       const response = await companiesApi.create(company);
       console.log('Company created:', response);

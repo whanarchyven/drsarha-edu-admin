@@ -14,88 +14,90 @@ import { Combine, X, Loader2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { pushConfigNamesMapPushConfigPost } from '@/app/api/sdk/insightQuestionsAPI';
 import { toast } from 'sonner';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+
 export interface Stat {
   value: string;
   count: number;
 }
 
-interface MergeMapping {
-  source: string;
-  target: string;
-}
-
 export default function MergeTable({ initialStats }: { initialStats: Stat[] }) {
-  // Sample data for the demo - now without IDs
+  // Состояние для хранения списка статистики
   const [stats, setStats] = useState<Stat[]>(initialStats);
+  
+  // Выбранные варианты для объединения
+  const [selectedVariants, setSelectedVariants] = useState<string[]>([]);
+  
+  // Состояние диалога
+  const [dialogOpen, setDialogOpen] = useState(false);
+  
+  // Каноническое значение
+  const [canonicalValue, setCanonicalValue] = useState('');
+  
+  const [isLoading, setIsLoading] = useState(false);
 
-  // State to track which row is in "merge mode" - now using value instead of id
-  const [mergeSourceValue, setMergeSourceValue] = useState<string | null>(null);
-
-  // State to track merged mappings
-  const [mergeMappings, setMergeMappings] = useState<MergeMapping[]>([]);
-
-  // Function to start merge mode
-  const startMerge = (value: string) => {
-    setMergeSourceValue(value);
-  };
-
-  // Function to cancel merge mode and reset all mappings
-  const cancelMerge = () => {
-    setMergeSourceValue(null);
-    setMergeMappings([]);
-  };
-
-  // Function to check if a mapping exists
-  const mappingExists = (sourceValue: string, targetValue: string) => {
-    return mergeMappings.some(
-      (mapping) =>
-        mapping.source === sourceValue && mapping.target === targetValue
-    );
-  };
-
-  // Function to add a mapping
-  const addMapping = (sourceValue: string, targetValue: string) => {
-    // Check if this mapping already exists
-    if (!mappingExists(sourceValue, targetValue)) {
-      setMergeMappings([
-        ...mergeMappings,
-        { source: sourceValue, target: targetValue },
-      ]);
+  // Функция для переключения выбора варианта
+  const toggleVariant = (value: string) => {
+    if (selectedVariants.includes(value)) {
+      setSelectedVariants(selectedVariants.filter(v => v !== value));
+    } else {
+      setSelectedVariants([...selectedVariants, value]);
     }
   };
 
-  // Function to remove a specific mapping by source and target values
-  const removeMappingByValues = (sourceValue: string, targetValue: string) => {
-    const newMappings = mergeMappings.filter(
-      (mapping) =>
-        !(mapping.source === sourceValue && mapping.target === targetValue)
-    );
-    setMergeMappings(newMappings);
+  // Функция для очистки выбранных вариантов
+  const clearSelection = () => {
+    setSelectedVariants([]);
   };
 
-  // Function to remove a mapping by index
-  const removeMapping = (index: number) => {
-    const newMappings = [...mergeMappings];
-    newMappings.splice(index, 1);
-    setMergeMappings(newMappings);
+  // Функция для открытия диалога ввода канонического имени
+  const openMergeDialog = () => {
+    if (selectedVariants.length < 2) {
+      toast.error('Выберите не менее двух вариантов для объединения');
+      return;
+    }
+    setDialogOpen(true);
+    setCanonicalValue('');
   };
 
-  const [isLoading, setIsLoading] = useState(false);
+  // Функция для завершения объединения
+  const completeMerge = async () => {
+    if (!canonicalValue.trim()) {
+      toast.error('Введите каноническое имя');
+      return;
+    }
 
-  const handleMerge = async () => {
     setIsLoading(true);
-    console.log(mergeMappings);
+    
     try {
-      const res = await pushConfigNamesMapPushConfigPost({
-        mappings: mergeMappings.map((m) => ({
-          [String(m.source.split('(*)')[0]).toLowerCase()]: String(
-            m.target.split('(*)')[0]
-          ),
-        })),
+      // Создаем объект маппингов для API
+      const mappingsObject: Record<string, string> = {};
+      
+      // Каждый выбранный вариант как ключ, каноническое значение как значение
+      selectedVariants.forEach(variant => {
+        const key = variant.toLowerCase().split('(*)')[0].trim();
+        mappingsObject[key] = canonicalValue.trim();
       });
-      console.log(res);
+      
+      console.log('Объект маппингов для API:', mappingsObject);
+      
+      const res = await pushConfigNamesMapPushConfigPost({
+        mappings: mappingsObject
+      });
+      
+      console.log('Ответ от сервера:', res);
       setIsLoading(false);
-      setMergeMappings([]);
+      setSelectedVariants([]);
+      setDialogOpen(false);
       toast.success('Варианты ответов объединены');
     } catch (error) {
       console.error(error);
@@ -120,46 +122,18 @@ export default function MergeTable({ initialStats }: { initialStats: Stat[] }) {
               <TableRow
                 key={stat.value}
                 className={
-                  mergeSourceValue === stat.value ? 'bg-muted/50' : ''
+                  selectedVariants.includes(stat.value) ? 'bg-muted/50' : ''
                 }>
                 <TableCell>{stat.value}</TableCell>
                 <TableCell>{stat.count}</TableCell>
                 <TableCell>
-                  {!mergeSourceValue && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => startMerge(stat.value)}>
-                      <Combine className="h-4 w-4 " />
-                    </Button>
-                  )}
-
-                  {mergeSourceValue && mergeSourceValue !== stat.value && (
-                    <Button
-                      variant={
-                        mappingExists(mergeSourceValue, stat.value)
-                          ? 'destructive'
-                          : 'outline'
-                      }
-                      size="sm"
-                      onClick={() => {
-                        if (mappingExists(mergeSourceValue, stat.value)) {
-                          removeMappingByValues(mergeSourceValue, stat.value);
-                        } else {
-                          addMapping(mergeSourceValue, stat.value);
-                        }
-                      }}>
-                      {mappingExists(mergeSourceValue, stat.value)
-                        ? 'Удалить'
-                        : 'Добавить'}
-                    </Button>
-                  )}
-
-                  {mergeSourceValue && mergeSourceValue === stat.value && (
-                    <Button variant="outline" size="sm" onClick={cancelMerge}>
-                      Отмена
-                    </Button>
-                  )}
+                  <Button
+                    variant={selectedVariants.includes(stat.value) ? 'destructive' : 'outline'}
+                    size="sm"
+                    onClick={() => toggleVariant(stat.value)}>
+                    <Combine className="h-4 w-4 mr-1" />
+                    {selectedVariants.includes(stat.value) ? 'Отменить' : 'Выбрать'}
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
@@ -167,51 +141,87 @@ export default function MergeTable({ initialStats }: { initialStats: Stat[] }) {
         </Table>
       </div>
 
-      {mergeSourceValue && (
-        <div className="bg-muted p-4 rounded-md">
-          <p className="font-medium mb-2">
-            Выбран вариант для объединения:{' '}
-            <span className="text-primary">{mergeSourceValue}</span>
-          </p>
-          <p className="text-sm text-muted-foreground mb-2">
-            Нажмите `&quot;Добавить&quot;` у других вариантов, чтобы объединить
-            их с выбранным, или `&quot;Отмена&quot;` для выхода из режима
-            объединения и сброса всех связей.
-          </p>
-        </div>
-      )}
-
-      {mergeMappings.length > 0 && (
+      {selectedVariants.length > 0 && (
         <div className="border rounded-md p-4">
-          <h3 className="font-medium mb-2">Объединенные варианты:</h3>
-          <div className="space-y-2">
-            {mergeMappings.map((mapping, index) => (
-              <div key={index} className="flex items-center gap-2">
-                <Badge variant="outline" className="text-sm">
-                  {mapping.source} → {mapping.target}
+          <h3 className="font-medium mb-2">Выбранные варианты для объединения:</h3>
+          <div className="space-y-2 mb-4">
+            <div className="flex flex-wrap gap-2">
+              {selectedVariants.map((variant, index) => (
+                <Badge key={index} variant="outline" className="text-sm flex items-center gap-1">
+                  {variant}
+                  <button 
+                    className="ml-1 rounded-full hover:bg-muted p-0.5" 
+                    onClick={() => toggleVariant(variant)}>
+                    <X className="h-3 w-3" />
+                    <span className="sr-only">Удалить</span>
+                  </button>
                 </Badge>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-6 w-6"
-                  onClick={() => removeMapping(index)}>
-                  <X className="h-3 w-3" />
-                  <span className="sr-only">Удалить объединение</span>
-                </Button>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-          <div className="mt-4">
-            <Button onClick={handleMerge} variant="default">
-              {isLoading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                'Объединить'
-              )}
+          <div className="flex gap-2">
+            <Button onClick={openMergeDialog} variant="default">
+              Объединить
+            </Button>
+            <Button onClick={clearSelection} variant="outline">
+              Очистить
             </Button>
           </div>
         </div>
       )}
+      
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Введите каноническое имя</DialogTitle>
+            <DialogDescription>
+              Это имя будет использоваться как стандартное значение для всех выбранных вариантов.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="canonical-name">Каноническое имя</Label>
+              <Input 
+                id="canonical-name" 
+                value={canonicalValue}
+                onChange={(e) => setCanonicalValue(e.target.value)}
+                placeholder="Введите стандартное имя"
+                autoFocus
+              />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground mb-2">Выбранные варианты:</p>
+              <div className="flex flex-wrap gap-2">
+                {selectedVariants.map((variant, index) => (
+                  <Badge key={index} variant="secondary" className="text-sm">
+                    {variant}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button 
+              onClick={() => setDialogOpen(false)} 
+              variant="outline"
+              disabled={isLoading}>
+              Отмена
+            </Button>
+            <Button 
+              onClick={completeMerge} 
+              disabled={isLoading || !canonicalValue.trim()}>
+              {isLoading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  Обработка...
+                </>
+              ) : (
+                'Объединить'
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
