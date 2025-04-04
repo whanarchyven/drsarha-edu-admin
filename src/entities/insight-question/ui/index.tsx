@@ -102,7 +102,7 @@ export const InsightQuestion = ({
             {average && (
               <p className="text-sm font-medium">Среднее значение: {average}</p>
             )}
-            <MergeTable initialStats={stats as Stat[]} />
+            <MergeTable initialStats={stats as Stat[]} questionId={question.id ?? ''} />
           </div>
         )}
       </CardContent>

@@ -30,7 +30,7 @@ export interface Stat {
   count: number;
 }
 
-export default function MergeTable({ initialStats }: { initialStats: Stat[] }) {
+export default function MergeTable({ initialStats,questionId }: { initialStats: Stat[],questionId:string }) {
   // Состояние для хранения списка статистики
   const [stats, setStats] = useState<Stat[]>(initialStats);
   
@@ -91,9 +91,9 @@ export default function MergeTable({ initialStats }: { initialStats: Stat[] }) {
       console.log('Объект маппингов для API:', mappingsObject);
 
       const alreadyExistsConfig = await getConfigNamesMapGetConfigGet();
-      console.log('Уже существующие конфигурации:', alreadyExistsConfig);
+      console.log('Уже существующие конфигурации:', alreadyExistsConfig.data);
       const res = await pushConfigNamesMapPushConfigPost({
-        ...mappingsObject,...alreadyExistsConfig.data
+        [`${questionId}`]:{...mappingsObject} ,...alreadyExistsConfig.data
       });
       
       console.log('Ответ от сервера:', res);
