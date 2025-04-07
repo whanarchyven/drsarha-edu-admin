@@ -61,10 +61,7 @@ export default function MergeTable({ initialStats,questionId }: { initialStats: 
 
   // Функция для открытия диалога ввода канонического имени
   const openMergeDialog = () => {
-    if (selectedVariants.length < 2) {
-      toast.error('Выберите не менее двух вариантов для объединения');
-      return;
-    }
+    
     setDialogOpen(true);
     setCanonicalValue('');
   };
