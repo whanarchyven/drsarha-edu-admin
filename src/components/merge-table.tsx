@@ -92,8 +92,14 @@ export default function MergeTable({ initialStats,questionId }: { initialStats: 
 
       const alreadyExistsConfig = await getConfigNamesMapGetConfigGet();
       console.log('Уже существующие конфигурации:', alreadyExistsConfig.data);
+      console.log({[`${questionId}`]:{...mappingsObject}});
+      console.log({[`${questionId}`]:{...mappingsObject, ...alreadyExistsConfig.data}});
+
+      let newData={...alreadyExistsConfig.data};
+      newData[`${questionId}`]={...mappingsObject, ...alreadyExistsConfig.data[`${questionId}`]};
+      console.log('newData',newData);
       const res = await pushConfigNamesMapPushConfigPost({
-        [`${questionId}`]:{...mappingsObject} ,...alreadyExistsConfig.data
+        ...newData
       });
       
       console.log('Ответ от сервера:', res);
